@@ -790,3 +790,33 @@ setTimeout(()=>{
 
 },5000);
 }
+const navMenu = document.getElementById("navMenu");
+const menuPanel = document.getElementById("menuPanel");
+const closeMenu = document.getElementById("closeMenu");
+
+navMenu.onclick = function () {
+    menuPanel.classList.add("show");
+};
+
+closeMenu.onclick = function () {
+    menuPanel.classList.remove("show");
+};
+
+document.addEventListener("click", function (e) {
+
+    if (
+        !menuPanel.contains(e.target) &&
+        !navMenu.contains(e.target)
+    ) {
+        menuPanel.classList.remove("show");
+    }
+
+});
+
+document.getElementById("logoutBtn").onclick = function () {
+
+    localStorage.removeItem("fb_login");
+
+    location.reload();
+
+};
