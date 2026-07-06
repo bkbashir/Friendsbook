@@ -1,3 +1,15 @@
+import { auth, db, storage } from "./firebase.js";
+
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+import {
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
 "use strict";
 
 //======================
@@ -83,7 +95,7 @@ if (backLogin) {
 // Register
 //======================
 
-registerBtn.onclick=function(){
+registerBtn.onclick = async function(){
 
     if(
         regName.value.trim()===""||
@@ -99,34 +111,57 @@ registerBtn.onclick=function(){
         return;
     }
 
-    localStorage.setItem("fb_name",regName.value.trim());
-    localStorage.setItem("fb_email",regEmail.value.trim());
-    localStorage.setItem("fb_password",regPassword.value);
+    try{
 
-    alert("Account Created");
+        await createUserWithEmailAndPassword(
+            auth,
+            regEmail.value.trim(),
+            regPassword.value
+        );
 
-    showLogin();
+        await setDoc(doc(db,"users",regEmail.value.trim()),{
+            name:regName.value.trim(),
+            email:regEmail.value.trim(),
+            createdAt:new Date().toISOString()
+        });
+
+        alert("Account Created");
+
+        showLogin();
+
+    }catch(e){
+
+        alert(e.message);
+
+    }
 
 };
-
 //======================
 // Login
 //======================
 
-loginBtn.onclick=function(){
-
-    const email=localStorage.getItem("fb_email");
-    const pass=localStorage.getItem("fb_password");
+loginBtn.onclick = async function(){
 
     if(
-        loginEmail.value.trim()===email &&
-        loginPassword.value===pass){
+        loginEmail.value.trim()===""||
+        loginPassword.value===""){
+        alert("Email এবং Password দিন");
+        return;
+    }
+
+    try{
+
+        await signInWithEmailAndPassword(
+            auth,
+            loginEmail.value.trim(),
+            loginPassword.value
+        );
 
         localStorage.setItem("fb_login","true");
 
         showHome();
 
-    }else{
+    }catch(e){
 
         alert("Wrong Email or Password");
 
@@ -754,4 +789,4 @@ setTimeout(()=>{
     }
 
 },5000);
-      }
+                         }
