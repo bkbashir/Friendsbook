@@ -203,42 +203,47 @@ style="display:none;">
 </section>
 <!-- EDIT PROFILE MODAL -->
 
-<div
-id="editProfileModal"
-class="modal"
-style="display:none;">
+<div id="editProfileModal" class="modal" style="display:none;">
 
 <div class="modalContent">
 
-<h2>Edit Profile</h2>
+<h2>👤 Edit Profile</h2>
 
 <label>Profile Photo</label>
-<input
-type="file"
-id="profileInput"
-accept="image/*">
+<input type="file" id="profileInput" accept="image/*">
 
 <label>Cover Photo</label>
-<input
-type="file"
-id="coverInput"
-accept="image/*">
+<input type="file" id="coverInput" accept="image/*">
 
 <label>Name</label>
-<input
-type="text"
-id="editName">
+<input type="text" id="editName">
 
 <label>Bio</label>
-<textarea
-id="editBio"></textarea>
+<textarea id="editBio"></textarea>
+
+<label>Location</label>
+<input type="text" id="editLocation" placeholder="Your location">
+
+<label>Work</label>
+<input type="text" id="editWork" placeholder="Where do you work?">
+
+<label>Education</label>
+<input type="text" id="editEducation" placeholder="Your education">
+
+<label>Relationship</label>
+<select id="editRelationship">
+<option value="">Select</option>
+<option>Single</option>
+<option>In a Relationship</option>
+<option>Married</option>
+</select>
 
 <button id="saveProfileBtn">
-Save
+💾 Save Changes
 </button>
 
 <button id="closeProfileBtn">
-Cancel
+❌ Cancel
 </button>
 
 </div>
