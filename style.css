@@ -411,3 +411,49 @@ animation:storyBar 5s linear forwards;
 from{width:0%;}
 to{width:100%;}
 }
+.menuPanel{
+position:fixed;
+right:-320px;
+top:0;
+width:300px;
+height:100%;
+background:#fff;
+box-shadow:-5px 0 15px rgba(0,0,0,.2);
+transition:.3s;
+z-index:9999;
+display:flex;
+flex-direction:column;
+}
+
+.menuPanel.show{
+right:0;
+}
+
+.menuHeader{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px;
+font-size:20px;
+font-weight:bold;
+border-bottom:1px solid #ddd;
+}
+
+.menuHeader span{
+font-size:28px;
+cursor:pointer;
+}
+
+.menuPanel button{
+border:none;
+background:none;
+padding:16px 20px;
+text-align:left;
+font-size:17px;
+cursor:pointer;
+border-bottom:1px solid #eee;
+}
+
+.menuPanel button:hover{
+background:#f0f2f5;
+    }
