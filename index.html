@@ -308,56 +308,34 @@ POST FEED
 BOTTOM NAVIGATION
 =========================== -->
 
-<div id="menuPanel" class="menuPanel">
+<nav class="bottomNav">
 
-<div class="menuHeader">
-<h3>Menu</h3>
-<span id="closeMenu">&times;</span>
-</div>
-
-<button id="editProfileBtn">
-👤 Edit Profile
+<button id="navHome" class="active">
+<i class="fa-solid fa-house"></i>
 </button>
 
-<button>
-🔒 Privacy
+<button id="navFriends">
+<i class="fa-solid fa-user-group"></i>
 </button>
 
-<button>
-🔐 Security
+<button id="navCreate">
+<i class="fa-solid fa-square-plus"></i>
 </button>
 
-<button>
-🔔 Notifications
+<button id="navNotify">
+<i class="fa-solid fa-bell"></i>
 </button>
 
-<button>
-💬 Messenger
+<button id="navMenu">
+<i class="fa-solid fa-bars"></i>
 </button>
 
-<button id="darkModeBtn">
-🌙 Dark Mode
-</button>
+</nav>
 
-<button>
-🌐 Language
-</button>
+</section>
 
-<button>
-💾 Saved Posts
-</button>
-
-<button>
-📊 Activity Log
-</button>
-
-<button id="logoutBtn">
-🚪 Logout
-</button>
-
-</div>
 <script type="module" src="firebase.js"></script>
 <script type="module" src="script.js"></script>
 
 </body>
-  </html>
+</html>
