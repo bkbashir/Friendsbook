@@ -1,0 +1,413 @@
+/* ====================================
+Friendsbook v3
+Part 2A
+==================================== */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f0f2f5;
+color:#222;
+}
+
+/* LOGIN */
+
+#loginPage,
+#registerPage{
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+padding:20px;
+}
+
+.loginCard{
+width:100%;
+max-width:400px;
+background:#fff;
+padding:25px;
+border-radius:12px;
+box-shadow:0 4px 15px rgba(0,0,0,.15);
+}
+
+.logo{
+font-size:40px;
+color:#1877f2;
+text-align:center;
+margin-bottom:10px;
+}
+
+.tag{
+text-align:center;
+margin-bottom:20px;
+color:#666;
+}
+
+.loginCard input,
+.loginCard textarea{
+width:100%;
+padding:12px;
+margin:8px 0;
+border:1px solid #ccc;
+border-radius:8px;
+outline:none;
+font-size:16px;
+}
+
+.loginCard button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:8px;
+background:#1877f2;
+color:#fff;
+font-size:16px;
+cursor:pointer;
+}
+
+.greenBtn{
+background:#42b72a!important;
+}
+
+.loginCard a{
+display:block;
+text-align:center;
+margin-top:12px;
+color:#1877f2;
+cursor:pointer;
+text-decoration:none;
+}
+
+.loginCard hr{
+margin:18px 0;
+}
+
+/* HOME */
+
+#homePage{
+display:none;
+padding-bottom:70px;
+}
+
+.topBar{
+height:60px;
+background:#1877f2;
+color:#fff;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 15px;
+position:sticky;
+top:0;
+z-index:100;
+}
+
+.fbLogo{
+font-size:28px;
+}
+
+.topRight button{
+width:40px;
+height:40px;
+border:none;
+border-radius:50%;
+margin-left:8px;
+background:#fff;
+cursor:pointer;
+font-size:18px;
+}
+/* ====================================
+Friendsbook v3
+Part 2B
+==================================== */
+
+.profileSection{
+background:#fff;
+margin-bottom:10px;
+}
+
+.coverBox{
+width:100%;
+height:220px;
+overflow:hidden;
+background:#ddd;
+}
+
+.coverBox img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.profileBox{
+display:flex;
+justify-content:center;
+margin-top:-60px;
+}
+
+.profileBox img{
+width:120px;
+height:120px;
+border-radius:50%;
+border:5px solid #fff;
+object-fit:cover;
+background:#fff;
+}
+
+.profileInfo{
+text-align:center;
+padding:15px;
+}
+
+.profileInfo h2{
+font-size:24px;
+margin-bottom:6px;
+}
+
+.profileInfo p{
+color:#666;
+margin-bottom:15px;
+}
+
+#editProfileBtn{
+padding:10px 20px;
+border:none;
+border-radius:8px;
+background:#1877f2;
+color:#fff;
+cursor:pointer;
+}
+
+.modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.6);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:999;
+}
+
+.modalContent{
+width:95%;
+max-width:420px;
+background:#fff;
+padding:20px;
+border-radius:12px;
+}
+
+.modalContent h2{
+margin-bottom:15px;
+}
+
+.modalContent label{
+display:block;
+margin-top:12px;
+margin-bottom:5px;
+font-weight:bold;
+}
+
+.modalContent input,
+.modalContent textarea{
+width:100%;
+padding:10px;
+border:1px solid #ccc;
+border-radius:8px;
+}
+
+.modalContent textarea{
+height:80px;
+resize:none;
+}
+
+.modalContent button{
+width:100%;
+padding:12px;
+margin-top:12px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+#saveProfileBtn{
+background:#1877f2;
+color:#fff;
+}
+
+#closeProfileBtn{
+background:#e4e6eb;
+color:#000;
+}
+/* ====================================
+Friendsbook v3
+Part 2C
+==================================== */
+
+.createPost{
+background:#fff;
+padding:15px;
+margin:10px 0;
+display:flex;
+gap:10px;
+}
+
+#createPost input,
+#postText{
+flex:1;
+padding:12px;
+border:1px solid #ccc;
+border-radius:8px;
+outline:none;
+}
+
+#postBtn{
+padding:12px 20px;
+background:#1877f2;
+color:#fff;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+#feed{
+padding:10px;
+}
+
+.post{
+background:#fff;
+border-radius:12px;
+padding:15px;
+margin-bottom:12px;
+box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.post img{
+width:100%;
+border-radius:10px;
+margin-top:10px;
+}
+
+.bottomNav{
+position:fixed;
+left:0;
+right:0;
+bottom:0;
+height:60px;
+background:#fff;
+display:flex;
+justify-content:space-around;
+align-items:center;
+box-shadow:0 -2px 8px rgba(0,0,0,.15);
+}
+
+.bottomNav button{
+background:none;
+border:none;
+font-size:22px;
+cursor:pointer;
+color:#555;
+}
+
+.bottomNav button.active{
+color:#1877f2;
+}
+.createPost{
+    display:flex;
+    flex-direction:column;
+    width:100%;
+    padding:15px;
+}
+
+#postText,
+#postImage,
+#postBtn{
+    width:100%;
+}
+
+#postImage{
+    max-width:100%;
+}
+
+#postBtn{
+    margin-top:10px;
+}
+.storySection{
+display:flex;
+gap:12px;
+overflow-x:auto;
+padding:12px;
+background:#fff;
+margin:10px;
+border-radius:12px;
+}
+
+.story{
+width:110px;
+height:180px;
+border-radius:12px;
+background:#ddd;
+flex:none;
+position:relative;
+overflow:hidden;
+cursor:pointer;
+}
+
+.story img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.story p{
+position:absolute;
+bottom:8px;
+left:8px;
+right:8px;
+color:#fff;
+font-weight:bold;
+text-shadow:0 0 5px #000;
+}
+
+.createStory{
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+background:#f0f2f5;
+}
+
+.plus{
+width:45px;
+height:45px;
+border-radius:50%;
+background:#1877f2;
+color:#fff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:28px;
+margin-bottom:10px;
+}
+.storyProgress{
+position:absolute;
+top:0;
+left:0;
+height:4px;
+width:0%;
+background:#fff;
+animation:storyBar 5s linear forwards;
+}
+
+@keyframes storyBar{
+from{width:0%;}
+to{width:100%;}
+}
