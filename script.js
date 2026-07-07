@@ -812,7 +812,18 @@ document.addEventListener("click", function (e) {
     }
 
 });
+const menuEditProfileBtn = $("menuEditProfileBtn");
 
+menuEditProfileBtn.onclick = function(){
+
+    editProfileModal.style.display = "flex";
+
+    editName.value = localStorage.getItem("fb_name") || "";
+    editBio.value = localStorage.getItem("fb_bio") || "";
+
+    menuPanel.classList.remove("show");
+
+};
 document.getElementById("logoutBtn").onclick = function () {
 
     localStorage.removeItem("fb_login");
