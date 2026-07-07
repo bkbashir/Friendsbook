@@ -198,7 +198,15 @@ const saveProfileBtn = $("saveProfileBtn");
 
 const editName = $("editName");
 const editBio = $("editBio");
+const editLocation = $("editLocation");
+const editWork = $("editWork");
+const editEducation = $("editEducation");
+const editRelationship = $("editRelationship");
 
+const userLocation = $("userLocation");
+const userWork = $("userWork");
+const userEducation = $("userEducation");
+const userRelationship = $("userRelationship");
 const profileImage = $("profileImage");
 const coverImage = $("coverImage");
 
@@ -273,6 +281,11 @@ saveProfileBtn.onclick = function(){
     localStorage.setItem("fb_name", editName.value.trim());
     localStorage.setItem("fb_bio", editBio.value.trim());
 
+    localStorage.setItem("fb_location", editLocation.value.trim());
+    localStorage.setItem("fb_work", editWork.value.trim());
+    localStorage.setItem("fb_education", editEducation.value.trim());
+    localStorage.setItem("fb_relationship", editRelationship.value);
+
     if(profileData){
         localStorage.setItem("fb_profile", profileData);
     }
@@ -283,6 +296,11 @@ saveProfileBtn.onclick = function(){
 
     userName.textContent = editName.value.trim();
     userBio.textContent = editBio.value.trim();
+
+    userLocation.textContent = "📍 " + (editLocation.value.trim() || "No location");
+    userWork.textContent = "💼 " + (editWork.value.trim() || "No work");
+    userEducation.textContent = "🎓 " + (editEducation.value.trim() || "No education");
+    userRelationship.textContent = "❤️ " + (editRelationship.value || "No relationship");
 
     editProfileModal.style.display = "none";
 
