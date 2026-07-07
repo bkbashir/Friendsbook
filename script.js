@@ -71,7 +71,17 @@ function showRegister(){
 
     userBio.textContent =
         localStorage.getItem("fb_bio") || "No bio added yet";
+userLocation.textContent =
+"📍 " + (localStorage.getItem("fb_location") || "No location");
 
+userWork.textContent =
+"💼 " + (localStorage.getItem("fb_work") || "No work");
+
+userEducation.textContent =
+"🎓 " + (localStorage.getItem("fb_education") || "No education");
+
+userRelationship.textContent =
+"❤️ " + (localStorage.getItem("fb_relationship") || "No relationship");
     const profile = localStorage.getItem("fb_profile");
     if(profile){
         profileImage.src = profile;
@@ -227,6 +237,11 @@ editProfileBtn.onclick = function(){
 
     editName.value = localStorage.getItem("fb_name") || "";
     editBio.value = localStorage.getItem("fb_bio") || "";
+
+    editLocation.value = localStorage.getItem("fb_location") || "";
+    editWork.value = localStorage.getItem("fb_work") || "";
+    editEducation.value = localStorage.getItem("fb_education") || "";
+    editRelationship.value = localStorage.getItem("fb_relationship") || "";
 
 };
 
