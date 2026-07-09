@@ -1,5 +1,5 @@
 import { db, auth } from "./firebase.js";
-import {
+
 import {
   collection,
   getDocs,
@@ -167,6 +167,25 @@ document.addEventListener("click", async (e) => {
         alert("❌ Friend Request Rejected");
 
         loadFriendRequests();
+
+    }
+
+});
+document.addEventListener("click", async (e) => {
+
+    if (!e.target.classList.contains("followBtn")) return;
+
+    const btn = e.target;
+
+    if (btn.dataset.state === "following") {
+
+        btn.dataset.state = "follow";
+        btn.textContent = "➕ Follow";
+
+    } else {
+
+        btn.dataset.state = "following";
+        btn.textContent = "✅ Following";
 
     }
 
