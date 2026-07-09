@@ -1,11 +1,14 @@
 import { db, auth } from "./firebase.js";
 import {
+import {
   collection,
   getDocs,
   doc,
   setDoc,
   query,
-  where
+  where,
+  updateDoc,
+  deleteDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 const friendsList = document.getElementById("friendsList");
 
@@ -136,3 +139,35 @@ export async function loadFriendRequests() {
     });
 
                       }
+document.addEventListener("click", async (e) => {
+
+    if (e.target.classList.contains("acceptBtn")) {
+
+        const id = e.target.dataset.id;
+
+        await updateDoc(doc(db, "friendRequests", id), {
+            status: "accepted"
+        });
+
+        alert("✅ Friend Request Accepted");
+
+        loadFriendRequests();
+
+    }
+
+});
+document.addEventListener("click", async (e) => {
+
+    if (e.target.classList.contains("rejectBtn")) {
+
+        const id = e.target.dataset.id;
+
+        await deleteDoc(doc(db, "friendRequests", id));
+
+        alert("❌ Friend Request Rejected");
+
+        loadFriendRequests();
+
+    }
+
+});
