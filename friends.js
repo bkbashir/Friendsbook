@@ -1,8 +1,9 @@
 import { db, auth } from "./firebase.js";
-
 import {
 collection,
-getDocs
+getDocs,
+doc,
+setDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const friendsList = document.getElementById("friendsList");
@@ -66,3 +67,30 @@ data-email="${user.email}">
     });
 
 }
+document.addEventListener("click", async (e) => {
+
+    if (e.target.classList.contains("addFriendBtn")) {
+
+        const receiver = e.target.dataset.email;
+
+        await setDoc(
+            doc(
+                db,
+                "friendRequests",
+                auth.currentUser.email + "_" + receiver
+            ),
+            {
+                from: auth.currentUser.email,
+                to: receiver,
+                status: "pending",
+                time: Date.now()
+            }
+        );
+
+        e.target.textContent = "⏳ Request Sent";
+
+        alert("Friend Request Sent");
+
+    }
+
+});
