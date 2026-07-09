@@ -695,9 +695,15 @@ document.getElementById("navHome").onclick=()=>{
   document.getElementById("navHome").classList.add("active");
 };
 
-document.getElementById("navFriends").onclick=()=>{
-  showPage("friends");
-  document.getElementById("navFriends").classList.add("active");
+document.getElementById("navFriends").onclick = async () => {
+
+    showPage("friends");
+
+    document.getElementById("navFriends")
+        .classList.add("active");
+
+    await loadFriends();
+
 };
 
 document.getElementById("navCreate").onclick=()=>{
@@ -889,96 +895,5 @@ document.getElementById("logoutBtn").onclick = function () {
     localStorage.removeItem("fb_login");
 
     location.reload();
-
-};
-const addFriendBtn = $("addFriendBtn");
-const followBtn = $("followBtn");
-
-let friendStatus =
-localStorage.getItem("friendStatus") || "add";
-
-let followStatus =
-localStorage.getItem("followStatus") || "follow";
-
-function updateFriendButton(){
-
-if(friendStatus==="add"){
-addFriendBtn.textContent="👥 Add Friend";
-}
-
-else if(friendStatus==="request"){
-addFriendBtn.textContent="⏳ Cancel Request";
-}
-
-else{
-addFriendBtn.textContent="✅ Friends";
-}
-
-}
-
-function updateFollowButton(){
-
-if(followStatus==="follow"){
-followBtn.textContent="➕ Follow";
-}
-
-else{
-followBtn.textContent="✅ Following";
-}
-
-}
-
-updateFriendButton();
-updateFollowButton();
-
-addFriendBtn.onclick=function(){
-
-if(friendStatus==="add"){
-
-friendStatus="request";
-
-}
-
-else if(friendStatus==="request"){
-
-friendStatus="add";
-
-}
-
-else{
-
-friendStatus="add";
-
-}
-
-localStorage.setItem(
-"friendStatus",
-friendStatus
-);
-
-updateFriendButton();
-
-};
-
-followBtn.onclick=function(){
-
-if(followStatus==="follow"){
-
-followStatus="following";
-
-}
-
-else{
-
-followStatus="follow";
-
-}
-
-localStorage.setItem(
-"followStatus",
-followStatus
-);
-
-updateFollowButton();
 
 };
