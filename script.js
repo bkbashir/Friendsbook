@@ -130,10 +130,36 @@ registerBtn.onclick = async function(){
         );
 
         await setDoc(doc(db,"users",regEmail.value.trim()),{
-            name:regName.value.trim(),
-            email:regEmail.value.trim(),
-            createdAt:new Date().toISOString()
-        });
+
+    uid: auth.currentUser.uid,
+
+    name: regName.value.trim(),
+
+    email: regEmail.value.trim(),
+
+    profile: "",
+
+    cover: "",
+
+    bio: "",
+
+    location: "",
+
+    work: "",
+
+    education: "",
+
+    relationship: "",
+
+    followers: 0,
+
+    following: 0,
+
+    friends: 0,
+
+    createdAt: new Date().toISOString()
+
+});
 
         alert("Account Created");
 
