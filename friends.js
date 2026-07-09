@@ -95,3 +95,44 @@ document.addEventListener("click", async (e) => {
     }
 
 });
+const requestList = document.getElementById("requestList");
+
+export async function loadFriendRequests() {
+
+    if (!requestList) return;
+
+    requestList.innerHTML = "";
+
+    const q = query(
+        collection(db, "friendRequests"),
+        where("to", "==", auth.currentUser.email),
+        where("status", "==", "pending")
+    );
+
+    const snap = await getDocs(q);
+
+    snap.forEach((docSnap) => {
+
+        const data = docSnap.data();
+
+        requestList.innerHTML += `
+            <div class="friendCard">
+
+                <h3>${data.from}</h3>
+
+                <button class="acceptBtn"
+                    data-id="${docSnap.id}">
+                    ✅ Accept
+                </button>
+
+                <button class="rejectBtn"
+                    data-id="${docSnap.id}">
+                    ❌ Reject
+                </button>
+
+            </div>
+        `;
+
+    });
+
+                      }
