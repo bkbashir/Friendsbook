@@ -1,11 +1,12 @@
 import { db, auth } from "./firebase.js";
 import {
-collection,
-getDocs,
-doc,
-setDoc
+  collection,
+  getDocs,
+  doc,
+  setDoc,
+  query,
+  where
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
 const friendsList = document.getElementById("friendsList");
 
 export async function loadFriends(){
