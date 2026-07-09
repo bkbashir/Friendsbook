@@ -5,10 +5,12 @@ import {
   getDocs,
   doc,
   setDoc,
+  getDoc,
+  updateDoc,
+  deleteDoc,
   query,
   where,
-  updateDoc,
-  deleteDoc
+  increment
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 const friendsList = document.getElementById("friendsList");
 
