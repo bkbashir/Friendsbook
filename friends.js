@@ -49,10 +49,20 @@ src="${user.profile || 'https://placehold.co/80'}">
 </div>
 
 <div class="friendActions">
-
-<button class="addFriendBtn"
+<button
+class="${
+myFriends.includes(user.email)
+? "messageBtn"
+: "addFriendBtn"
+}"
 data-email="${user.email}">
-👥 Add Friend
+
+${
+myFriends.includes(user.email)
+? "❌ Unfriend"
+: "👥 Add Friend"
+}
+
 </button>
 
 <button class="followBtn"
@@ -233,6 +243,49 @@ document.addEventListener("click", async (e) => {
         loadFriendRequests();
 
     }
+
+});
+      document.addEventListener("click", async (e) => {
+
+    if (!e.target.classList.contains("messageBtn")) return;
+
+    const email = e.target.dataset.email;
+
+    if (!confirm("Remove this friend?")) return;
+
+    await deleteDoc(
+        doc(
+            db,
+            "friends",
+            auth.currentUser.email + "_" + email
+        )
+    );
+
+    await deleteDoc(
+        doc(
+            db,
+            "friends",
+            email + "_" + auth.currentUser.email
+        )
+    );
+
+    await updateDoc(
+        doc(db, "users", auth.currentUser.email),
+        {
+            friends: increment(-1)
+        }
+    );
+
+    await updateDoc(
+        doc(db, "users", email),
+        {
+            friends: increment(-1)
+        }
+    );
+
+    alert("❌ Friend Removed");
+
+    loadFriends();
 
 });
 document.addEventListener("click", async (e) => {
