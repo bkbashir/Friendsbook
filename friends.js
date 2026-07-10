@@ -10,6 +10,7 @@ import {
   deleteDoc,
   query,
   where,
+  or,
   increment
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 const friendsList = document.getElementById("friendsList");
@@ -156,7 +157,23 @@ const req = reqSnap.data();
 await updateDoc(reqRef, {
     status: "accepted"
 });
+await setDoc(
+    doc(db, "friends", auth.currentUser.email + "_" + req.from),
+    {
+        user1: auth.currentUser.email,
+        user2: req.from,
+        time: Date.now()
+    }
+);
 
+await setDoc(
+    doc(db, "friends", req.from + "_" + auth.currentUser.email),
+    {
+        user1: req.from,
+        user2: auth.currentUser.email,
+        time: Date.now()
+    }
+);
 // Sender Friends Count
 await updateDoc(
     doc(db, "users", req.from),
