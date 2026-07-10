@@ -678,6 +678,7 @@ function reactPost(postIndex,reaction){
 const pages = {
   home: document.getElementById("feed"),
   friends: document.getElementById("friendsPage"),
+  message: document.getElementById("messagePage"),
   notification: document.getElementById("notificationPage"),
   menu: document.getElementById("menuPage")
 };
@@ -714,7 +715,11 @@ document.getElementById("navNotify").onclick=()=>{
   showPage("notification");
   document.getElementById("navNotify").classList.add("active");
 };
+document.getElementById("messageBtn").onclick = () => {
 
+    showPage("message");
+
+};
 document.getElementById("navMenu").onclick=()=>{
   showPage("menu");
   document.getElementById("navMenu").classList.add("active");
