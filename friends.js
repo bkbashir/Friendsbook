@@ -147,17 +147,36 @@ document.addEventListener("click", async (e) => {
 
         const id = e.target.dataset.id;
 
-        await updateDoc(doc(db, "friendRequests", id), {
-            status: "accepted"
-        });
+const reqRef = doc(db, "friendRequests", id);
 
-        alert("✅ Friend Request Accepted");
+const reqSnap = await getDoc(reqRef);
 
-        loadFriendRequests();
+const req = reqSnap.data();
 
-    }
-
+await updateDoc(reqRef, {
+    status: "accepted"
 });
+
+// Sender Friends Count
+await updateDoc(
+    doc(db, "users", req.from),
+    {
+        friends: increment(1)
+    }
+);
+
+// Receiver Friends Count
+await updateDoc(
+    doc(db, "users", req.to),
+    {
+        friends: increment(1)
+    }
+);
+
+alert("✅ Friend Added");
+
+loadFriendRequests();
+loadFriends();
 document.addEventListener("click", async (e) => {
 
     if (e.target.classList.contains("rejectBtn")) {
