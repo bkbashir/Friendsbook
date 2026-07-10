@@ -1,5 +1,5 @@
 import { db, auth } from "./firebase.js";
-
+import { openChat } from "./message.js";
 import {
   collection,
   getDocs,
