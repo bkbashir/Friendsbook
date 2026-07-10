@@ -1,3 +1,4 @@
+import { openChat } from "./message.js";
 import { loadFriends } from "./friends.js";
 import { auth, db, storage } from "./firebase.js";
 
