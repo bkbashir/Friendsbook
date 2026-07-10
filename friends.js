@@ -141,7 +141,33 @@ export async function loadFriendRequests() {
 
     });
 
-                      }
+const friendSnap = await getDocs(
+    query(
+        collection(db, "friends"),
+        or(
+            where("user1", "==", auth.currentUser.email),
+            where("user2", "==", auth.currentUser.email)
+        )
+    )
+);
+
+const myFriends = [];
+
+friendSnap.forEach(f => {
+
+    const d = f.data();
+
+    if (d.user1 === auth.currentUser.email) {
+
+        myFriends.push(d.user2);
+
+    } else {
+
+        myFriends.push(d.user1);
+
+    }
+
+});                      
 document.addEventListener("click", async (e) => {
 
     if (e.target.classList.contains("acceptBtn")) {
