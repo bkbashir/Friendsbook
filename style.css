@@ -1,7 +1,6 @@
-/* ====================================
-Friendsbook v3
-Part 2A
-==================================== */
+/*==========================
+Friendsbook V4
+==========================*/
 
 *{
 margin:0;
@@ -11,505 +10,916 @@ font-family:Arial,sans-serif;
 }
 
 body{
+
 background:#f0f2f5;
-color:#222;
+
+overflow-x:hidden;
+
 }
 
-/* LOGIN */
+a{
 
-#loginPage,
-#registerPage{
-display:flex;
-justify-content:center;
-align-items:center;
-min-height:100vh;
-padding:20px;
+text-decoration:none;
+
+color:inherit;
+
 }
 
-.loginCard{
+img{
+
+display:block;
+
+max-width:100%;
+
+}
+
+button{
+
+cursor:pointer;
+
+border:none;
+
+outline:none;
+
+}
+
+input,
+textarea{
+
+outline:none;
+
+border:none;
+
+}
+
+/* Loading */
+
+#loadingScreen{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
 width:100%;
-max-width:400px;
+
+height:100%;
+
+background:#ffffff;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+align-items:center;
+
+z-index:99999;
+
+}
+
+.loader{
+
+width:55px;
+
+height:55px;
+
+border:5px solid #ddd;
+
+border-top:5px solid #1877f2;
+
+border-radius:50%;
+
+animation:spin 1s linear infinite;
+
+margin-bottom:15px;
+
+}
+
+@keyframes spin{
+
+100%{
+
+transform:rotate(360deg);
+
+}
+
+}
+
+/* Login */
+
+#loginPage{
+
+width:100%;
+
+height:100vh;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+background:#f0f2f5;
+
+}
+
+.loginBox{
+
+width:370px;
+
 background:#fff;
+
 padding:25px;
+
 border-radius:12px;
-box-shadow:0 4px 15px rgba(0,0,0,.15);
+
+box-shadow:0 5px 20px rgba(0,0,0,.15);
+
+}
+
+.loginBox h1{
+
+color:#1877f2;
+
+font-size:38px;
+
+text-align:center;
+
+margin-bottom:10px;
+
+}
+
+.loginBox p{
+
+text-align:center;
+
+margin-bottom:20px;
+
+color:#666;
+
+}.loginBox input{
+
+width:100%;
+
+padding:14px;
+
+margin:8px 0;
+
+border:1px solid #ddd;
+
+border-radius:8px;
+
+font-size:15px;
+
+background:#fafafa;
+
+}
+
+.loginBox input:focus{
+
+border:1px solid #1877f2;
+
+background:#fff;
+
+}
+
+#loginBtn,
+#registerBtn{
+
+width:100%;
+
+padding:14px;
+
+border-radius:8px;
+
+font-size:16px;
+
+font-weight:bold;
+
+margin-top:10px;
+
+transition:.3s;
+
+}
+
+#loginBtn{
+
+background:#1877f2;
+
+color:#fff;
+
+}
+
+#loginBtn:hover{
+
+background:#166fe5;
+
+}
+
+#registerBtn{
+
+background:#42b72a;
+
+color:#fff;
+
+}
+
+#registerBtn:hover{
+
+background:#36a420;
+
+}
+
+/* Main */
+
+#mainApp{
+
+display:none;
+
+width:100%;
+
+min-height:100vh;
+
+background:#f0f2f5;
+
+}
+
+#topBar{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:100%;
+
+height:60px;
+
+background:#fff;
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+padding:0 15px;
+
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+
+z-index:999;
+
 }
 
 .logo{
-font-size:40px;
-color:#1877f2;
-text-align:center;
-margin-bottom:10px;
-}
 
-.tag{
-text-align:center;
-margin-bottom:20px;
-color:#666;
-}
-
-.loginCard input,
-.loginCard textarea{
-width:100%;
-padding:12px;
-margin:8px 0;
-border:1px solid #ccc;
-border-radius:8px;
-outline:none;
-font-size:16px;
-}
-
-.loginCard button{
-width:100%;
-padding:12px;
-margin-top:10px;
-border:none;
-border-radius:8px;
-background:#1877f2;
-color:#fff;
-font-size:16px;
-cursor:pointer;
-}
-
-.greenBtn{
-background:#42b72a!important;
-}
-
-.loginCard a{
-display:block;
-text-align:center;
-margin-top:12px;
-color:#1877f2;
-cursor:pointer;
-text-decoration:none;
-}
-
-.loginCard hr{
-margin:18px 0;
-}
-
-/* HOME */
-
-#homePage{
-display:none;
-padding-bottom:70px;
-}
-
-.topBar{
-height:60px;
-background:#1877f2;
-color:#fff;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:0 15px;
-position:sticky;
-top:0;
-z-index:100;
-}
-
-.fbLogo{
 font-size:28px;
-}
 
-.topRight button{
-width:40px;
-height:40px;
-border:none;
-border-radius:50%;
-margin-left:8px;
-background:#fff;
-cursor:pointer;
-font-size:18px;
-}
-/* ====================================
-Friendsbook v3
-Part 2B
-==================================== */
-
-.profileSection{
-background:#fff;
-margin-bottom:10px;
-}
-
-.coverBox{
-width:100%;
-height:220px;
-overflow:hidden;
-background:#ddd;
-}
-
-.coverBox img{
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-.profileBox{
-display:flex;
-justify-content:center;
-margin-top:-60px;
-}
-
-.profileBox img{
-width:120px;
-height:120px;
-border-radius:50%;
-border:5px solid #fff;
-object-fit:cover;
-background:#fff;
-}
-
-.profileInfo{
-text-align:center;
-padding:15px;
-}
-
-.profileInfo h2{
-font-size:24px;
-margin-bottom:6px;
-}
-
-.profileInfo p{
-color:#666;
-margin-bottom:15px;
-}
-
-#editProfileBtn{
-padding:10px 20px;
-border:none;
-border-radius:8px;
-background:#1877f2;
-color:#fff;
-cursor:pointer;
-}
-
-.modal{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.6);
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:999;
-}
-
-.modalContent{
-width:95%;
-max-width:420px;
-background:#fff;
-padding:20px;
-border-radius:12px;
-}
-
-.modalContent h2{
-margin-bottom:15px;
-}
-
-.modalContent label{
-display:block;
-margin-top:12px;
-margin-bottom:5px;
 font-weight:bold;
+
+color:#1877f2;
+
 }
 
-.modalContent input,
-.modalContent textarea{
-width:100%;
-padding:10px;
-border:1px solid #ccc;
-border-radius:8px;
+#searchInput{
+
+width:320px;
+
+padding:10px 15px;
+
+border-radius:50px;
+
+background:#f0f2f5;
+
+font-size:15px;
+
 }
 
-.modalContent textarea{
-height:80px;
-resize:none;
-}
+.topIcons{
 
-.modalContent button{
-width:100%;
-padding:12px;
-margin-top:12px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-}
-
-#saveProfileBtn{
-background:#1877f2;
-color:#fff;
-}
-
-#closeProfileBtn{
-background:#e4e6eb;
-color:#000;
-}
-/* ====================================
-Friendsbook v3
-Part 2C
-==================================== */
-
-.createPost{
-background:#fff;
-padding:15px;
-margin:10px 0;
 display:flex;
-gap:10px;
-}
 
-#createPost input,
-#postText{
-flex:1;
-padding:12px;
-border:1px solid #ccc;
-border-radius:8px;
-outline:none;
-}
-
-#postBtn{
-padding:12px 20px;
-background:#1877f2;
-color:#fff;
-border:none;
-border-radius:8px;
-cursor:pointer;
-}
-
-#feed{
-padding:10px;
-}
-
-.post{
-background:#fff;
-border-radius:12px;
-padding:15px;
-margin-bottom:12px;
-box-shadow:0 2px 8px rgba(0,0,0,.08);
-}
-
-.post img{
-width:100%;
-border-radius:10px;
-margin-top:10px;
-}
-
-.bottomNav{
-position:fixed;
-left:0;
-right:0;
-bottom:0;
-height:60px;
-background:#fff;
-display:flex;
-justify-content:space-around;
 align-items:center;
-box-shadow:0 -2px 8px rgba(0,0,0,.15);
+
+gap:15px;
+
 }
 
-.bottomNav button{
-background:none;
-border:none;
-font-size:22px;
+.topIcons .material-icons{
+
+font-size:28px;
+
 cursor:pointer;
+
 color:#555;
-}
 
-.bottomNav button.active{
-color:#1877f2;
-}
-.createPost{
-    display:flex;
-    flex-direction:column;
-    width:100%;
-    padding:15px;
-}
-
-#postText,
-#postImage,
-#postBtn{
-    width:100%;
-}
-
-#postImage{
-    max-width:100%;
-}
-
-#postBtn{
-    margin-top:10px;
-}
-.storySection{
-display:flex;
-gap:12px;
-overflow-x:auto;
-padding:12px;
-background:#fff;
-margin:10px;
-border-radius:12px;
-}
-
-.story{
-width:110px;
-height:180px;
-border-radius:12px;
-background:#ddd;
-flex:none;
-position:relative;
-overflow:hidden;
-cursor:pointer;
-}
-
-.story img{
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-.story p{
-position:absolute;
-bottom:8px;
-left:8px;
-right:8px;
-color:#fff;
-font-weight:bold;
-text-shadow:0 0 5px #000;
-}
-
-.createStory{
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-background:#f0f2f5;
-}
-
-.plus{
-width:45px;
-height:45px;
-border-radius:50%;
-background:#1877f2;
-color:#fff;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:28px;
-margin-bottom:10px;
-}
-.storyProgress{
-position:absolute;
-top:0;
-left:0;
-height:4px;
-width:0%;
-background:#fff;
-animation:storyBar 5s linear forwards;
-}
-
-@keyframes storyBar{
-from{width:0%;}
-to{width:100%;}
-}
-.menuPanel{
-position:fixed;
-right:-320px;
-top:0;
-width:300px;
-height:100%;
-background:#fff;
-box-shadow:-5px 0 15px rgba(0,0,0,.2);
 transition:.3s;
-z-index:9999;
-display:flex;
-flex-direction:column;
+
 }
 
-.menuPanel.show{
-right:0;
-}
+.topIcons .material-icons:hover{
 
-.menuHeader{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:18px;
-font-size:20px;
-font-weight:bold;
-border-bottom:1px solid #ddd;
-}
+color:#1877f2;
 
-.menuHeader span{
-font-size:28px;
-cursor:pointer;
-}
+}/* ==========================
+Left Sidebar
+========================== */
 
-.menuPanel button{
-border:none;
-background:none;
-padding:16px 20px;
-text-align:left;
-font-size:17px;
-cursor:pointer;
-border-bottom:1px solid #eee;
-}
+#leftSidebar{
 
-.menuPanel button:hover{
-background:#f0f2f5;
-    }
-.friendCard{
-display:flex;
-align-items:center;
-justify-content:space-between;
+position:fixed;
+
+top:70px;
+
+left:10px;
+
+width:270px;
+
 background:#fff;
-padding:12px;
-margin:10px;
-border-radius:12px;
-box-shadow:0 2px 8px rgba(0,0,0,.08);
+
+border-radius:15px;
+
+padding:15px;
+
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+
 }
 
-.friendPhoto{
-width:60px;
-height:60px;
+.profileCard{
+
+text-align:center;
+
+padding-bottom:15px;
+
+border-bottom:1px solid #eee;
+
+}
+
+.profileCard img{
+
+width:90px;
+
+height:90px;
+
 border-radius:50%;
+
 object-fit:cover;
+
+margin:auto;
+
+border:3px solid #1877f2;
+
 }
 
-.friendInfo{
-flex:1;
-margin-left:12px;
+.profileCard h3{
+
+margin-top:10px;
+
+font-size:20px;
+
 }
 
-.friendInfo h3{
-margin:0;
-font-size:17px;
-}
+.profileCard p{
 
-.friendInfo p{
-margin:4px 0 0;
 color:#666;
-font-size:13px;
+
+font-size:14px;
+
+margin-top:5px;
+
 }
 
-.friendActions{
+.menuList{
+
+margin-top:15px;
+
+}
+
+.menuItem{
+
 display:flex;
-gap:8px;
-}
 
-.friendActions button{
-padding:8px 14px;
-border:none;
-border-radius:8px;
+align-items:center;
+
+gap:12px;
+
+padding:12px;
+
+border-radius:10px;
+
 cursor:pointer;
-font-weight:600;
+
+font-size:16px;
+
+transition:.3s;
+
 }
 
-#addFriendBtn{
+.menuItem:hover{
+
+background:#f0f2f5;
+
+}
+
+.menuItem .material-icons{
+
+color:#1877f2;
+
+font-size:28px;
+
+}
+
+/* ==========================
+Feed
+========================== */
+
+#feedPage{
+
+margin-left:300px;
+
+margin-right:300px;
+
+margin-top:75px;
+
+padding:15px;
+
+}
+
+.createPost{
+
+background:#fff;
+
+padding:15px;
+
+border-radius:15px;
+
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+
+margin-bottom:20px;
+
+}
+
+#createPostBtn{
+
+margin-top:10px;
+
+padding:12px 25px;
+
 background:#1877f2;
+
 color:#fff;
+
+border-radius:8px;
+
+font-size:15px;
+
+font-weight:bold;
+
 }
 
-#followBtn{
+#createPostBtn:hover{
+
+background:#166fe5;
+
+}
+
+#postContainer{
+
+display:flex;
+
+flex-direction:column;
+
+gap:15px;
+
+}/* ==========================
+Post Card
+========================== */
+
+.postCard{
+
+background:#fff;
+
+border-radius:15px;
+
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+
+overflow:hidden;
+
+}
+
+.postHeader{
+
+display:flex;
+
+align-items:center;
+
+padding:15px;
+
+gap:12px;
+
+}
+
+.postHeader img{
+
+width:50px;
+
+height:50px;
+
+border-radius:50%;
+
+object-fit:cover;
+
+}
+
+.postUser{
+
+font-size:17px;
+
+font-weight:bold;
+
+}
+
+.postTime{
+
+font-size:13px;
+
+color:#777;
+
+}
+
+.postText{
+
+padding:0 15px 15px;
+
+font-size:16px;
+
+line-height:1.6;
+
+}
+
+.postImage{
+
+width:100%;
+
+max-height:550px;
+
+object-fit:cover;
+
+background:#000;
+
+}
+
+.postVideo{
+
+width:100%;
+
+background:#000;
+
+}
+
+.postActions{
+
+display:flex;
+
+justify-content:space-around;
+
+padding:12px;
+
+border-top:1px solid #eee;
+
+}
+
+.postActions button{
+
+background:none;
+
+font-size:15px;
+
+font-weight:bold;
+
+color:#666;
+
+padding:10px;
+
+border-radius:8px;
+
+transition:.3s;
+
+}
+
+.postActions button:hover{
+
+background:#f0f2f5;
+
+color:#1877f2;
+
+}
+
+/* ==========================
+Right Sidebar
+========================== */
+
+#rightSidebar{
+
+position:fixed;
+
+top:70px;
+
+right:10px;
+
+width:270px;
+
+background:#fff;
+
+border-radius:15px;
+
+padding:15px;
+
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+
+}
+
+.onlineTitle,
+.shortcutTitle{
+
+font-size:18px;
+
+font-weight:bold;
+
+margin-bottom:12px;
+
+}
+
+.shortcutItem{
+
+padding:12px;
+
+border-radius:10px;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.shortcutItem:hover{
+
+background:#f0f2f5;
+
+}
+
+/* ==========================
+Messenger
+========================== */
+
+#messagePage{
+
+display:none;
+
+position:fixed;
+
+top:70px;
+
+right:20px;
+
+width:380px;
+
+height:600px;
+
+background:#fff;
+
+border-radius:15px;
+
+box-shadow:0 2px 20px rgba(0,0,0,.15);
+
+overflow:hidden;
+
+z-index:9999;
+
+}/* ==========================
+Messenger
+========================== */
+
+.chatHeader{
+
+height:60px;
+
+background:#1877f2;
+
+color:#fff;
+
+display:flex;
+
+align-items:center;
+
+padding:0 20px;
+
+font-size:18px;
+
+font-weight:bold;
+
+}
+
+#chatBox{
+
+height:470px;
+
+overflow-y:auto;
+
+padding:15px;
+
+background:#f5f7fb;
+
+}
+
+.myMessage{
+
+background:#1877f2;
+
+color:#fff;
+
+padding:10px 15px;
+
+border-radius:15px 15px 0 15px;
+
+margin:8px 0;
+
+margin-left:60px;
+
+word-break:break-word;
+
+}
+
+.friendMessage{
+
 background:#e4e6eb;
-color:#000;
+
+color:#111;
+
+padding:10px 15px;
+
+border-radius:15px 15px 15px 0;
+
+margin:8px 0;
+
+margin-right:60px;
+
+word-break:break-word;
+
+}
+
+.chatBottom{
+
+height:70px;
+
+display:flex;
+
+align-items:center;
+
+padding:10px;
+
+border-top:1px solid #ddd;
+
+background:#fff;
+
+}
+
+#chatInput{
+
+flex:1;
+
+padding:12px;
+
+border:1px solid #ddd;
+
+border-radius:30px;
+
+font-size:15px;
+
+}
+
+#sendBtn{
+
+margin-left:10px;
+
+padding:12px 22px;
+
+background:#1877f2;
+
+color:#fff;
+
+border-radius:30px;
+
+font-weight:bold;
+
+}
+
+/* ==========================
+Responsive
+========================== */
+
+@media(max-width:1100px){
+
+#leftSidebar{
+
+display:none;
+
+}
+
+#rightSidebar{
+
+display:none;
+
+}
+
+#feedPage{
+
+margin:75px auto;
+
+width:95%;
+
+}
+
+#messagePage{
+
+width:100%;
+
+height:100%;
+
+top:0;
+
+right:0;
+
+border-radius:0;
+
+}
+
+}
+
+/* ==========================
+Dark Mode
+========================== */
+
+.dark{
+
+background:#18191a;
+
+color:#fff;
+
+}
+
+.dark #topBar,
+
+.dark #leftSidebar,
+
+.dark #rightSidebar,
+
+.dark .createPost,
+
+.dark .postCard,
+
+.dark #messagePage{
+
+background:#242526;
+
+color:#fff;
+
+}
+
+.dark input,
+
+.dark textarea{
+
+background:#3a3b3c;
+
+color:#fff;
+
+}
+
+.dark .menuItem:hover,
+
+.dark .shortcutItem:hover,
+
+.dark .postActions button:hover{
+
+background:#3a3b3c;
+
+}
+
+.dark .friendMessage{
+
+background:#3a3b3c;
+
+color:#fff;
+
+}
+
+.dark #chatBox{
+
+background:#18191a;
+
 }
