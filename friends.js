@@ -230,17 +230,6 @@ alert("✅ Friend Added");
 
 loadFriendRequests();
 loadFriends();
-document.addEventListener("click", async (e) => {
-
-    if (e.target.classList.contains("rejectBtn")) {
-
-        const id = e.target.dataset.id;
-
-        await deleteDoc(doc(db, "friendRequests", id));
-
-        alert("❌ Friend Request Rejected");
-
-        loadFriendRequests();
 
     }
 
