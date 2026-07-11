@@ -70,8 +70,10 @@ data-email="${user.email}">
 ➕ Follow
 </button>
 
-<button class="messageBtn"
-data-email="${user.email}">
+<button
+class="messageBtn"
+data-email="${user.email}"
+onclick="openChat('${user.email}')">
 💬 Message
 </button>
 
