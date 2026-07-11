@@ -1,390 +1,329 @@
-// friends.js PART-1
+// ===============================
+// Friendsbook V4
+// friends.js Part 1
+// ===============================
 
 import { db, auth } from "./firebase.js";
-import { openChat } from "./message.js";
 
 import {
-  collection,
-  getDocs,
-  getDoc,
-  setDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-  query,
-  where,
-  increment
+
+collection,
+doc,
+setDoc,
+getDocs,
+deleteDoc,
+onSnapshot
+
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-const friendsList = document.getElementById("friendsList");
-const requestList = document.getElementById("requestList");
+const requestList=document.getElementById("requestList");
 
-let myFriends = [];
+const friendsList=document.getElementById("friendsList");
 
-async function loadMyFriends() {
+// ===============================
+// Send Friend Request
+// ===============================
 
-    myFriends = [];
+export async function sendFriendRequest(email){
 
-    const snap = await getDocs(
-        query(
-            collection(db, "friends"),
-            where("user1", "==", auth.currentUser.email)
-        )
-    );
+if(email===auth.currentUser.email){
 
-    snap.forEach((d) => {
+alert("নিজেকে Friend করা যাবে না");
 
-        myFriends.push(d.data().user2);
-
-    });
+return;
 
 }
 
-export async function loadFriends() {
+await setDoc(
 
-    if (!friendsList) return;
+doc(
 
-    await loadMyFriends();
+db,
 
-    friendsList.innerHTML = "<h3>Loading...</h3>";
+"friendRequests",
 
-    const users = await getDocs(collection(db, "users"));
+auth.currentUser.email+"_"+email
 
-    friendsList.innerHTML = "";
+),
 
-    users.forEach((docSnap) => {
+{
 
-        const user = docSnap.data();
+from:auth.currentUser.email,
 
-        if (user.email === auth.currentUser.email) return;
+to:email,
 
-        const isFriend = myFriends.includes(user.email);
+time:Date.now()
 
-        friendsList.innerHTML += `
-
-<div class="friendCard">
-
-<img class="friendPhoto"
-src="${user.profile || "https://placehold.co/80"}">
-
-<div class="friendInfo">
-
-<h3>${user.name}</h3>
-
-<p>${user.bio || "Friendsbook User"}</p>
-
-</div>
-
-<div class="friendActions">
-
-${
-isFriend
-?
-`
-<button
-class="messageBtn"
-data-email="${user.email}"
-onclick="openChat('${user.email}')">
-💬 Message
-</button>
-
-<button
-class="unfriendBtn"
-data-email="${user.email}">
-❌ Unfriend
-</button>
-`
-:
-`
-<button
-class="addFriendBtn"
-data-email="${user.email}">
-👥 Add Friend
-</button>
-
-<button
-class="followBtn"
-data-email="${user.email}">
-➕ Follow
-</button>
-`
 }
 
-</div>
+);
+
+alert("Friend Request Sent");
+
+}
+
+// ===============================
+// Load Friend Requests
+// ===============================
+
+const requestRef=collection(db,"friendRequests");
+
+onSnapshot(requestRef,(snapshot)=>{
+
+requestList.innerHTML="";
+
+snapshot.forEach((item)=>{
+
+const data=item.data();
+
+if(data.to===auth.currentUser.email){
+
+requestList.innerHTML+=`
+
+<div class="friendRequest">
+
+<h4>${data.from}</h4>
+
+<button onclick="acceptFriend('${item.id}','${data.from}')">
+
+Accept
+
+</button>
+
+<button onclick="rejectFriend('${item.id}')">
+
+Delete
+
+</button>
 
 </div>
 
 `;
 
-    });
-
 }
-// ===============================
-// Friend Requests
-// ===============================
-
-export async function loadFriendRequests() {
-
-    if (!requestList) return;
-
-    requestList.innerHTML = "";
-
-    const snap = await getDocs(
-        query(
-            collection(db, "friendRequests"),
-            where("to", "==", auth.currentUser.email),
-            where("status", "==", "pending")
-        )
-    );
-
-    snap.forEach((d) => {
-
-        const req = d.data();
-
-        requestList.innerHTML += `
-
-<div class="friendCard">
-
-<h3>${req.from}</h3>
-
-<div class="friendActions">
-
-<button
-class="acceptBtn"
-data-id="${d.id}">
-✅ Accept
-</button>
-
-<button
-class="rejectBtn"
-data-id="${d.id}">
-❌ Reject
-</button>
-
-</div>
-
-</div>
-
-`;
-
-    });
-
-}
-
-// ===============================
-// Add Friend
-// ===============================
-
-document.addEventListener("click", async (e) => {
-
-    if (!e.target.classList.contains("addFriendBtn")) return;
-
-    const receiver = e.target.dataset.email;
-
-    await setDoc(
-
-        doc(
-            db,
-            "friendRequests",
-            auth.currentUser.email + "_" + receiver
-        ),
-
-        {
-            from: auth.currentUser.email,
-            to: receiver,
-            status: "pending",
-            time: Date.now()
-        }
-
-    );
-
-    alert("✅ Friend Request Sent");
-
-    loadFriends();
 
 });
 
+});// ===============================
+// Accept Friend Request
 // ===============================
-// Accept Friend
-// ===============================
 
-document.addEventListener("click", async (e) => {
+window.acceptFriend = async(requestId, friendEmail)=>{
 
-    if (!e.target.classList.contains("acceptBtn")) return;
+await setDoc(
 
-    const id = e.target.dataset.id;
+doc(
 
-    const reqRef = doc(db, "friendRequests", id);
+db,
 
-    const reqSnap = await getDoc(reqRef);
+"friends",
 
-    const req = reqSnap.data();
+auth.currentUser.email+"_"+friendEmail
 
-    await updateDoc(reqRef, {
-        status: "accepted"
-    });
+),
 
-    await setDoc(
-        doc(
-            db,
-            "friends",
-            auth.currentUser.email + "_" + req.from
-        ),
-        {
-            user1: auth.currentUser.email,
-            user2: req.from,
-            time: Date.now()
-        }
-    );
+{
 
-    await setDoc(
-        doc(
-            db,
-            "friends",
-            req.from + "_" + auth.currentUser.email
-        ),
-        {
-            user1: req.from,
-            user2: auth.currentUser.email,
-            time: Date.now()
-        }
-    );
+user1:auth.currentUser.email,
 
-    await updateDoc(
-        doc(db, "users", req.from),
-        {
-            friends: increment(1)
-        }
-    );
+user2:friendEmail,
 
-    await updateDoc(
-        doc(db, "users", req.to),
-        {
-            friends: increment(1)
-        }
-    );
+createdAt:Date.now()
 
-    alert("✅ Friend Added");
+}
 
-    loadFriends();
+);
 
-    loadFriendRequests();
+await deleteDoc(
 
-});
+doc(db,"friendRequests",requestId)
+
+);
+
+alert("Friend Added");
+
+};
+
 // ===============================
 // Reject Friend Request
 // ===============================
 
-document.addEventListener("click", async (e) => {
+window.rejectFriend = async(requestId)=>{
 
-    if (!e.target.classList.contains("rejectBtn")) return;
+await deleteDoc(
 
-    await deleteDoc(
-        doc(
-            db,
-            "friendRequests",
-            e.target.dataset.id
-        )
-    );
+doc(db,"friendRequests",requestId)
 
-    alert("❌ Friend Request Rejected");
+);
 
-    loadFriendRequests();
+};
+
+// ===============================
+// Load Friends
+// ===============================
+
+const friendsRef=collection(db,"friends");
+
+onSnapshot(friendsRef,(snapshot)=>{
+
+friendsList.innerHTML="";
+
+snapshot.forEach((item)=>{
+
+const f=item.data();
+
+let friend="";
+
+if(f.user1===auth.currentUser.email){
+
+friend=f.user2;
+
+}else if(f.user2===auth.currentUser.email){
+
+friend=f.user1;
+
+}
+
+if(friend!==""){
+
+friendsList.innerHTML+=`
+
+<div class="friendCard">
+
+<img src="images/default-profile.png">
+
+<div>
+
+<h4>${friend}</h4>
+
+<button onclick="openChat('${friend}')">
+
+Message
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}
 
 });
+
+});// ===============================
+// Friendsbook V4
+// friends.js Part 3
+// Unfriend + Search + Follow
+// ===============================
+
+import {
+updateDoc,
+increment
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 // ===============================
 // Unfriend
 // ===============================
 
-document.addEventListener("click", async (e) => {
+window.unFriend = async(friendEmail)=>{
 
-    if (!e.target.classList.contains("unfriendBtn")) return;
+const id1 = auth.currentUser.email+"_"+friendEmail;
+const id2 = friendEmail+"_"+auth.currentUser.email;
 
-    const email = e.target.dataset.email;
+try{
 
-    if (!confirm("Remove this friend?")) return;
+await deleteDoc(doc(db,"friends",id1));
 
-    await deleteDoc(
-        doc(
-            db,
-            "friends",
-            auth.currentUser.email + "_" + email
-        )
-    );
+}catch(e){}
 
-    await deleteDoc(
-        doc(
-            db,
-            "friends",
-            email + "_" + auth.currentUser.email
-        )
-    );
+try{
 
-    await updateDoc(
-        doc(db, "users", auth.currentUser.email),
-        {
-            friends: increment(-1)
-        }
-    );
+await deleteDoc(doc(db,"friends",id2));
 
-    await updateDoc(
-        doc(db, "users", email),
-        {
-            friends: increment(-1)
-        }
-    );
+}catch(e){}
 
-    alert("❌ Friend Removed");
+alert("Friend Removed");
 
-    loadFriends();
-
-});
+};
 
 // ===============================
-// Follow / Unfollow
+// Follow User
 // ===============================
 
-document.addEventListener("click", (e) => {
+window.followUser = async(email)=>{
 
-    if (!e.target.classList.contains("followBtn")) return;
+if(email===auth.currentUser.email) return;
 
-    const btn = e.target;
+await setDoc(
 
-    if (btn.dataset.state === "following") {
+doc(
+db,
+"followers",
+auth.currentUser.email+"_"+email
+),
 
-        btn.dataset.state = "follow";
-        btn.innerHTML = "➕ Follow";
+{
 
-    } else {
+from:auth.currentUser.email,
 
-        btn.dataset.state = "following";
-        btn.innerHTML = "✅ Following";
+to:email,
 
-    }
-
-});
-
-// ===============================
-// Auto Load
-// ===============================
-
-if (auth.currentUser) {
-
-    loadFriends();
-
-    loadFriendRequests();
+time:Date.now()
 
 }
 
-auth.onAuthStateChanged((user) => {
+);
 
-    if (user) {
+};
 
-        loadFriends();
+// ===============================
+// Search Friends
+// ===============================
 
-        loadFriendRequests();
+const friendSearch=document.getElementById("searchInput");
 
-    }
+friendSearch.addEventListener("keyup",()=>{
+
+const value=friendSearch.value.toLowerCase();
+
+document.querySelectorAll(".friendCard").forEach(card=>{
+
+const txt=card.innerText.toLowerCase();
+
+card.style.display=txt.includes(value)
+?"flex"
+:"none";
 
 });
+
+});
+
+// ===============================
+// Online Status
+// ===============================
+
+window.addEventListener("beforeunload",()=>{
+
+localStorage.setItem(
+
+auth.currentUser.email+"_online",
+
+"offline"
+
+);
+
+});
+
+localStorage.setItem(
+
+auth.currentUser.email+"_online",
+
+"online"
+
+);
+
+// ===============================
+// End friends.js
+// ===============================
