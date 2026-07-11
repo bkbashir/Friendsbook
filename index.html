@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
@@ -10,410 +9,499 @@
 
 <link rel="stylesheet" href="style.css">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 </head>
 
 <body>
 
-<!-- ===========================
-LOGIN PAGE
-=========================== -->
+<!-- Loading -->
 
-<section id="loginPage">
+<div id="loadingScreen">
 
-<div class="loginCard">
+<div class="loader"></div>
 
-<h1 class="logo">
-Friendsbook
-</h1>
-
-<p class="tag">
-Connect with friends and the world.
-</p>
-
-<input
-id="loginEmail"
-type="email"
-placeholder="Email address">
-
-<input
-id="loginPassword"
-type="password"
-placeholder="Password">
-
-<button id="loginBtn">
-Log In
-</button>
-
-<a id="forgotPassword">
-Forgot password?
-</a>
-
-<hr>
-
-<button
-id="openRegister"
-class="greenBtn">
-Create New Account
-</button>
+<h2>Friendsbook</h2>
 
 </div>
 
-</section>
+<!-- Login -->
 
-<!-- ===========================
-REGISTER PAGE
-=========================== -->
+<div id="loginPage">
 
-<section
-id="registerPage"
-style="display:none;">
+<div class="loginBox">
 
-<div class="loginCard">
+<h1>Friendsbook</h1>
 
-<h2>Create New Account</h2>
+<p>Connect with friends</p>
 
 <input
-id="regName"
+type="text"
+id="loginName"
 placeholder="Full Name">
 
 <input
-id="regEmail"
 type="email"
+id="loginEmail"
 placeholder="Email">
 
 <input
-id="regPassword"
 type="password"
+id="loginPassword"
 placeholder="Password">
 
-<input
-id="regConfirm"
-type="password"
-placeholder="Confirm Password">
+<button id="loginBtn">
+
+Login
+
+</button>
 
 <button id="registerBtn">
-Create Account
+
+Create New Account
+
 </button>
-
-<p>
-
-Already have an account?
-
-<a id="backLogin">
-Log In
-</a>
-
-</p>
 
 </div>
 
-</section>
-<!-- ===========================
-HOME PAGE
-=========================== -->
+</div>
 
-<section
-id="homePage"
-style="display:none;">
+<!-- Main -->
 
-<!-- TOP BAR -->
+<div id="mainApp">
 
-<header class="topBar">
+<header id="topBar">
 
-<div class="topLeft">
+<div class="logo">
 
-<h2 class="fbLogo">
 Friendsbook
-</h2>
 
 </div>
-
-<div class="topRight">
-
-<button id="searchBtn">
-<i class="fa-solid fa-magnifying-glass"></i>
-</button>
-
-<button id="messageBtn">
-<i class="fa-brands fa-facebook-messenger"></i>
-</button>
-<section id="messagePage" style="display:none;">
-
-<h2>💬 Messenger</h2>
-
-<div id="chatList"></div>
-
-<div id="chatBox"></div>
 
 <input
-id="chatInput"
-placeholder="Type a message...">
-
-<button id="sendBtn">
-Send
-</button>
-
-</section>
-</div>
-
-</header>
-
-<!-- PROFILE SECTION --> 
-<section class="profileSection">
-
-<div class="coverBox">
-
-<img
-id="coverImage"
-src="https://placehold.co/1200x350?text=Cover+Photo">
-
-</div>
-
-<div class="profileBox">
-
-<img
-id="profileImage"
-src="https://placehold.co/200x200?text=Profile">
-
-</div>
-
-<div class="profileInfo">
-
-<h2 id="userName">
-Your Name
-</h2>
-
-<p id="userBio">
-No bio added yet.
-</p>
-
-<p id="userLocation">📍 Tangail</p>
-
-<p id="userWork">💼 Friendsbook Developer</p>
-
-<p id="userEducation">🎓 Government College</p>
-
-<p id="userRelationship">❤️ Single</p>
-
-
-</div>
-
-</section>
-<!-- ===========================
-STORY SECTION
-=========================== -->
-
-<section class="storySection">
-
-    <div class="story createStory" id="createStory">
-        <div class="plus">+</div>
-        <p>Create Story</p>
-      <input
-type="file"
-id="storyInput"
-accept="image/*"
-style="display:none;">
-    </div>
-
-    <div id="storyContainer"></div>
-
-</section>
-<!-- EDIT PROFILE MODAL -->
-
-<div id="editProfileModal" class="modal" style="display:none;">
-
-<div class="modalContent">
-
-<h2>👤 Edit Profile</h2>
-
-<label>Profile Photo</label>
-<input type="file" id="profileInput" accept="image/*">
-
-<label>Cover Photo</label>
-<input type="file" id="coverInput" accept="image/*">
-
-<label>Name</label>
-<input type="text" id="editName">
-
-<label>Bio</label>
-<textarea id="editBio"></textarea>
-
-<label>Location</label>
-<input type="text" id="editLocation" placeholder="Your location">
-
-<label>Work</label>
-<input type="text" id="editWork" placeholder="Where do you work?">
-
-<label>Education</label>
-<input type="text" id="editEducation" placeholder="Your education">
-
-<label>Relationship</label>
-<select id="editRelationship">
-<option value="">Select</option>
-<option>Single</option>
-<option>In a Relationship</option>
-<option>Married</option>
-</select>
-
-<button id="saveProfileBtn">
-💾 Save Changes
-</button>
-
-<button id="closeProfileBtn">
-❌ Cancel
-</button>
-
-</div>
-
-    </div>
-<!-- ===========================
-CREATE POST
-=========================== -->
-
-<section class="createPost">
-
-<input
-id="postText"
+id="searchInput"
 type="text"
+placeholder="Search Friendsbook">
+
+<div class="topIcons">
+
+<span
+class="material-icons"
+id="notificationBtn">
+
+notifications
+
+</span>
+
+<span
+class="material-icons"
+id="messageBtn">
+
+chat
+
+</span>
+
+<span
+class="material-icons"
+id="menuBtn">
+
+menu
+
+</span>
+
+</div>
+
+</header><!-- Left Sidebar -->
+
+<div id="leftSidebar">
+
+<div class="profileCard">
+
+<img id="profilePhoto" src="images/default-profile.png">
+
+<h3 id="profileName">User Name</h3>
+
+<p id="profileBio">Welcome to Friendsbook</p>
+
+</div>
+
+<div class="menuList">
+
+<div class="menuItem" id="homePageBtn">
+
+<span class="material-icons">home</span>
+
+Home
+
+</div>
+
+<div class="menuItem" id="profilePageBtn">
+
+<span class="material-icons">person</span>
+
+Profile
+
+</div>
+
+<div class="menuItem" id="friendsPageBtn">
+
+<span class="material-icons">group</span>
+
+Friends
+
+</div>
+
+<div class="menuItem" id="storyPageBtn">
+
+<span class="material-icons">auto_stories</span>
+
+Stories
+
+</div>
+
+<div class="menuItem" id="reelsPageBtn">
+
+<span class="material-icons">smart_display</span>
+
+Reels
+
+</div>
+
+<div class="menuItem" id="savedPageBtn">
+
+<span class="material-icons">bookmark</span>
+
+Saved
+
+</div>
+
+<div class="menuItem" id="settingsPageBtn">
+
+<span class="material-icons">settings</span>
+
+Settings
+
+</div>
+
+<div class="menuItem" id="logoutBtn">
+
+<span class="material-icons">logout</span>
+
+Logout
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Feed -->
+
+<div id="feedPage">
+
+<div class="createPost">
+
+<textarea
+
+id="postText"
+
 placeholder="What's on your mind?">
 
+</textarea>
+
 <input
+
 type="file"
+
 id="postImage"
+
 accept="image/*">
 
 <input
+
 type="file"
-id="videoInput"
-accept="video/*"
-style="display:none;">
 
-<button id="addVideo">
-🎥 Video
-</button>
+id="postVideo"
 
-<button id="postBtn">
+accept="video/*">
+
+<button id="createPostBtn">
+
 Post
-</button>
 
-</section>
-
-<!-- ===========================
-POST FEED
-=========================== -->
-
-<section id="feed">
-
-</section>
-<section id="friendsPage" style="display:none;">
-    <h2>👥 Friends</h2>
-   <div id="friendsList"></div>
-    
-</section>
-
-<section id="watchPage" style="display:none;">
-    <h2>🎥 Watch</h2>
-    <div id="watchFeed"></div>
-</section>
-
-<section id="notificationPage" style="display:none;">
-    <h2>🔔 Notifications</h2>
-    <div id="notificationList"></div>
-    <h3>👥 Friend Requests</h3>
-
-<div id="requestList"></div>
-</section>
-
-<section id="menuPage" style="display:none;">
-    <h2>☰ Menu</h2>
-
-    <button id="editProfileMenuBtn">Edit Profile</button>
-    
-</section>
-<!-- ===========================
-BOTTOM NAVIGATION
-=========================== -->
-
-<div id="menuPanel" class="menuPanel">
-
-<div class="menuHeader">
-<h3>Menu</h3>
-<span id="closeMenu">&times;</span>
-</div>
-
-<button id="menuEditProfileBtn">
-👤 Edit Profile
-</button>
-
-<button>
-🔒 Privacy
-</button>
-
-<button>
-🔐 Security
-</button>
-
-<button>
-🔔 Notifications
-</button>
-
-<button>
-💬 Messenger
-</button>
-
-<button id="darkModeBtn">
-🌙 Dark Mode
-</button>
-
-<button>
-🌐 Language
-</button>
-
-<button>
-💾 Saved Posts
-</button>
-
-<button>
-📊 Activity Log
-</button>
-
-<button id="logoutBtn">
-🚪 Logout
 </button>
 
 </div>
 
-<nav class="bottomNav">
+<div id="storyBar">
 
-<button id="navHome" class="active">
-<i class="fa-solid fa-house"></i>
+</div>
+
+<div id="postContainer">
+
+</div>
+
+</div><!-- Right Sidebar -->
+
+<div id="rightSidebar">
+
+<div class="onlineTitle">
+
+Online Friends
+
+</div>
+
+<div id="onlineFriends">
+
+</div>
+
+<div class="shortcutTitle">
+
+Shortcuts
+
+</div>
+
+<div class="shortcutItem">
+
+📷 Photos
+
+</div>
+
+<div class="shortcutItem">
+
+🎥 Videos
+
+</div>
+
+<div class="shortcutItem">
+
+👥 Groups
+
+</div>
+
+<div class="shortcutItem">
+
+📄 Pages
+
+</div>
+
+</div>
+
+<!-- Messenger -->
+
+<div id="messagePage" class="page">
+
+<div class="chatHeader">
+
+<span id="chatFriendName">
+
+Messenger
+
+</span>
+
+</div>
+
+<div id="chatBox">
+
+</div>
+
+<div class="chatBottom">
+
+<input
+
+type="text"
+
+id="chatInput"
+
+placeholder="Write a message...">
+
+<button id="sendBtn">
+
+Send
+
 </button>
 
-<button id="navFriends">
-<i class="fa-solid fa-user-group"></i>
+</div>
+
+</div>
+
+<!-- Notification -->
+
+<div id="notificationPage" class="page">
+
+<h2>
+
+Notifications
+
+</h2>
+
+<div id="notificationList">
+
+</div>
+
+</div>
+
+<!-- Friends -->
+
+<div id="friendsPage" class="page">
+
+<h2>
+
+Friends
+
+</h2>
+
+<div id="requestList">
+
+</div>
+
+<div id="friendsList">
+
+</div>
+
+</div><!-- Profile Page -->
+
+<div id="profilePage" class="page">
+
+<div class="coverSection">
+
+<img id="coverPhoto" src="images/default-cover.jpg">
+
+<input
+type="file"
+id="coverInput"
+accept="image/*">
+
+</div>
+
+<div class="profileSection">
+
+<img id="profileImage" src="images/default-profile.png">
+
+<input
+type="file"
+id="profileInput"
+accept="image/*">
+
+<h2 id="myName">
+
+User Name
+
+</h2>
+
+<textarea
+
+id="bioInput"
+
+placeholder="Write your bio...">
+
+</textarea>
+
+<button id="saveProfileBtn">
+
+Save Profile
+
 </button>
 
-<button id="navCreate">
-<i class="fa-solid fa-square-plus"></i>
+</div>
+
+</div>
+
+<!-- Story Page -->
+
+<div id="storyPage" class="page">
+
+<h2>
+
+Create Story
+
+</h2>
+
+<input
+
+type="file"
+
+id="storyInput"
+
+accept="image/*,video/*">
+
+<button id="uploadStoryBtn">
+
+Upload Story
+
 </button>
 
-<button id="navNotify">
-<i class="fa-solid fa-bell"></i>
+<div id="storyContainer">
+
+</div>
+
+</div>
+
+<!-- Reels -->
+
+<div id="reelsPage" class="page">
+
+<h2>
+
+Reels
+
+</h2>
+
+<div id="reelsContainer">
+
+</div>
+
+</div><!-- Settings -->
+
+<div id="settingsPage" class="page">
+
+<h2>Settings</h2>
+
+<div class="settingCard">
+
+<label>
+
+<input type="checkbox" id="darkMode">
+
+Dark Mode
+
+</label>
+
+</div>
+
+<div class="settingCard">
+
+<button id="clearCacheBtn">
+
+Clear Cache
+
 </button>
 
-<button id="navMenu">
-<i class="fa-solid fa-bars"></i>
-</button>
+</div>
 
-</nav>
+</div>
 
-</section>
+</div>
+<!-- mainApp End -->
 
 <script type="module" src="firebase.js"></script>
+
+<script type="module" src="auth.js"></script>
+
 <script type="module" src="script.js"></script>
 
+<script type="module" src="post.js"></script>
+
+<script type="module" src="story.js"></script>
+
+<script type="module" src="friends.js"></script>
+
+<script type="module" src="message.js"></script>
+
+<script type="module" src="notification.js"></script>
+
+<script type="module" src="profile.js"></script>
+
 </body>
+
 </html>
