@@ -2,7 +2,7 @@
 // Friendsbook V5
 // admin.js Part 1
 // ===============================
-
+const ADMIN_EMAIL = "bashirahmed0052@gmail.com";
 import { auth, db } from "./firebase.js";
 
 import {
