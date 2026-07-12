@@ -602,50 +602,60 @@ id="notificationContainer">
 Settings Page
 =========================== -->
 
-<section
-class="page"
-id="settingsPage"
-style="display:none;">
+<div class="settingsCard">
+<h3>⚙️ Settings</h3>
 
-<div class="settingItem">
+<div class="settingItem" id="editProfileBtn">
+<i class="fa-solid fa-user"></i>
+<span>Edit Profile</span>
+</div>
 
-<span>
+<div class="settingItem" id="changePasswordBtn">
+<i class="fa-solid fa-key"></i>
+<span>Change Password</span>
+</div>
 
-Dark Mode
+<div class="settingItem" id="privacyBtn">
+<i class="fa-solid fa-lock"></i>
+<span>Privacy</span>
+</div>
 
-</span>
+<div class="settingItem" id="notificationSettingBtn">
+<i class="fa-solid fa-bell"></i>
+<span>Notifications</span>
+</div>
 
-<input
-type="checkbox"
-id="darkMode">
-
+<div class="settingItem" id="languageBtn">
+<i class="fa-solid fa-language"></i>
+<span>Language</span>
 </div>
 
 <div class="settingItem">
-
-<button
-class="btn"
-id="clearCacheBtn">
-
-Clear Cache
-
-</button>
-
+<span>Dark Mode</span>
+<input type="checkbox" id="darkMode">
 </div>
 
-<div class="settingItem">
+<div class="settingItem" id="clearCacheBtn">
+<i class="fa-solid fa-trash"></i>
+<span>Clear Cache</span>
+</div>
 
-<button
-class="btn btnDanger"
-onclick="logout()">
+<div class="settingItem" id="aboutBtn">
+<i class="fa-solid fa-circle-info"></i>
+<span>About Friendsbook</span>
+</div>
 
+<div class="settingItem adminOnly" id="adminPanelBtn" style="display:none;">
+<i class="fa-solid fa-user-shield"></i>
+<span>Admin Panel</span>
+</div>
+
+<button class="logoutBtn" id="logoutBtn">
 Logout
-
 </button>
 
 </div>
-
-</section><!-- ===========================
+  <!-- ===========================
 Marketplace Page
 =========================== -->
 
