@@ -460,6 +460,8 @@ const adminBtn = document.getElementById("adminPanelBtn");
 
 onAuthStateChanged(auth, (user) => {
 
+    if (!adminBtn) return;
+
     if (user && user.email === ADMIN_EMAIL) {
 
         adminBtn.style.display = "flex";
@@ -472,11 +474,11 @@ onAuthStateChanged(auth, (user) => {
 
 });
 
-adminBtn?.addEventListener("click", () => {
-
-    location.href = "admin.html";
-
-});
+if (adminBtn) {
+    adminBtn.addEventListener("click", () => {
+        location.href = "admin.html";
+    });
+}
 // ===============================
 // End script.js
 // ===============================
