@@ -1,13 +1,29 @@
 // ===============================
-// Friendsbook V4
-// script.js
+// Friendsbook V5
+// script.js Part 1
 // ===============================
 
+// Imports
 import { auth } from "./firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-const pages = document.querySelectorAll(".page");
+// ===============================
+// Elements
+// ===============================
 
-function hidePages(){
+const pages=document.querySelectorAll(".page");
+
+const loadingScreen=document.getElementById("loadingScreen");
+
+const loginPage=document.getElementById("loginPage");
+
+const mainApp=document.getElementById("mainApp");
+
+// ===============================
+// Hide All Pages
+// ===============================
+
+export function hidePages(){
 
 pages.forEach(page=>{
 
@@ -17,73 +33,83 @@ page.style.display="none";
 
 }
 
+// ===============================
+// Show Page
+// ===============================
+
 export function showPage(id){
 
 hidePages();
 
-const page = document.getElementById(id);
+const page=document.getElementById(id);
 
 if(page){
 
 page.style.display="block";
 
+window.scrollTo({
+
+top:0,
+
+behavior:"smooth"
+
+});
+
 }
 
 }
 
 // ===============================
-// Navigation
+// Open Feed
 // ===============================
 
-document.getElementById("homePageBtn").onclick=()=>{
+export function openFeed(){
 
-hidePages();
+showPage("feedPage");
 
-document.getElementById("feedPage").style.display="block";
+}
 
-};
+// ===============================
+// Authentication
+// ===============================
 
-document.getElementById("profilePageBtn").onclick=()=>{
+onAuthStateChanged(auth,(user)=>{
 
-showPage("profilePage");
+if(user){
 
-};
+if(loginPage){
 
-document.getElementById("friendsPageBtn").onclick=()=>{
+loginPage.style.display="none";
 
-showPage("friendsPage");
+}
 
-};
+if(mainApp){
 
-document.getElementById("storyPageBtn").onclick=()=>{
+mainApp.style.display="block";
 
-showPage("storyPage");
+}
 
-};
+openFeed();
 
-document.getElementById("reelsPageBtn").onclick=()=>{
+}else{
 
-showPage("reelsPage");
+if(loginPage){
 
-};
+loginPage.style.display="flex";
 
-document.getElementById("messageBtn").onclick=()=>{
+}
 
-showPage("messagePage");
+if(mainApp){
 
-};
+mainApp.style.display="none";
 
-document.getElementById("notificationBtn").onclick=()=>{
+}
 
-showPage("notificationPage");
+}
 
-};
+});
 
-document.getElementById("settingsPageBtn").onclick=()=>{
-
-showPage("settingsPage");
-
-};// ===============================
+// ===============================
 // Loading Screen
 // ===============================
 
@@ -91,11 +117,74 @@ window.addEventListener("load",()=>{
 
 setTimeout(()=>{
 
-document.getElementById("loadingScreen").style.display="none";
+if(loadingScreen){
 
-},1200);
+loadingScreen.style.display="none";
+
+}
+
+},1000);
 
 });
+
+// ===============================
+// Navigation Buttons
+// ===============================
+
+document.getElementById("homePageBtn")?.addEventListener("click",()=>{
+
+openFeed();
+
+});
+
+document.getElementById("profilePageBtn")?.addEventListener("click",()=>{
+
+showPage("profilePage");
+
+});
+
+document.getElementById("friendsPageBtn")?.addEventListener("click",()=>{
+
+showPage("friendsPage");
+
+});
+
+document.getElementById("storyPageBtn")?.addEventListener("click",()=>{
+
+showPage("storyPage");
+
+});
+
+document.getElementById("reelsPageBtn")?.addEventListener("click",()=>{
+
+showPage("reelsPage");
+
+});
+
+document.getElementById("messageBtn")?.addEventListener("click",()=>{
+
+showPage("messagePage");
+
+});
+
+document.getElementById("notificationBtn")?.addEventListener("click",()=>{
+
+showPage("notificationPage");
+
+});
+
+document.getElementById("settingsPageBtn")?.addEventListener("click",()=>{
+
+showPage("settingsPage");
+
+});
+
+// ===============================
+// End Part 1
+// ===============================// ===============================
+// Friendsbook V5
+// script.js Part 2
+// ===============================
 
 // ===============================
 // Search
@@ -103,7 +192,9 @@ document.getElementById("loadingScreen").style.display="none";
 
 const searchInput=document.getElementById("searchInput");
 
-searchInput.onkeyup=()=>{
+if(searchInput){
+
+searchInput.addEventListener("keyup",()=>{
 
 const value=searchInput.value.toLowerCase();
 
@@ -115,7 +206,9 @@ post.style.display=text.includes(value)?"block":"none";
 
 });
 
-};
+});
+
+}
 
 // ===============================
 // Dark Mode
@@ -123,15 +216,21 @@ post.style.display=text.includes(value)?"block":"none";
 
 const darkMode=document.getElementById("darkMode");
 
-if(localStorage.getItem("theme")=="dark"){
+if(localStorage.getItem("theme")==="dark"){
 
 document.body.classList.add("dark");
+
+if(darkMode){
 
 darkMode.checked=true;
 
 }
 
-darkMode.onchange=()=>{
+}
+
+if(darkMode){
+
+darkMode.addEventListener("change",()=>{
 
 if(darkMode.checked){
 
@@ -147,46 +246,9 @@ localStorage.setItem("theme","light");
 
 }
 
-};
-
-// ===============================
-// Clear Cache
-// ===============================
-
-document.getElementById("clearCacheBtn").onclick=()=>{
-
-if(confirm("সব Local Data Delete করবেন?")){
-
-localStorage.clear();
-
-location.reload();
-
-}
-
-};// ===============================
-// Friendsbook V4
-// Profile + Mobile Menu
-// ===============================
-
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
-onAuthStateChanged(auth,(user)=>{
-
-if(user){
-
-hidePages();
-
-document.getElementById("feedPage").style.display="block";
-
-}else{
-
-document.getElementById("loginPage").style.display="flex";
-
-document.getElementById("mainApp").style.display="none";
-
-}
-
 });
+
+}
 
 // ===============================
 // Mobile Menu
@@ -198,23 +260,35 @@ const leftSidebar=document.getElementById("leftSidebar");
 
 let menuOpen=false;
 
-menuBtn.onclick=()=>{
+if(menuBtn){
+
+menuBtn.addEventListener("click",()=>{
 
 if(window.innerWidth<=1100){
 
 menuOpen=!menuOpen;
 
-leftSidebar.style.display=menuOpen?"block":"none";
+if(leftSidebar){
+
+leftSidebar.style.display=
+
+menuOpen?"block":"none";
 
 }
 
-};
+}
+
+});
+
+}
 
 // ===============================
 // Responsive
 // ===============================
 
 window.addEventListener("resize",()=>{
+
+if(!leftSidebar) return;
 
 if(window.innerWidth>1100){
 
@@ -234,30 +308,153 @@ menuOpen=false;
 // Profile Shortcut
 // ===============================
 
-document.getElementById("profilePhoto").onclick=()=>{
+document.getElementById("profilePhoto")?.addEventListener("click",()=>{
 
 showPage("profilePage");
 
-};
+});
 
-document.getElementById("profileImage").onclick=()=>{
+document.getElementById("profileImage")?.addEventListener("click",()=>{
 
 showPage("profilePage");
 
+});
+
+// ===============================
+// Logo Shortcut
+// ===============================
+
+document.querySelector(".logo")?.addEventListener("click",()=>{
+
+openFeed();
+
+});
+
+// ===============================
+// End Part 2
+// ===============================// ===============================
+// Friendsbook V5
+// script.js Part 3 (Final)
+// ===============================
+
+// ===============================
+// Clear Local Cache
+// ===============================
+
+document.getElementById("clearCacheBtn")?.addEventListener("click",()=>{
+
+if(confirm("সব Local Data Delete করবেন?")){
+
+localStorage.clear();
+
+sessionStorage.clear();
+
+location.reload();
+
+}
+
+});
+
+// ===============================
+// Online / Offline Status
+// ===============================
+
+window.addEventListener("online",()=>{
+
+console.log("Internet Connected");
+
+});
+
+window.addEventListener("offline",()=>{
+
+console.log("Internet Disconnected");
+
+});
+
+// ===============================
+// Keyboard Shortcut
+// ===============================
+
+window.addEventListener("keydown",(e)=>{
+
+// Home
+
+if(e.altKey && e.key==="1"){
+
+openFeed();
+
+}
+
+// Profile
+
+if(e.altKey && e.key==="2"){
+
+showPage("profilePage");
+
+}
+
+// Friends
+
+if(e.altKey && e.key==="3"){
+
+showPage("friendsPage");
+
+}
+
+// Messages
+
+if(e.altKey && e.key==="4"){
+
+showPage("messagePage");
+
+}
+
+});
+
+// ===============================
+// Global Logout
+// ===============================
+
+window.logout=async()=>{
+
+await auth.signOut();
+
+localStorage.clear();
+
+sessionStorage.clear();
+
+location.reload();
+
 };
 
 // ===============================
-// Home Shortcut
+// App Version
 // ===============================
 
-document.querySelector(".logo").onclick=()=>{
+window.FRIENDSBOOK={
 
-hidePages();
+name:"Friendsbook",
 
-document.getElementById("feedPage").style.display="block";
+version:"5.0.0",
+
+developer:"Bashir Ahmed"
 
 };
 
 // ===============================
-// End Script Part 3
+// Initialize App
+// ===============================
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+console.log(
+
+`${FRIENDSBOOK.name} ${FRIENDSBOOK.version} Loaded`
+
+);
+
+});
+
+// ===============================
+// End script.js
 // ===============================
