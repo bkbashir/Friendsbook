@@ -454,7 +454,29 @@ console.log(
 );
 
 });
+const ADMIN_EMAIL = "bashirahmed0052@gmail.com";
 
+const adminBtn = document.getElementById("adminPanelBtn");
+
+onAuthStateChanged(auth, (user) => {
+
+    if (user && user.email === ADMIN_EMAIL) {
+
+        adminBtn.style.display = "flex";
+
+    } else {
+
+        adminBtn.style.display = "none";
+
+    }
+
+});
+
+adminBtn?.addEventListener("click", () => {
+
+    location.href = "admin.html";
+
+});
 // ===============================
 // End script.js
 // ===============================
