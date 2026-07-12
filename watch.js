@@ -247,3 +247,115 @@ video.requestFullscreen();
 }
 
 };
+// ===============================
+// Friendsbook V5
+// watch.js Part 3 (Final)
+// ===============================
+
+import {
+
+collection,
+addDoc,
+serverTimestamp
+
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+// ===============================
+// Comment Video
+// ===============================
+
+window.watchComment=async(videoId)=>{
+
+const text=prompt("Write a comment");
+
+if(!text) return;
+
+await addDoc(
+
+collection(db,"watchComments"),
+
+{
+
+videoId:videoId,
+
+uid:auth.currentUser.uid,
+
+email:auth.currentUser.email,
+
+text:text,
+
+createdAt:serverTimestamp()
+
+}
+
+);
+
+alert("Comment Added");
+
+};
+
+// ===============================
+// Save Video
+// ===============================
+
+window.saveWatchVideo=async(videoId)=>{
+
+await addDoc(
+
+collection(db,"savedWatch"),
+
+{
+
+uid:auth.currentUser.uid,
+
+videoId:videoId,
+
+savedAt:serverTimestamp()
+
+}
+
+);
+
+alert("Video Saved");
+
+};
+
+// ===============================
+// Report Video
+// ===============================
+
+window.reportWatchVideo=async(videoId)=>{
+
+await addDoc(
+
+collection(db,"watchReports"),
+
+{
+
+videoId:videoId,
+
+reporter:auth.currentUser.email,
+
+reportedAt:serverTimestamp()
+
+}
+
+);
+
+alert("Video Report Submitted");
+
+};
+
+// ===============================
+// Open Video
+// ===============================
+
+window.openWatchVideo=(videoId)=>{
+
+location.href="watch-player.html?id="+videoId;
+
+};
+
+// ===============================
+// End watch.js
+// ===============================
