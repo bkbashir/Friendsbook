@@ -1,94 +1,104 @@
-/*==========================
-Friendsbook V4
-==========================*/
+/* ===============================
+   Friendsbook V5
+   style.css Part 1
+================================ */
+
+/* Reset */
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+html{
+scroll-behavior:smooth;
 }
 
 body{
-
 background:#f0f2f5;
-
+color:#050505;
 overflow-x:hidden;
+}
+
+/* ===============================
+   Root Colors
+================================ */
+
+:root{
+
+--primary:#1877f2;
+--primary-hover:#166fe5;
+
+--bg:#f0f2f5;
+--card:#ffffff;
+
+--text:#050505;
+--text2:#65676b;
+
+--border:#d8dadf;
+
+--shadow:0 2px 8px rgba(0,0,0,.08);
 
 }
 
-a{
+/* ===============================
+   Dark Mode
+================================ */
 
-text-decoration:none;
+body.dark{
 
-color:inherit;
+--bg:#18191a;
+--card:#242526;
 
-}
+--text:#e4e6eb;
+--text2:#b0b3b8;
 
-img{
+--border:#3a3b3c;
 
-display:block;
-
-max-width:100%;
-
-}
-
-button{
-
-cursor:pointer;
-
-border:none;
-
-outline:none;
+background:var(--bg);
+color:var(--text);
 
 }
 
-input,
-textarea{
-
-outline:none;
-
-border:none;
-
-}
-
-/* Loading */
+/* ===============================
+   Loading Screen
+================================ */
 
 #loadingScreen{
 
 position:fixed;
-
 top:0;
-
 left:0;
 
 width:100%;
-
 height:100%;
 
-background:#ffffff;
+background:white;
 
 display:flex;
-
+justify-content:center;
+align-items:center;
 flex-direction:column;
 
-justify-content:center;
+z-index:999999;
 
-align-items:center;
+}
 
-z-index:99999;
+body.dark #loadingScreen{
+
+background:#18191a;
 
 }
 
 .loader{
 
-width:55px;
+width:60px;
+height:60px;
 
-height:55px;
-
-border:5px solid #ddd;
-
-border-top:5px solid #1877f2;
+border:6px solid #ddd;
+border-top:6px solid var(--primary);
 
 border-radius:50%;
 
@@ -108,301 +118,196 @@ transform:rotate(360deg);
 
 }
 
-/* Login */
+.loadingText{
 
-#loginPage{
-
-width:100%;
-
-height:100vh;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-background:#f0f2f5;
-
-}
-
-.loginBox{
-
-width:370px;
-
-background:#fff;
-
-padding:25px;
-
-border-radius:12px;
-
-box-shadow:0 5px 20px rgba(0,0,0,.15);
-
-}
-
-.loginBox h1{
-
-color:#1877f2;
-
-font-size:38px;
-
-text-align:center;
-
-margin-bottom:10px;
-
-}
-
-.loginBox p{
-
-text-align:center;
-
-margin-bottom:20px;
-
-color:#666;
-
-}.loginBox input{
-
-width:100%;
-
-padding:14px;
-
-margin:8px 0;
-
-border:1px solid #ddd;
-
-border-radius:8px;
-
-font-size:15px;
-
-background:#fafafa;
-
-}
-
-.loginBox input:focus{
-
-border:1px solid #1877f2;
-
-background:#fff;
-
-}
-
-#loginBtn,
-#registerBtn{
-
-width:100%;
-
-padding:14px;
-
-border-radius:8px;
-
-font-size:16px;
-
+font-size:32px;
 font-weight:bold;
-
-margin-top:10px;
-
-transition:.3s;
+color:var(--primary);
 
 }
 
-#loginBtn{
+/* ===============================
+   Header
+================================ */
 
-background:#1877f2;
-
-color:#fff;
-
-}
-
-#loginBtn:hover{
-
-background:#166fe5;
-
-}
-
-#registerBtn{
-
-background:#42b72a;
-
-color:#fff;
-
-}
-
-#registerBtn:hover{
-
-background:#36a420;
-
-}
-
-/* Main */
-
-#mainApp{
-
-display:none;
-
-width:100%;
-
-min-height:100vh;
-
-background:#f0f2f5;
-
-}
-
-#topBar{
+.header{
 
 position:fixed;
 
 top:0;
-
 left:0;
 
 width:100%;
-
 height:60px;
 
-background:#fff;
+background:var(--card);
 
 display:flex;
-
 align-items:center;
-
 justify-content:space-between;
 
 padding:0 15px;
 
-box-shadow:0 2px 10px rgba(0,0,0,.08);
+box-shadow:var(--shadow);
 
-z-index:999;
+z-index:1000;
 
 }
 
 .logo{
 
-font-size:28px;
-
+font-size:30px;
 font-weight:bold;
 
-color:#1877f2;
+color:var(--primary);
+
+cursor:pointer;
 
 }
 
-#searchInput{
+/* ===============================
+   Search Box
+================================ */
+
+.searchBox{
 
 width:320px;
+max-width:45%;
 
-padding:10px 15px;
+height:42px;
 
-border-radius:50px;
+border-radius:25px;
 
-background:#f0f2f5;
+background:var(--bg);
+
+display:flex;
+align-items:center;
+
+padding:0 15px;
+
+}
+
+.searchBox input{
+
+width:100%;
+
+background:none;
+border:none;
+outline:none;
 
 font-size:15px;
 
+color:var(--text);
+
 }
 
-.topIcons{
+/* ===============================
+   Header Right Icons
+================================ */
+
+.headerRight{
 
 display:flex;
-
 align-items:center;
-
 gap:15px;
 
 }
 
-.topIcons .material-icons{
+.headerIcon{
 
-font-size:28px;
-
-cursor:pointer;
-
-color:#555;
-
-transition:.3s;
-
-}
-
-.topIcons .material-icons:hover{
-
-color:#1877f2;
-
-}/* ==========================
-Left Sidebar
-========================== */
-
-#leftSidebar{
-
-position:fixed;
-
-top:70px;
-
-left:10px;
-
-width:270px;
-
-background:#fff;
-
-border-radius:15px;
-
-padding:15px;
-
-box-shadow:0 2px 10px rgba(0,0,0,.08);
-
-}
-
-.profileCard{
-
-text-align:center;
-
-padding-bottom:15px;
-
-border-bottom:1px solid #eee;
-
-}
-
-.profileCard img{
-
-width:90px;
-
-height:90px;
+width:40px;
+height:40px;
 
 border-radius:50%;
 
-object-fit:cover;
-
-margin:auto;
-
-border:3px solid #1877f2;
-
-}
-
-.profileCard h3{
-
-margin-top:10px;
-
-font-size:20px;
-
-}
-
-.profileCard p{
-
-color:#666;
-
-font-size:14px;
-
-margin-top:5px;
-
-}
-
-.menuList{
-
-margin-top:15px;
-
-}
-
-.menuItem{
+background:var(--bg);
 
 display:flex;
+align-items:center;
+justify-content:center;
 
+cursor:pointer;
+
+transition:.2s;
+
+}
+
+.headerIcon:hover{
+
+background:#dfe3ee;
+
+}
+
+body.dark .headerIcon:hover{
+
+background:#3a3b3c;
+
+}
+
+/* ===============================
+   End Part 1
+================================ *//* ===============================
+   Friendsbook V5
+   style.css Part 2
+================================ */
+
+/* ===============================
+   Main Layout
+================================ */
+
+.mainContainer{
+
+display:flex;
+justify-content:space-between;
+gap:20px;
+
+padding:80px 15px 20px;
+
+max-width:1600px;
+margin:auto;
+
+}
+
+/* ===============================
+   Left Sidebar
+================================ */
+
+.leftSidebar{
+
+width:280px;
+background:var(--card);
+
+border-radius:12px;
+
+padding:15px;
+
+box-shadow:var(--shadow);
+
+height:calc(100vh - 90px);
+
+position:sticky;
+top:75px;
+
+overflow-y:auto;
+
+}
+
+.leftSidebar::-webkit-scrollbar{
+
+width:6px;
+
+}
+
+.leftSidebar::-webkit-scrollbar-thumb{
+
+background:#ccc;
+border-radius:20px;
+
+}
+
+.sidebarItem{
+
+display:flex;
 align-items:center;
 
 gap:12px;
@@ -413,99 +318,231 @@ border-radius:10px;
 
 cursor:pointer;
 
+transition:.2s;
+
 font-size:16px;
+font-weight:500;
 
-transition:.3s;
-
-}
-
-.menuItem:hover{
-
-background:#f0f2f5;
+color:var(--text);
 
 }
 
-.menuItem .material-icons{
+.sidebarItem:hover{
 
-color:#1877f2;
-
-font-size:28px;
+background:var(--bg);
 
 }
 
-/* ==========================
-Feed
-========================== */
+.sidebarItem img{
 
-#feedPage{
+width:35px;
+height:35px;
 
-margin-left:300px;
+border-radius:50%;
 
-margin-right:300px;
-
-margin-top:75px;
-
-padding:15px;
+object-fit:cover;
 
 }
+
+/* ===============================
+   Feed
+================================ */
+
+.feed{
+
+flex:1;
+
+max-width:650px;
+
+display:flex;
+flex-direction:column;
+
+gap:18px;
+
+}
+
+/* ===============================
+   Create Post Box
+================================ */
 
 .createPost{
 
-background:#fff;
+background:var(--card);
+
+border-radius:12px;
 
 padding:15px;
 
-border-radius:15px;
-
-box-shadow:0 2px 10px rgba(0,0,0,.08);
-
-margin-bottom:20px;
+box-shadow:var(--shadow);
 
 }
 
-#createPostBtn{
-
-margin-top:10px;
-
-padding:12px 25px;
-
-background:#1877f2;
-
-color:#fff;
-
-border-radius:8px;
-
-font-size:15px;
-
-font-weight:bold;
-
-}
-
-#createPostBtn:hover{
-
-background:#166fe5;
-
-}
-
-#postContainer{
+.createTop{
 
 display:flex;
 
-flex-direction:column;
+align-items:center;
 
-gap:15px;
+gap:12px;
 
-}/* ==========================
-Post Card
-========================== */
+margin-bottom:15px;
+
+}
+
+.createTop img{
+
+width:45px;
+height:45px;
+
+border-radius:50%;
+
+object-fit:cover;
+
+}
+
+.createTop input{
+
+flex:1;
+
+height:45px;
+
+border:none;
+outline:none;
+
+background:var(--bg);
+
+border-radius:25px;
+
+padding:0 18px;
+
+font-size:15px;
+
+color:var(--text);
+
+}
+
+.createBottom{
+
+display:flex;
+
+justify-content:space-around;
+
+padding-top:12px;
+
+border-top:1px solid var(--border);
+
+}
+
+.createBtn{
+
+display:flex;
+
+align-items:center;
+
+gap:8px;
+
+padding:10px 15px;
+
+border-radius:8px;
+
+cursor:pointer;
+
+font-weight:600;
+
+transition:.2s;
+
+}
+
+.createBtn:hover{
+
+background:var(--bg);
+
+}
+
+/* ===============================
+   Story Section
+================================ */
+
+.storyContainer{
+
+display:flex;
+
+gap:10px;
+
+overflow-x:auto;
+
+padding-bottom:5px;
+
+}
+
+.storyContainer::-webkit-scrollbar{
+
+display:none;
+
+}
+
+.storyCard{
+
+min-width:110px;
+height:190px;
+
+background:var(--card);
+
+border-radius:12px;
+
+overflow:hidden;
+
+box-shadow:var(--shadow);
+
+cursor:pointer;
+
+position:relative;
+
+}
+
+.storyCard img{
+
+width:100%;
+height:100%;
+
+object-fit:cover;
+
+}
+
+.storyName{
+
+position:absolute;
+
+bottom:10px;
+left:10px;
+
+color:white;
+
+font-size:14px;
+font-weight:bold;
+
+text-shadow:0 1px 5px rgba(0,0,0,.7);
+
+}
+
+/* ===============================
+   End Part 2
+================================ *//* ===============================
+   Friendsbook V5
+   style.css Part 3
+================================ */
+
+/* ===============================
+   Post Card
+================================ */
 
 .postCard{
 
-background:#fff;
+background:var(--card);
 
-border-radius:15px;
+border-radius:12px;
 
-box-shadow:0 2px 10px rgba(0,0,0,.08);
+box-shadow:var(--shadow);
 
 overflow:hidden;
 
@@ -514,7 +551,6 @@ overflow:hidden;
 .postHeader{
 
 display:flex;
-
 align-items:center;
 
 padding:15px;
@@ -525,9 +561,8 @@ gap:12px;
 
 .postHeader img{
 
-width:50px;
-
-height:50px;
+width:45px;
+height:45px;
 
 border-radius:50%;
 
@@ -537,9 +572,10 @@ object-fit:cover;
 
 .postUser{
 
-font-size:17px;
+font-size:16px;
+font-weight:700;
 
-font-weight:bold;
+color:var(--text);
 
 }
 
@@ -547,7 +583,7 @@ font-weight:bold;
 
 font-size:13px;
 
-color:#777;
+color:var(--text2);
 
 }
 
@@ -559,17 +595,19 @@ font-size:16px;
 
 line-height:1.6;
 
+color:var(--text);
+
 }
 
 .postImage{
 
 width:100%;
 
-max-height:550px;
+display:block;
+
+max-height:700px;
 
 object-fit:cover;
-
-background:#000;
 
 }
 
@@ -577,349 +615,1476 @@ background:#000;
 
 width:100%;
 
-background:#000;
+display:block;
+
+background:black;
 
 }
 
-.postActions{
+/* ===============================
+   Post Action
+================================ */
+
+.postAction{
 
 display:flex;
 
 justify-content:space-around;
 
-padding:12px;
-
-border-top:1px solid #eee;
-
-}
-
-.postActions button{
-
-background:none;
-
-font-size:15px;
-
-font-weight:bold;
-
-color:#666;
-
 padding:10px;
 
-border-radius:8px;
-
-transition:.3s;
+border-top:1px solid var(--border);
 
 }
 
-.postActions button:hover{
-
-background:#f0f2f5;
-
-color:#1877f2;
-
-}
-
-/* ==========================
-Right Sidebar
-========================== */
-
-#rightSidebar{
-
-position:fixed;
-
-top:70px;
-
-right:10px;
-
-width:270px;
-
-background:#fff;
-
-border-radius:15px;
-
-padding:15px;
-
-box-shadow:0 2px 10px rgba(0,0,0,.08);
-
-}
-
-.onlineTitle,
-.shortcutTitle{
-
-font-size:18px;
-
-font-weight:bold;
-
-margin-bottom:12px;
-
-}
-
-.shortcutItem{
-
-padding:12px;
-
-border-radius:10px;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-.shortcutItem:hover{
-
-background:#f0f2f5;
-
-}
-
-/* ==========================
-Messenger
-========================== */
-
-#messagePage{
-
-display:none;
-
-position:fixed;
-
-top:70px;
-
-right:20px;
-
-width:380px;
-
-height:600px;
-
-background:#fff;
-
-border-radius:15px;
-
-box-shadow:0 2px 20px rgba(0,0,0,.15);
-
-overflow:hidden;
-
-z-index:9999;
-
-}/* ==========================
-Messenger
-========================== */
-
-.chatHeader{
-
-height:60px;
-
-background:#1877f2;
-
-color:#fff;
-
-display:flex;
-
-align-items:center;
-
-padding:0 20px;
-
-font-size:18px;
-
-font-weight:bold;
-
-}
-
-#chatBox{
-
-height:470px;
-
-overflow-y:auto;
-
-padding:15px;
-
-background:#f5f7fb;
-
-}
-
-.myMessage{
-
-background:#1877f2;
-
-color:#fff;
-
-padding:10px 15px;
-
-border-radius:15px 15px 0 15px;
-
-margin:8px 0;
-
-margin-left:60px;
-
-word-break:break-word;
-
-}
-
-.friendMessage{
-
-background:#e4e6eb;
-
-color:#111;
-
-padding:10px 15px;
-
-border-radius:15px 15px 15px 0;
-
-margin:8px 0;
-
-margin-right:60px;
-
-word-break:break-word;
-
-}
-
-.chatBottom{
-
-height:70px;
-
-display:flex;
-
-align-items:center;
-
-padding:10px;
-
-border-top:1px solid #ddd;
-
-background:#fff;
-
-}
-
-#chatInput{
+.postBtn{
 
 flex:1;
 
 padding:12px;
 
-border:1px solid #ddd;
+background:none;
 
-border-radius:30px;
+border:none;
+
+cursor:pointer;
+
+border-radius:8px;
+
+font-size:15px;
+
+font-weight:600;
+
+color:var(--text2);
+
+transition:.2s;
+
+}
+
+.postBtn:hover{
+
+background:var(--bg);
+
+}
+
+/* ===============================
+   Right Sidebar
+================================ */
+
+.rightSidebar{
+
+width:300px;
+
+background:var(--card);
+
+padding:15px;
+
+border-radius:12px;
+
+box-shadow:var(--shadow);
+
+height:calc(100vh - 90px);
+
+position:sticky;
+
+top:75px;
+
+overflow-y:auto;
+
+}
+
+.rightTitle{
+
+font-size:18px;
+
+font-weight:700;
+
+margin-bottom:15px;
+
+color:var(--text);
+
+}
+
+/* ===============================
+   Responsive
+================================ */
+
+@media(max-width:1100px){
+
+.leftSidebar{
+
+display:none;
+
+position:fixed;
+
+left:0;
+
+top:60px;
+
+width:270px;
+
+height:100vh;
+
+z-index:999;
+
+}
+
+.rightSidebar{
+
+display:none;
+
+}
+
+.feed{
+
+max-width:100%;
+
+}
+
+.searchBox{
+
+width:180px;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.mainContainer{
+
+padding:70px 8px 80px;
+
+}
+
+.header{
+
+padding:0 8px;
+
+}
+
+.logo{
+
+font-size:24px;
+
+}
+
+.searchBox{
+
+width:130px;
+
+height:38px;
+
+}
+
+.searchBox input{
+
+font-size:14px;
+
+}
+
+.headerRight{
+
+gap:8px;
+
+}
+
+.headerIcon{
+
+width:36px;
+
+height:36px;
+
+}
+
+.storyCard{
+
+min-width:95px;
+
+height:170px;
+
+}
+
+.createTop input{
+
+font-size:14px;
+
+}
+
+.postText{
 
 font-size:15px;
 
 }
 
-#sendBtn{
+}
 
-margin-left:10px;
+@media(max-width:480px){
 
-padding:12px 22px;
+.mainContainer{
 
-background:#1877f2;
-
-color:#fff;
-
-border-radius:30px;
-
-font-weight:bold;
+padding:65px 5px 75px;
 
 }
 
-/* ==========================
-Responsive
-========================== */
-
-@media(max-width:1100px){
-
-#leftSidebar{
-
-display:none;
-
-}
-
-#rightSidebar{
-
-display:none;
-
-}
-
-#feedPage{
-
-margin:75px auto;
-
-width:95%;
-
-}
-
-#messagePage{
+.feed{
 
 width:100%;
 
+}
+
+.createPost{
+
+padding:10px;
+
+}
+
+.postHeader{
+
+padding:10px;
+
+}
+
+.postText{
+
+padding:0 10px 10px;
+
+}
+
+.storyCard{
+
+min-width:85px;
+
+height:150px;
+
+}
+
+.header{
+
+height:55px;
+
+}
+
+.logo{
+
+font-size:22px;
+
+}
+
+.searchBox{
+
+display:none;
+
+}
+
+}
+
+/* ===============================
+   End Part 3
+================================ *//* ===============================
+   Friendsbook V5
+   style.css Part 4
+================================ */
+
+/* ===============================
+   Bottom Navigation (Mobile)
+================================ */
+
+.bottomNav{
+
+position:fixed;
+
+left:0;
+bottom:0;
+
+width:100%;
+height:60px;
+
+background:var(--card);
+
+display:none;
+
+justify-content:space-around;
+align-items:center;
+
+border-top:1px solid var(--border);
+
+box-shadow:0 -2px 10px rgba(0,0,0,.08);
+
+z-index:9999;
+
+}
+
+.bottomItem{
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+justify-content:center;
+
+cursor:pointer;
+
+font-size:12px;
+
+font-weight:600;
+
+color:var(--text2);
+
+transition:.2s;
+
+}
+
+.bottomItem i{
+
+font-size:22px;
+
+margin-bottom:4px;
+
+}
+
+.bottomItem:hover{
+
+color:var(--primary);
+
+}
+
+.bottomItem.active{
+
+color:var(--primary);
+
+}
+
+/* ===============================
+   Profile Page
+================================ */
+
+.profilePage{
+
+width:100%;
+
+}
+
+.coverPhoto{
+
+width:100%;
+height:320px;
+
+border-radius:12px;
+
+overflow:hidden;
+
+background:#ddd;
+
+}
+
+.coverPhoto img{
+
+width:100%;
 height:100%;
 
-top:0;
-
-right:0;
-
-border-radius:0;
+object-fit:cover;
 
 }
 
+.profileInfo{
+
+background:var(--card);
+
+padding:20px;
+
+margin-top:-60px;
+
+border-radius:12px;
+
+box-shadow:var(--shadow);
+
+text-align:center;
+
+position:relative;
+
 }
 
-/* ==========================
-Dark Mode
-========================== */
+.profileImage{
 
-.dark{
+width:160px;
+height:160px;
 
-background:#18191a;
+border-radius:50%;
+
+border:5px solid white;
+
+object-fit:cover;
+
+margin:auto;
+
+display:block;
+
+}
+
+.profileName{
+
+font-size:28px;
+
+font-weight:700;
+
+margin-top:12px;
+
+color:var(--text);
+
+}
+
+.profileBio{
+
+margin-top:10px;
+
+font-size:15px;
+
+color:var(--text2);
+
+}
+
+/* ===============================
+   Friends List
+================================ */
+
+.friendCard{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+background:var(--card);
+
+padding:12px;
+
+margin-bottom:12px;
+
+border-radius:10px;
+
+box-shadow:var(--shadow);
+
+}
+
+.friendCard img{
+
+width:60px;
+height:60px;
+
+border-radius:50%;
+
+object-fit:cover;
+
+}
+
+.friendInfo{
+
+flex:1;
+
+}
+
+.friendName{
+
+font-size:17px;
+
+font-weight:700;
+
+color:var(--text);
+
+}
+
+.friendBtn{
+
+padding:8px 16px;
+
+border:none;
+
+border-radius:8px;
+
+background:var(--primary);
+
+color:white;
+
+cursor:pointer;
+
+}
+
+/* ===============================
+   Message Page
+================================ */
+
+.chatBox{
+
+background:var(--card);
+
+height:70vh;
+
+border-radius:12px;
+
+box-shadow:var(--shadow);
+
+display:flex;
+
+flex-direction:column;
+
+overflow:hidden;
+
+}
+
+.chatMessages{
+
+flex:1;
+
+overflow-y:auto;
+
+padding:15px;
+
+}
+
+.chatInput{
+
+display:flex;
+
+padding:10px;
+
+border-top:1px solid var(--border);
+
+}
+
+.chatInput input{
+
+flex:1;
+
+height:42px;
+
+padding:0 15px;
+
+border:none;
+
+outline:none;
+
+background:var(--bg);
+
+border-radius:25px;
+
+}
+
+.chatInput button{
+
+margin-left:10px;
+
+padding:0 18px;
+
+border:none;
+
+border-radius:25px;
+
+background:var(--primary);
+
+color:white;
+
+cursor:pointer;
+
+}
+
+/* ===============================
+   Notification
+================================ */
+
+.notificationCard{
+
+background:var(--card);
+
+padding:15px;
+
+border-radius:10px;
+
+margin-bottom:10px;
+
+box-shadow:var(--shadow);
+
+cursor:pointer;
+
+transition:.2s;
+
+}
+
+.notificationCard:hover{
+
+background:var(--bg);
+
+}
+
+/* ===============================
+   Settings
+================================ */
+
+.settingItem{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:15px;
+
+background:var(--card);
+
+margin-bottom:10px;
+
+border-radius:10px;
+
+box-shadow:var(--shadow);
+
+}
+
+/* ===============================
+   Mobile
+================================ */
+
+@media(max-width:768px){
+
+.bottomNav{
+
+display:flex;
+
+}
+
+.header{
+
+padding:0 10px;
+
+}
+
+.profileImage{
+
+width:110px;
+
+height:110px;
+
+}
+
+.coverPhoto{
+
+height:220px;
+
+}
+
+.profileName{
+
+font-size:22px;
+
+}
+
+.friendCard{
+
+padding:10px;
+
+}
+
+.chatBox{
+
+height:65vh;
+
+}
+
+}/* ===============================
+   Friendsbook V5
+   style.css Part 5
+================================ */
+
+/* ===============================
+   Marketplace
+================================ */
+
+.marketCard{
+
+background:var(--card);
+
+border-radius:12px;
+
+overflow:hidden;
+
+box-shadow:var(--shadow);
+
+margin-bottom:18px;
+
+}
+
+.marketCard img{
+
+width:100%;
+
+height:220px;
+
+object-fit:cover;
+
+}
+
+.marketInfo{
+
+padding:15px;
+
+}
+
+.marketPrice{
+
+font-size:22px;
+
+font-weight:bold;
+
+color:var(--primary);
+
+margin-bottom:8px;
+
+}
+
+.marketTitle{
+
+font-size:18px;
+
+font-weight:700;
+
+color:var(--text);
+
+margin-bottom:6px;
+
+}
+
+.marketLocation{
+
+font-size:14px;
+
+color:var(--text2);
+
+}
+
+/* ===============================
+   Reels
+================================ */
+
+.reelsContainer{
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.reelCard{
+
+background:#000;
+
+border-radius:15px;
+
+overflow:hidden;
+
+position:relative;
+
+}
+
+.reelCard video{
+
+width:100%;
+
+max-height:650px;
+
+display:block;
+
+}
+
+.reelActions{
+
+position:absolute;
+
+right:15px;
+
+bottom:20px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:15px;
+
+}
+
+.reelBtn{
+
+width:48px;
+
+height:48px;
+
+border-radius:50%;
+
+background:rgba(255,255,255,.2);
+
+backdrop-filter:blur(10px);
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
 
 color:#fff;
 
+cursor:pointer;
+
 }
 
-.dark #topBar,
+/* ===============================
+   Watch
+================================ */
 
-.dark #leftSidebar,
+.watchCard{
 
-.dark #rightSidebar,
+background:var(--card);
 
-.dark .createPost,
+border-radius:12px;
 
-.dark .postCard,
+overflow:hidden;
 
-.dark #messagePage{
+box-shadow:var(--shadow);
+
+margin-bottom:20px;
+
+}
+
+.watchCard video{
+
+width:100%;
+
+display:block;
+
+}
+
+.watchInfo{
+
+padding:15px;
+
+}
+
+/* ===============================
+   Gaming
+================================ */
+
+.gameCard{
+
+background:var(--card);
+
+padding:15px;
+
+border-radius:12px;
+
+box-shadow:var(--shadow);
+
+margin-bottom:15px;
+
+}
+
+.gameCard button{
+
+margin-top:12px;
+
+padding:10px 20px;
+
+border:none;
+
+border-radius:8px;
+
+background:var(--primary);
+
+color:#fff;
+
+cursor:pointer;
+
+}
+
+/* ===============================
+   Jobs
+================================ */
+
+.jobCard{
+
+background:var(--card);
+
+padding:15px;
+
+border-radius:12px;
+
+box-shadow:var(--shadow);
+
+margin-bottom:15px;
+
+}
+
+.jobCard button{
+
+margin-top:12px;
+
+padding:10px 18px;
+
+border:none;
+
+border-radius:8px;
+
+background:#42b72a;
+
+color:#fff;
+
+cursor:pointer;
+
+}
+
+/* ===============================
+   Live
+================================ */
+
+.liveCard{
+
+background:var(--card);
+
+padding:15px;
+
+border-radius:12px;
+
+box-shadow:var(--shadow);
+
+margin-bottom:15px;
+
+}
+
+.liveBadge{
+
+display:inline-block;
+
+padding:4px 10px;
+
+background:red;
+
+color:#fff;
+
+border-radius:20px;
+
+font-size:12px;
+
+font-weight:bold;
+
+animation:pulse 1s infinite;
+
+}
+
+@keyframes pulse{
+
+0%{opacity:1;}
+
+50%{opacity:.5;}
+
+100%{opacity:1;}
+
+}
+
+/* ===============================
+   Dating
+================================ */
+
+.datingCard{
+
+background:var(--card);
+
+border-radius:15px;
+
+overflow:hidden;
+
+box-shadow:var(--shadow);
+
+margin-bottom:20px;
+
+}
+
+.datingCard img{
+
+width:100%;
+
+height:320px;
+
+object-fit:cover;
+
+}
+
+.datingCard h3,
+
+.datingCard p{
+
+padding:0 15px;
+
+margin-top:10px;
+
+}
+
+.datingCard button{
+
+margin:15px;
+
+padding:10px 20px;
+
+border:none;
+
+border-radius:25px;
+
+background:#ff3b6b;
+
+color:#fff;
+
+cursor:pointer;
+
+}
+
+/* ===============================
+   Premium
+================================ */
+
+.premiumCard{
+
+background:linear-gradient(135deg,#1877f2,#6a5cff);
+
+color:#fff;
+
+padding:25px;
+
+border-radius:15px;
+
+box-shadow:var(--shadow);
+
+text-align:center;
+
+}
+
+/* ===============================
+   Fade Animation
+================================ */
+
+.fadeIn{
+
+animation:fadeIn .35s ease;
+
+}
+
+@keyframes fadeIn{
+
+from{
+
+opacity:0;
+
+transform:translateY(15px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+/* ===============================
+   Mobile Responsive
+================================ */
+
+@media(max-width:768px){
+
+.marketCard img{
+
+height:180px;
+
+}
+
+.datingCard img{
+
+height:240px;
+
+}
+
+.reelCard video{
+
+max-height:520px;
+
+}
+
+.gameCard,
+
+.jobCard,
+
+.liveCard{
+
+padding:12px;
+
+}
+
+}
+
+@media(max-width:480px){
+
+.marketPrice{
+
+font-size:18px;
+
+}
+
+.marketTitle{
+
+font-size:16px;
+
+}
+
+.reelBtn{
+
+width:42px;
+
+height:42px;
+
+}
+
+.premiumCard{
+
+padding:18px;
+
+}
+
+}
+
+/* ===============================
+   End Part 5
+================================ *//* ===============================
+   Friendsbook V5
+   style.css Part 6 (Final)
+================================ */
+
+/* ===============================
+   Modal
+================================ */
+
+.modal{
+
+position:fixed;
+left:0;
+top:0;
+
+width:100%;
+height:100%;
+
+background:rgba(0,0,0,.55);
+
+display:none;
+
+justify-content:center;
+align-items:center;
+
+z-index:99999;
+
+}
+
+.modalContent{
+
+width:95%;
+max-width:520px;
+
+background:var(--card);
+
+border-radius:15px;
+
+padding:20px;
+
+box-shadow:0 15px 40px rgba(0,0,0,.25);
+
+animation:popup .25s ease;
+
+}
+
+@keyframes popup{
+
+from{
+
+transform:scale(.8);
+opacity:0;
+
+}
+
+to{
+
+transform:scale(1);
+opacity:1;
+
+}
+
+}
+
+/* ===============================
+   Form
+================================ */
+
+input,
+textarea,
+select{
+
+width:100%;
+
+padding:12px;
+
+border:1px solid var(--border);
+
+border-radius:10px;
+
+background:var(--card);
+
+color:var(--text);
+
+outline:none;
+
+margin-top:8px;
+
+margin-bottom:12px;
+
+}
+
+textarea{
+
+resize:vertical;
+
+min-height:100px;
+
+}
+
+/* ===============================
+   Button
+================================ */
+
+.btn{
+
+display:inline-flex;
+
+justify-content:center;
+align-items:center;
+
+padding:12px 22px;
+
+border:none;
+
+border-radius:10px;
+
+background:var(--primary);
+
+color:white;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:.25s;
+
+}
+
+.btn:hover{
+
+background:var(--primary-hover);
+
+}
+
+.btnDanger{
+
+background:#e41e3f;
+
+}
+
+.btnSuccess{
+
+background:#42b72a;
+
+}
+
+/* ===============================
+   Toast
+================================ */
+
+.toast{
+
+position:fixed;
+
+left:50%;
+bottom:90px;
+
+transform:translateX(-50%);
 
 background:#242526;
 
-color:#fff;
+color:white;
+
+padding:12px 22px;
+
+border-radius:30px;
+
+z-index:999999;
+
+animation:toastShow .3s;
 
 }
 
-.dark input,
+@keyframes toastShow{
 
-.dark textarea{
+from{
 
-background:#3a3b3c;
+opacity:0;
 
-color:#fff;
-
-}
-
-.dark .menuItem:hover,
-
-.dark .shortcutItem:hover,
-
-.dark .postActions button:hover{
-
-background:#3a3b3c;
+bottom:60px;
 
 }
 
-.dark .friendMessage{
+to{
 
-background:#3a3b3c;
+opacity:1;
 
-color:#fff;
+bottom:90px;
+
+}
 
 }
 
-.dark #chatBox{
+/* ===============================
+   Scrollbar
+================================ */
 
-background:#18191a;
+::-webkit-scrollbar{
+
+width:8px;
+height:8px;
 
 }
+
+::-webkit-scrollbar-thumb{
+
+background:#bdbdbd;
+
+border-radius:20px;
+
+}
+
+body.dark ::-webkit-scrollbar-thumb{
+
+background:#4d4d4d;
+
+}
+
+/* ===============================
+   Utility Classes
+================================ */
+
+.hidden{
+
+display:none !important;
+
+}
+
+.flex{
+
+display:flex;
+
+}
+
+.center{
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+}
+
+.textCenter{
+
+text-align:center;
+
+}
+
+.mt10{
+
+margin-top:10px;
+
+}
+
+.mt20{
+
+margin-top:20px;
+
+}
+
+.mb10{
+
+margin-bottom:10px;
+
+}
+
+.mb20{
+
+margin-bottom:20px;
+
+}
+
+.round{
+
+border-radius:50%;
+
+}
+
+/* ===============================
+   Final Mobile Fix
+================================ */
+
+@media(max-width:480px){
+
+*{
+
+max-width:100%;
+
+}
+
+img,
+video{
+
+max-width:100%;
+
+height:auto;
+
+}
+
+.feed,
+.leftSidebar,
+.rightSidebar{
+
+width:100%;
+
+}
+
+.header{
+
+width:100%;
+
+}
+
+}
+
+/* ===============================
+   Friendsbook V5
+   style.css Completed
+================================ */
