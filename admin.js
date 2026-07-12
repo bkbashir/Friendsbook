@@ -3,116 +3,227 @@
 // admin.js Part 1
 // ===============================
 
-import { db, auth } from "./firebase.js";
+import { auth, db } from "./firebase.js";
+
+import {
+
+onAuthStateChanged
+
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 import {
 
 collection,
-query,
-orderBy,
-onSnapshot
+getDocs
 
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-const adminEmail="admin@friendsbook.com";
-
-const adminPanel=document.getElementById("adminPanel");
-
-const totalUsers=document.getElementById("totalUsers");
-
-const totalPosts=document.getElementById("totalPosts");
-
-const totalGroups=document.getElementById("totalGroups");
-
-const totalPages=document.getElementById("totalPages");
-
 // ===============================
-// Check Admin
+// Admin Email
 // ===============================
 
-window.checkAdmin=()=>{
+const ADMIN_EMAIL="your_admin_email@gmail.com";
 
-if(auth.currentUser.email===adminEmail){
+// উদাহরণ:
+// const ADMIN_EMAIL="bashir@gmail.com";
 
-adminPanel.style.display="block";
+// ===============================
+// Admin Authentication
+// ===============================
 
-}else{
+onAuthStateChanged(auth,(user)=>{
 
-adminPanel.style.display="none";
+if(!user){
+
+location.href="index.html";
+
+return;
 
 }
 
-};
+if(user.email!==ADMIN_EMAIL){
 
-// ===============================
-// Total Users
-// ===============================
+alert("Access Denied!");
 
-const usersQuery=query(
+location.href="index.html";
 
-collection(db,"users"),
+return;
 
-orderBy("name")
+}
 
-);
-
-onSnapshot(usersQuery,(snapshot)=>{
-
-totalUsers.innerHTML=snapshot.size;
+loadDashboard();
 
 });
+
+// ===============================
+// Dashboard
+// ===============================
+
+async function loadDashboard(){
+
+loadUsers();
+
+loadPosts();
+
+loadStories();
+
+loadReels();
+
+}
+
+// ===============================
+// Users Count
+// ===============================
+
+async function loadUsers(){
+
+const snap=
+
+await getDocs(collection(db,"users"));
+
+document.getElementById("totalUsers").innerText=snap.size;
+
+}
+
+// ===============================
+// End Part 1
+// ===============================// ===============================
+// Friendsbook V5
+// admin.js Part 2
+// ===============================
+
+import {
+
+collection,
+getDocs
+
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 // ===============================
 // Total Posts
 // ===============================
 
-const postsQuery=query(
+async function loadPosts(){
 
-collection(db,"posts"),
+const snap=
 
-orderBy("createdAt")
+await getDocs(collection(db,"posts"));
 
-);
+document.getElementById("totalPosts").innerText=snap.size;
 
-onSnapshot(postsQuery,(snapshot)=>{
+}
 
-totalPosts.innerHTML=snapshot.size;
+// ===============================
+// Total Stories
+// ===============================
+
+async function loadStories(){
+
+const snap=
+
+await getDocs(collection(db,"stories"));
+
+document.getElementById("totalStories").innerText=snap.size;
+
+}
+
+// ===============================
+// Total Reels
+// ===============================
+
+async function loadReels(){
+
+const snap=
+
+await getDocs(collection(db,"reels"));
+
+document.getElementById("totalReels").innerText=snap.size;
+
+}
+
+// ===============================
+// Premium Users
+// ===============================
+
+async function loadPremiumUsers(){
+
+const snap=
+
+await getDocs(collection(db,"premium"));
+
+const el=document.getElementById("premiumContainer");
+
+if(!el) return;
+
+el.innerHTML="";
+
+snap.forEach((doc)=>{
+
+const data=doc.data();
+
+el.innerHTML+=`
+
+<div class="friendCard">
+
+<div class="friendInfo">
+
+<div class="friendName">
+
+${data.email || "Unknown User"}
+
+</div>
+
+</div>
+
+</div>
+
+`;
 
 });
 
+}
+
 // ===============================
-// Total Groups
+// Reports
 // ===============================
 
-const groupsQuery=query(
+async function loadReports(){
 
-collection(db,"groups")
+const snap=
 
-);
+await getDocs(collection(db,"reports"));
 
-onSnapshot(groupsQuery,(snapshot)=>{
+const el=document.getElementById("reportsContainer");
 
-totalGroups.innerHTML=snapshot.size;
+if(!el) return;
+
+el.innerHTML="";
+
+snap.forEach((doc)=>{
+
+const data=doc.data();
+
+el.innerHTML+=`
+
+<div class="notificationCard">
+
+<b>${data.type || "Report"}</b>
+
+<p>${data.reason || ""}</p>
+
+</div>
+
+`;
 
 });
 
+}
+
 // ===============================
-// Total Pages
-// ===============================
-
-const pagesQuery=query(
-
-collection(db,"pages")
-
-);
-
-onSnapshot(pagesQuery,(snapshot)=>{
-
-totalPages.innerHTML=snapshot.size;
-
-});// ===============================
+// End Part 2
+// ===============================// ===============================
 // Friendsbook V5
-// admin.js Part 2
+// admin.js Part 3 (Final)
 // ===============================
 
 import {
@@ -124,38 +235,42 @@ updateDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 // ===============================
-// Delete Any Post
+// Delete User
 // ===============================
 
-window.adminDeletePost=async(postId)=>{
-
-if(!confirm("Delete this post?")) return;
-
-await deleteDoc(
-
-doc(db,"posts",postId)
-
-);
-
-alert("Post Deleted");
-
-};
-
-// ===============================
-// Delete Any User
-// ===============================
-
-window.adminDeleteUser=async(uid)=>{
+window.deleteUser=async(id)=>{
 
 if(!confirm("Delete this user?")) return;
 
 await deleteDoc(
 
-doc(db,"users",uid)
+doc(db,"users",id)
 
 );
 
 alert("User Deleted");
+
+loadUsers();
+
+};
+
+// ===============================
+// Delete Post
+// ===============================
+
+window.deletePost=async(id)=>{
+
+if(!confirm("Delete this post?")) return;
+
+await deleteDoc(
+
+doc(db,"posts",id)
+
+);
+
+alert("Post Deleted");
+
+loadPosts();
 
 };
 
@@ -163,15 +278,15 @@ alert("User Deleted");
 // Ban User
 // ===============================
 
-window.banUser=async(uid)=>{
+window.banUser=async(id)=>{
 
 await updateDoc(
 
-doc(db,"users",uid),
+doc(db,"users",id),
 
 {
 
-banned:true
+status:"banned"
 
 }
 
@@ -185,15 +300,15 @@ alert("User Banned");
 // Unban User
 // ===============================
 
-window.unbanUser=async(uid)=>{
+window.unbanUser=async(id)=>{
 
 await updateDoc(
 
-doc(db,"users",uid),
+doc(db,"users",id),
 
 {
 
-banned:false
+status:"active"
 
 }
 
@@ -204,73 +319,24 @@ alert("User Unbanned");
 };
 
 // ===============================
-// Verify User
+// Refresh Dashboard
 // ===============================
 
-window.verifyUser=async(uid)=>{
+window.refreshDashboard=()=>{
 
-await updateDoc(
+loadDashboard();
 
-doc(db,"users",uid),
+loadPremiumUsers();
 
-{
-
-verified:true
-
-}
-
-);
-
-alert("User Verified");
-
-};// ===============================
-// Friendsbook V5
-// admin.js Part 3 (Final)
-// ===============================
-
-import {
-
-addDoc,
-collection,
-serverTimestamp
-
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-// ===============================
-// Send Notice
-// ===============================
-
-window.sendNotice=async()=>{
-
-const text=prompt("Enter Notice");
-
-if(!text) return;
-
-await addDoc(
-
-collection(db,"notices"),
-
-{
-
-message:text,
-
-admin:auth.currentUser.email,
-
-createdAt:serverTimestamp()
-
-}
-
-);
-
-alert("Notice Published");
+loadReports();
 
 };
 
 // ===============================
-// Admin Logout
+// Logout
 // ===============================
 
-window.adminLogout=async()=>{
+window.logout=async()=>{
 
 await auth.signOut();
 
@@ -279,32 +345,16 @@ location.href="index.html";
 };
 
 // ===============================
-// Dashboard Refresh
+// Initialize
 // ===============================
 
-window.refreshDashboard=()=>{
+document.addEventListener("DOMContentLoaded",()=>{
 
-location.reload();
+refreshDashboard();
 
-};
+console.log("Friendsbook Admin Ready");
 
-// ===============================
-// System Information
-// ===============================
-
-window.systemInfo=()=>{
-
-alert(
-
-"Friendsbook V5\n"+
-
-"Admin Panel\n"+
-
-"Status : Running"
-
-);
-
-};
+});
 
 // ===============================
 // End admin.js
