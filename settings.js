@@ -233,3 +233,51 @@ alert(
 // ===============================
 // End settings.js
 // ===============================
+// ===============================
+// Friendsbook V5 Extra Settings
+// ===============================
+
+const editProfileBtn=document.getElementById("editProfileBtn");
+const changePasswordBtn=document.getElementById("changePasswordBtn");
+const notificationSettingBtn=document.getElementById("notificationSettingBtn");
+const aboutBtn=document.getElementById("aboutBtn");
+const adminPanelBtn=document.getElementById("adminPanelBtn");
+
+// Edit Profile
+editProfileBtn?.addEventListener("click",()=>{
+
+if(document.getElementById("feedPage"))
+document.getElementById("feedPage").style.display="none";
+
+if(document.getElementById("profilePage"))
+document.getElementById("profilePage").style.display="block";
+
+});
+
+// Change Password
+changePasswordBtn?.addEventListener("click",()=>{
+
+alert("Change Password feature coming soon.");
+
+});
+
+// Notification Settings
+notificationSettingBtn?.addEventListener("click",()=>{
+
+alert("Notification Settings coming soon.");
+
+});
+
+// About
+aboutBtn?.addEventListener("click",()=>{
+
+showAppVersion();
+
+});
+
+// Admin Panel
+adminPanelBtn?.addEventListener("click",()=>{
+
+location.href="admin.html";
+
+});
