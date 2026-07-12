@@ -1,133 +1,44 @@
 // ===============================
 // Friendsbook V5
-// settings.js Part 1
+// settings.js (Final Fixed)
 // ===============================
 
-import { db, auth } from "./firebase.js";
+import { auth } from "./firebase.js";
 
-import {
+const darkMode = document.getElementById("darkMode");
+const clearCacheBtn = document.getElementById("clearCacheBtn");
+const logoutBtn = document.getElementById("logoutBtn");
 
-doc,
-getDoc,
-updateDoc
-
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-const darkMode=document.getElementById("darkMode");
-const language=document.getElementById("language");
-const privacy=document.getElementById("privacy");
-const saveSettingsBtn=document.getElementById("saveSettingsBtn");
+const editProfileBtn = document.getElementById("editProfileBtn");
+const changePasswordBtn = document.getElementById("changePasswordBtn");
+const privacyBtn = document.getElementById("privacyBtn");
+const notificationSettingBtn = document.getElementById("notificationSettingBtn");
+const languageBtn = document.getElementById("languageBtn");
+const aboutBtn = document.getElementById("aboutBtn");
+const adminPanelBtn = document.getElementById("adminPanelBtn");
 
 // ===============================
-// Load Settings
+// Dark Mode
 // ===============================
 
-async function loadSettings(){
-
-const snap=await getDoc(
-
-doc(db,"settings",auth.currentUser.uid)
-
-);
-
-if(snap.exists()){
-
-const data=snap.data();
-
-darkMode.checked=data.darkMode||false;
-
-language.value=data.language||"English";
-
-privacy.value=data.privacy||"Public";
-
-if(data.darkMode){
-
-document.body.classList.add("dark");
-
+if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
+    if (darkMode) darkMode.checked = true;
 }
 
-}
+darkMode?.addEventListener("change", () => {
 
-}
+    if (darkMode.checked) {
 
-loadSettings();
+        document.body.classList.add("dark");
+        localStorage.setItem("theme", "dark");
 
-// ===============================
-// Save Settings
-// ===============================
+    } else {
 
-saveSettingsBtn.onclick=async()=>{
+        document.body.classList.remove("dark");
+        localStorage.setItem("theme", "light");
 
-await updateDoc(
-
-doc(db,"settings",auth.currentUser.uid),
-
-{
-
-darkMode:darkMode.checked,
-
-language:language.value,
-
-privacy:privacy.value
-
-}
-
-);
-
-alert("Settings Saved");
-
-};// ===============================
-// Friendsbook V5
-// settings.js Part 2
-// ===============================
-
-// ===============================
-// Dark Mode Toggle
-// ===============================
-
-darkMode.addEventListener("change",()=>{
-
-if(darkMode.checked){
-
-document.body.classList.add("dark");
-
-}else{
-
-document.body.classList.remove("dark");
-
-}
-
-});
-
-// ===============================
-// Language Change
-// ===============================
-
-language.addEventListener("change",()=>{
-
-localStorage.setItem(
-
-"friendsbook_language",
-
-language.value
-
-);
-
-});
-
-// ===============================
-// Privacy Change
-// ===============================
-
-privacy.addEventListener("change",()=>{
-
-localStorage.setItem(
-
-"friendsbook_privacy",
-
-privacy.value
-
-);
+    }
 
 });
 
@@ -135,149 +46,101 @@ privacy.value
 // Clear Cache
 // ===============================
 
-window.clearCache=()=>{
+clearCacheBtn?.addEventListener("click", () => {
 
-localStorage.clear();
+    if (confirm("সব Local Data Delete করবেন?")) {
 
-sessionStorage.clear();
+        localStorage.clear();
+        sessionStorage.clear();
+        location.reload();
 
-alert("Cache Cleared");
+    }
 
-};
-
-// ===============================
-// Reset Settings
-// ===============================
-
-window.resetSettings=()=>{
-
-darkMode.checked=false;
-
-language.value="English";
-
-privacy.value="Public";
-
-document.body.classList.remove("dark");
-
-alert("Settings Reset");
-
-};// ===============================
-// Friendsbook V5
-// settings.js Part 3 (Final)
-// ===============================
+});
 
 // ===============================
-// Account Logout
-// ===============================
-
-window.logoutAccount=async()=>{
-
-await auth.signOut();
-
-location.href="index.html";
-
-};
-
-// ===============================
-// Delete Account
-// ===============================
-
-window.deleteAccount=()=>{
-
-const ok=confirm(
-
-"Are you sure you want to delete your account?"
-
-);
-
-if(!ok) return;
-
-alert(
-
-"Account Delete Feature Enabled"
-
-);
-
-// Firebase Auth delete() এখানে পরে যোগ হবে
-
-};
-
-// ===============================
-// App Version
-// ===============================
-
-window.showAppVersion=()=>{
-
-alert(
-
-"Friendsbook V5\nVersion : 5.0.0"
-
-);
-
-};
-
-// ===============================
-// About App
-// ===============================
-
-window.aboutFriendsbook=()=>{
-
-alert(
-
-"Friendsbook V5\nCreated by Bashir Ahmed"
-
-);
-
-};
-
-// ===============================
-// End settings.js
-// ===============================
-// ===============================
-// Friendsbook V5 Extra Settings
-// ===============================
-
-const editProfileBtn=document.getElementById("editProfileBtn");
-const changePasswordBtn=document.getElementById("changePasswordBtn");
-const notificationSettingBtn=document.getElementById("notificationSettingBtn");
-const aboutBtn=document.getElementById("aboutBtn");
-const adminPanelBtn=document.getElementById("adminPanelBtn");
-
 // Edit Profile
-editProfileBtn?.addEventListener("click",()=>{
+// ===============================
 
-if(document.getElementById("feedPage"))
-document.getElementById("feedPage").style.display="none";
+editProfileBtn?.addEventListener("click", () => {
 
-if(document.getElementById("profilePage"))
-document.getElementById("profilePage").style.display="block";
+    document.querySelectorAll(".page").forEach(p => p.style.display = "none");
+
+    document.getElementById("profilePage").style.display = "block";
 
 });
 
+// ===============================
 // Change Password
-changePasswordBtn?.addEventListener("click",()=>{
+// ===============================
 
-alert("Change Password feature coming soon.");
+changePasswordBtn?.addEventListener("click", () => {
 
-});
-
-// Notification Settings
-notificationSettingBtn?.addEventListener("click",()=>{
-
-alert("Notification Settings coming soon.");
+    alert("Coming Soon");
 
 });
 
+// ===============================
+// Privacy
+// ===============================
+
+privacyBtn?.addEventListener("click", () => {
+
+    alert("Privacy Settings Coming Soon");
+
+});
+
+// ===============================
+// Notification
+// ===============================
+
+notificationSettingBtn?.addEventListener("click", () => {
+
+    alert("Notification Settings Coming Soon");
+
+});
+
+// ===============================
+// Language
+// ===============================
+
+languageBtn?.addEventListener("click", () => {
+
+    alert("Language Settings Coming Soon");
+
+});
+
+// ===============================
 // About
-aboutBtn?.addEventListener("click",()=>{
+// ===============================
 
-showAppVersion();
+aboutBtn?.addEventListener("click", () => {
+
+    alert("Friendsbook V5\nDeveloper: Bashir Ahmed");
 
 });
 
+// ===============================
 // Admin Panel
-adminPanelBtn?.addEventListener("click",()=>{
+// ===============================
 
-location.href="admin.html";
+adminPanelBtn?.addEventListener("click", () => {
+
+    location.href = "admin.html";
+
+});
+
+// ===============================
+// Logout
+// ===============================
+
+logoutBtn?.addEventListener("click", async () => {
+
+    await auth.signOut();
+
+    localStorage.clear();
+    sessionStorage.clear();
+
+    location.reload();
 
 });
