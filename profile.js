@@ -57,7 +57,7 @@ if(data.cover){
 document.getElementById("coverPhoto").src=data.cover;
 
 }
-document.getElementById("bioText").innerText = data.bio || "";
+document.getElementById("profileBio").innerText = data.bio || "No bio yet...";
 }
 
 }
@@ -160,7 +160,7 @@ cover:url
 
 );
 
-document.getElementById("coverPhoto").src=url;
+document.getElementById("coverImage").src = url;
 
 };
 
