@@ -1,44 +1,918 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Friendsbook</title>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="style.css">
+<title>Friendsbook V5</title>
 
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet"
+href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
 
-<!-- Loading -->
+<!-- ===========================
+Loading Screen
+============================ -->
 
 <div id="loadingScreen">
 
 <div class="loader"></div>
 
-<h2>Friendsbook</h2>
+<h1 class="loadingText">
+Friendsbook
+</h1>
 
 </div>
 
-<!-- Login -->
+<!-- ===========================
+Main App
+============================ -->
 
-<div id="loginPage">
+<div id="mainApp">
 
-<div class="loginBox">
+<!-- ===========================
+Header
+============================ -->
 
-<h1>Friendsbook</h1>
+<header class="header">
 
-<p>Connect with friends</p>
+<div class="logo">
+Friendsbook
+</div>
+
+<div class="searchBox">
+
+<input
+id="searchInput"
+type="text"
+placeholder="Search Friendsbook">
+
+</div>
+
+<div class="headerRight">
+
+<div
+class="headerIcon"
+id="notificationBtn">
+
+<i class="fa-solid fa-bell"></i>
+
+</div>
+
+<div
+class="headerIcon"
+id="messageBtn">
+
+<i class="fa-solid fa-comments"></i>
+
+</div>
+
+<div
+class="headerIcon"
+id="menuBtn">
+
+<i class="fa-solid fa-bars"></i>
+
+</div>
+
+</div>
+
+</header>
+
+<!-- ===========================
+Main Container Start
+============================ -->
+
+<div class="mainContainer"><!-- ===========================
+Left Sidebar
+============================ -->
+
+<aside
+class="leftSidebar"
+id="leftSidebar">
+
+<div
+class="sidebarItem"
+id="homePageBtn">
+
+<i class="fa-solid fa-house"></i>
+
+<span>Home</span>
+
+</div>
+
+<div
+class="sidebarItem"
+id="profilePageBtn">
+
+<i class="fa-solid fa-user"></i>
+
+<span>Profile</span>
+
+</div>
+
+<div
+class="sidebarItem"
+id="friendsPageBtn">
+
+<i class="fa-solid fa-user-group"></i>
+
+<span>Friends</span>
+
+</div>
+
+<div
+class="sidebarItem"
+id="storyPageBtn">
+
+<i class="fa-solid fa-book-open"></i>
+
+<span>Stories</span>
+
+</div>
+
+<div
+class="sidebarItem"
+id="reelsPageBtn">
+
+<i class="fa-solid fa-clapperboard"></i>
+
+<span>Reels</span>
+
+</div>
+
+<div
+class="sidebarItem"
+id="watchPageBtn">
+
+<i class="fa-solid fa-circle-play"></i>
+
+<span>Watch</span>
+
+</div>
+
+<div
+class="sidebarItem"
+id="marketplacePageBtn">
+
+<i class="fa-solid fa-shop"></i>
+
+<span>Marketplace</span>
+
+</div>
+
+<div
+class="sidebarItem"
+id="gamingPageBtn">
+
+<i class="fa-solid fa-gamepad"></i>
+
+<span>Gaming</span>
+
+</div>
+
+<div
+class="sidebarItem"
+id="jobsPageBtn">
+
+<i class="fa-solid fa-briefcase"></i>
+
+<span>Jobs</span>
+
+</div>
+
+<div
+class="sidebarItem"
+id="settingsPageBtn">
+
+<i class="fa-solid fa-gear"></i>
+
+<span>Settings</span>
+
+</div>
+
+</aside>
+
+<!-- ===========================
+Feed Container
+============================ -->
+
+<main
+class="feed"
+id="feedPage">
+
+<!-- Story -->
+<div
+class="storyContainer"
+id="storyContainer">
+
+</div>
+
+<!-- Create Post -->
+<div
+class="createPost"
+id="createPost">
+
+<!-- Part 3 -->
+
+</div>
+
+<!-- Feed Posts -->
+
+<div
+id="feedContainer">
+
+</div>
+
+</main><!-- ===========================
+Create Post Box
+============================ -->
+
+<div class="createTop">
+
+<img
+id="profileImage"
+src="assets/profile.png"
+alt="Profile">
 
 <input
 type="text"
-id="loginName"
-placeholder="Full Name">
+id="postText"
+placeholder="What's on your mind?">
+
+</div>
+
+<div class="createMedia">
+
+<div class="createBtn">
+
+<label for="postImage">
+
+<i class="fa-solid fa-image"></i>
+
+Photo
+
+</label>
+
+<input
+type="file"
+id="postImage"
+accept="image/*"
+hidden>
+
+</div>
+
+<div class="createBtn">
+
+<label for="postVideo">
+
+<i class="fa-solid fa-video"></i>
+
+Video
+
+</label>
+
+<input
+type="file"
+id="postVideo"
+accept="video/*"
+hidden>
+
+</div>
+
+<div class="createBtn">
+
+<label for="storyImage">
+
+<i class="fa-solid fa-book-open"></i>
+
+Story
+
+</label>
+
+<input
+type="file"
+id="storyImage"
+accept="image/*"
+hidden>
+
+</div>
+
+</div>
+
+<div id="imagePreview"></div>
+
+<div id="videoPreview"></div>
+
+<div class="createBottom">
+
+<button
+class="btn"
+id="postBtn">
+
+<i class="fa-solid fa-paper-plane"></i>
+
+Post
+
+</button>
+
+</div>
+
+</div>
+
+<!-- ===========================
+Posts Container
+============================ -->
+
+<div
+id="feedContainer"
+class="fadeIn">
+
+<!-- JS will load posts here -->
+
+</div>
+
+</main><!-- ===========================
+Right Sidebar
+============================ -->
+
+<aside
+class="rightSidebar"
+id="rightSidebar">
+
+<!-- Sponsored -->
+
+<div class="rightSection">
+
+<h3 class="rightTitle">
+
+Sponsored
+
+</h3>
+
+<div class="marketCard">
+
+<img
+src="assets/ad1.jpg"
+alt="Advertisement">
+
+<div class="marketInfo">
+
+<div class="marketTitle">
+
+Friendsbook Premium
+
+</div>
+
+<div class="marketLocation">
+
+Upgrade your account
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Birthdays -->
+
+<div class="rightSection">
+
+<h3 class="rightTitle">
+
+Birthdays
+
+</h3>
+
+<div class="friendCard">
+
+<img
+src="assets/profile.png"
+alt="Birthday">
+
+<div class="friendInfo">
+
+<div class="friendName">
+
+Today is your friend's birthday 🎂
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Contacts -->
+
+<div class="rightSection">
+
+<h3 class="rightTitle">
+
+Contacts
+
+</h3>
+
+<div id="contactList">
+
+<div class="friendCard">
+
+<img
+src="assets/profile.png"
+alt="Profile">
+
+<div class="friendInfo">
+
+<div class="friendName">
+
+Loading...
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Online Friends -->
+
+<div class="rightSection">
+
+<h3 class="rightTitle">
+
+Online Friends
+
+</h3>
+
+<div id="onlineFriends">
+
+</div>
+
+</div>
+
+</aside>
+
+<!-- ===========================
+End Main Container
+============================ -->
+
+</div><!-- ===========================
+Profile Page
+=========================== -->
+
+<section
+class="page profilePage"
+id="profilePage"
+style="display:none;">
+
+<div class="coverPhoto">
+
+<img
+id="coverImage"
+src="assets/cover.jpg"
+alt="Cover">
+
+</div>
+
+<div class="profileInfo">
+
+<img
+id="profilePhoto"
+class="profileImage"
+src="assets/profile.png"
+alt="Profile">
+
+<h2
+id="profileName"
+class="profileName">
+
+Your Name
+
+</h2>
+
+<p
+id="profileBio"
+class="profileBio">
+
+No bio yet...
+
+</p>
+
+<input
+type="file"
+id="profileInput"
+accept="image/*"
+hidden>
+
+<input
+type="file"
+id="coverInput"
+accept="image/*"
+hidden>
+
+<button
+class="btn"
+onclick="document.getElementById('profileInput').click()">
+
+Change Profile
+
+</button>
+
+<button
+class="btn mt10"
+onclick="document.getElementById('coverInput').click()">
+
+Change Cover
+
+</button>
+
+</div>
+
+<div
+id="profilePosts">
+
+</div>
+
+</section>
+
+<!-- ===========================
+Friends Page
+=========================== -->
+
+<section
+class="page"
+id="friendsPage"
+style="display:none;">
+
+<h2 class="rightTitle">
+
+Friends
+
+</h2>
+
+<div
+id="friendsContainer">
+
+</div>
+
+</section>
+
+<!-- ===========================
+Message Page
+=========================== -->
+
+<section
+class="page"
+id="messagePage"
+style="display:none;">
+
+<div class="chatBox">
+
+<div
+class="chatMessages"
+id="chatMessages">
+
+</div>
+
+<div class="chatInput">
+
+<input
+type="text"
+id="messageInput"
+placeholder="Write a message...">
+
+<button
+id="sendMessageBtn">
+
+<i class="fa-solid fa-paper-plane"></i>
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ===========================
+Notification Page
+=========================== -->
+
+<section
+class="page"
+id="notificationPage"
+style="display:none;">
+
+<h2 class="rightTitle">
+
+Notifications
+
+</h2>
+
+<div
+id="notificationContainer">
+
+</div>
+
+</section>
+
+<!-- ===========================
+Settings Page
+=========================== -->
+
+<section
+class="page"
+id="settingsPage"
+style="display:none;">
+
+<div class="settingItem">
+
+<span>
+
+Dark Mode
+
+</span>
+
+<input
+type="checkbox"
+id="darkMode">
+
+</div>
+
+<div class="settingItem">
+
+<button
+class="btn"
+id="clearCacheBtn">
+
+Clear Cache
+
+</button>
+
+</div>
+
+<div class="settingItem">
+
+<button
+class="btn btnDanger"
+onclick="logout()">
+
+Logout
+
+</button>
+
+</div>
+
+</section><!-- ===========================
+Marketplace Page
+=========================== -->
+
+<section
+class="page"
+id="marketplacePage"
+style="display:none;">
+
+<h2 class="rightTitle">Marketplace</h2>
+
+<div id="marketplaceContainer"></div>
+
+</section>
+
+<!-- ===========================
+Reels Page
+=========================== -->
+
+<section
+class="page"
+id="reelsPage"
+style="display:none;">
+
+<div
+class="reelsContainer"
+id="reelsContainer">
+
+</div>
+
+</section>
+
+<!-- ===========================
+Watch Page
+=========================== -->
+
+<section
+class="page"
+id="watchPage"
+style="display:none;">
+
+<h2 class="rightTitle">Watch</h2>
+
+<div
+id="watchContainer">
+
+</div>
+
+</section>
+
+<!-- ===========================
+Live Page
+=========================== -->
+
+<section
+class="page"
+id="livePage"
+style="display:none;">
+
+<h2 class="rightTitle">Live Videos</h2>
+
+<div
+id="liveContainer">
+
+</div>
+
+</section>
+
+<!-- ===========================
+Gaming Page
+=========================== -->
+
+<section
+class="page"
+id="gamingPage"
+style="display:none;">
+
+<h2 class="rightTitle">Gaming</h2>
+
+<div
+id="gamingContainer">
+
+</div>
+
+</section>
+
+<!-- ===========================
+Jobs Page
+=========================== -->
+
+<section
+class="page"
+id="jobsPage"
+style="display:none;">
+
+<h2 class="rightTitle">Jobs</h2>
+
+<div
+id="jobsContainer">
+
+</div>
+
+</section>
+
+<!-- ===========================
+Dating Page
+=========================== -->
+
+<section
+class="page"
+id="datingPage"
+style="display:none;">
+
+<h2 class="rightTitle">Dating</h2>
+
+<div
+id="datingContainer">
+
+</div>
+
+</section>
+
+<!-- ===========================
+Premium Page
+=========================== -->
+
+<section
+class="page"
+id="premiumPage"
+style="display:none;">
+
+<div class="premiumCard">
+
+<h2>
+
+Friendsbook Premium
+
+</h2>
+
+<p>
+
+Unlock all premium features.
+
+</p>
+
+<select id="premiumPlan">
+
+<option value="Monthly">
+
+Monthly Plan
+
+</option>
+
+<option value="Yearly">
+
+Yearly Plan
+
+</option>
+
+</select>
+
+<button
+class="btn"
+id="buyPremiumBtn">
+
+Buy Premium
+
+</button>
+
+<div
+id="premiumStatus"
+class="mt20">
+
+</div>
+
+</div>
+
+</section><!-- ===========================
+Bottom Navigation
+=========================== -->
+
+<nav class="bottomNav">
+
+<div class="bottomItem" id="bottomHome">
+
+<i class="fa-solid fa-house"></i>
+
+<span>Home</span>
+
+</div>
+
+<div class="bottomItem" id="bottomFriends">
+
+<i class="fa-solid fa-user-group"></i>
+
+<span>Friends</span>
+
+</div>
+
+<div class="bottomItem" id="bottomReels">
+
+<i class="fa-solid fa-clapperboard"></i>
+
+<span>Reels</span>
+
+</div>
+
+<div class="bottomItem" id="bottomMessage">
+
+<i class="fa-solid fa-comments"></i>
+
+<span>Chats</span>
+
+</div>
+
+<div class="bottomItem" id="bottomProfile">
+
+<i class="fa-solid fa-user"></i>
+
+<span>Profile</span>
+
+</div>
+
+</nav>
+
+<!-- ===========================
+Login Page
+=========================== -->
+
+<div id="loginPage" style="display:none;">
+
+<div class="loginCard">
+
+<h1>Friendsbook</h1>
 
 <input
 type="email"
@@ -50,13 +924,17 @@ type="password"
 id="loginPassword"
 placeholder="Password">
 
-<button id="loginBtn">
+<button
+class="btn"
+id="loginBtn">
 
 Login
 
 </button>
 
-<button id="registerBtn">
+<button
+class="btn mt10"
+id="registerBtn">
 
 Create New Account
 
@@ -66,442 +944,45 @@ Create New Account
 
 </div>
 
-<!-- Main -->
-
-<div id="mainApp">
-
-<header id="topBar">
-
-<div class="logo">
-
-Friendsbook
-
 </div>
 
-<input
-id="searchInput"
-type="text"
-placeholder="Search Friendsbook">
-
-<div class="topIcons">
-
-<span
-class="material-icons"
-id="notificationBtn">
-
-notifications
-
-</span>
-
-<span
-class="material-icons"
-id="messageBtn">
-
-chat
-
-</span>
-
-<span
-class="material-icons"
-id="menuBtn">
-
-menu
-
-</span>
-
-</div>
-
-</header><!-- Left Sidebar -->
-
-<div id="leftSidebar">
-
-<div class="profileCard">
-
-<img id="profilePhoto" src="images/default-profile.png">
-
-<h3 id="profileName">User Name</h3>
-
-<p id="profileBio">Welcome to Friendsbook</p>
-
-</div>
-
-<div class="menuList">
-
-<div class="menuItem" id="homePageBtn">
-
-<span class="material-icons">home</span>
-
-Home
-
-</div>
-
-<div class="menuItem" id="profilePageBtn">
-
-<span class="material-icons">person</span>
-
-Profile
-
-</div>
-
-<div class="menuItem" id="friendsPageBtn">
-
-<span class="material-icons">group</span>
-
-Friends
-
-</div>
-
-<div class="menuItem" id="storyPageBtn">
-
-<span class="material-icons">auto_stories</span>
-
-Stories
-
-</div>
-
-<div class="menuItem" id="reelsPageBtn">
-
-<span class="material-icons">smart_display</span>
-
-Reels
-
-</div>
-
-<div class="menuItem" id="savedPageBtn">
-
-<span class="material-icons">bookmark</span>
-
-Saved
-
-</div>
-
-<div class="menuItem" id="settingsPageBtn">
-
-<span class="material-icons">settings</span>
-
-Settings
-
-</div>
-
-<div class="menuItem" id="logoutBtn">
-
-<span class="material-icons">logout</span>
-
-Logout
-
-</div>
-
-</div>
-
-</div>
-
-<!-- Feed -->
-
-<div id="feedPage">
-
-<div class="createPost">
-
-<textarea
-
-id="postText"
-
-placeholder="What's on your mind?">
-
-</textarea>
-
-<input
-
-type="file"
-
-id="postImage"
-
-accept="image/*">
-
-<input
-
-type="file"
-
-id="postVideo"
-
-accept="video/*">
-
-<button id="createPostBtn">
-
-Post
-
-</button>
-
-</div>
-
-<div id="storyBar">
-
-</div>
-
-<div id="postContainer">
-
-</div>
-
-</div><!-- Right Sidebar -->
-
-<div id="rightSidebar">
-
-<div class="onlineTitle">
-
-Online Friends
-
-</div>
-
-<div id="onlineFriends">
-
-</div>
-
-<div class="shortcutTitle">
-
-Shortcuts
-
-</div>
-
-<div class="shortcutItem">
-
-📷 Photos
-
-</div>
-
-<div class="shortcutItem">
-
-🎥 Videos
-
-</div>
-
-<div class="shortcutItem">
-
-👥 Groups
-
-</div>
-
-<div class="shortcutItem">
-
-📄 Pages
-
-</div>
-
-</div>
-
-<!-- Messenger -->
-
-<div id="messagePage" class="page">
-
-<div class="chatHeader">
-
-<span id="chatFriendName">
-
-Messenger
-
-</span>
-
-</div>
-
-<div id="chatBox">
-
-</div>
-
-<div class="chatBottom">
-
-<input
-
-type="text"
-
-id="chatInput"
-
-placeholder="Write a message...">
-
-<button id="sendBtn">
-
-Send
-
-</button>
-
-</div>
-
-</div>
-
-<!-- Notification -->
-
-<div id="notificationPage" class="page">
-
-<h2>
-
-Notifications
-
-</h2>
-
-<div id="notificationList">
-
-</div>
-
-</div>
-
-<!-- Friends -->
-
-<div id="friendsPage" class="page">
-
-<h2>
-
-Friends
-
-</h2>
-
-<div id="requestList">
-
-</div>
-
-<div id="friendsList">
-
-</div>
-
-</div><!-- Profile Page -->
-
-<div id="profilePage" class="page">
-
-<div class="coverSection">
-
-<img id="coverPhoto" src="images/default-cover.jpg">
-
-<input
-type="file"
-id="coverInput"
-accept="image/*">
-
-</div>
-
-<div class="profileSection">
-
-<img id="profileImage" src="images/default-profile.png">
-
-<input
-type="file"
-id="profileInput"
-accept="image/*">
-
-<h2 id="myName">
-
-User Name
-
-</h2>
-
-<textarea
-
-id="bioInput"
-
-placeholder="Write your bio...">
-
-</textarea>
-
-<button id="saveProfileBtn">
-
-Save Profile
-
-</button>
-
-</div>
-
-</div>
-
-<!-- Story Page -->
-
-<div id="storyPage" class="page">
-
-<h2>
-
-Create Story
-
-</h2>
-
-<input
-
-type="file"
-
-id="storyInput"
-
-accept="image/*,video/*">
-
-<button id="uploadStoryBtn">
-
-Upload Story
-
-</button>
-
-<div id="storyContainer">
-
-</div>
-
-</div>
-
-<!-- Reels -->
-
-<div id="reelsPage" class="page">
-
-<h2>
-
-Reels
-
-</h2>
-
-<div id="reelsContainer">
-
-</div>
-
-</div><!-- Settings -->
-
-<div id="settingsPage" class="page">
-
-<h2>Settings</h2>
-
-<div class="settingCard">
-
-<label>
-
-<input type="checkbox" id="darkMode">
-
-Dark Mode
-
-</label>
-
-</div>
-
-<div class="settingCard">
-
-<button id="clearCacheBtn">
-
-Clear Cache
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-<!-- mainApp End -->
+<!-- ===========================
+JavaScript Files
+=========================== -->
 
 <script type="module" src="firebase.js"></script>
-
 <script type="module" src="auth.js"></script>
-
 <script type="module" src="script.js"></script>
-
 <script type="module" src="post.js"></script>
-
 <script type="module" src="story.js"></script>
-
 <script type="module" src="friends.js"></script>
-
 <script type="module" src="message.js"></script>
-
 <script type="module" src="notification.js"></script>
-
 <script type="module" src="profile.js"></script>
+<script type="module" src="reaction.js"></script>
+<script type="module" src="comment.js"></script>
+<script type="module" src="reels.js"></script>
+<script type="module" src="videoCall.js"></script>
+<script type="module" src="group.js"></script>
+<script type="module" src="page.js"></script>
+<script type="module" src="admin.js"></script>
+<script type="module" src="search.js"></script>
+<script type="module" src="settings.js"></script>
+<script type="module" src="security.js"></script>
+<script type="module" src="marketplace.js"></script>
+<script type="module" src="events.js"></script>
+<script type="module" src="watch.js"></script>
+<script type="module" src="memories.js"></script>
+<script type="module" src="gaming.js"></script>
+<script type="module" src="dating.js"></script>
+<script type="module" src="jobs.js"></script>
+<script type="module" src="live.js"></script>
+<script type="module" src="ads.js"></script>
+<script type="module" src="premium.js"></script>
+<script type="module" src="backup.js"></script>
+<script type="module" src="analytics.js"></script>
+<script type="module" src="utils.js"></script>
 
 </body>
 
-</html>
+  </html>
