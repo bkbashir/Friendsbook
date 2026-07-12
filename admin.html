@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Friendsbook Admin Panel</title>
+
+<link rel="stylesheet"
+href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- ===========================
+Admin Header
+=========================== -->
+
+<header class="header">
+
+<div class="logo">
+
+Friendsbook Admin
+
+</div>
+
+<div class="headerRight">
+
+<div class="headerIcon">
+
+<i class="fa-solid fa-user-shield"></i>
+
+</div>
+
+<div class="headerIcon"
+onclick="logout()">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+</div>
+
+</div>
+
+</header>
+
+<!-- ===========================
+Admin Layout
+=========================== -->
+
+<div class="mainContainer">
+
+<!-- ===========================
+Admin Sidebar
+=========================== -->
+
+<aside class="leftSidebar">
+
+<div class="sidebarItem"
+id="dashboardBtn">
+
+<i class="fa-solid fa-chart-line"></i>
+
+<span>Dashboard</span>
+
+</div>
+
+<div class="sidebarItem"
+id="usersBtn">
+
+<i class="fa-solid fa-users"></i>
+
+<span>Users</span>
+
+</div>
+
+<div class="sidebarItem"
+id="postsBtn">
+
+<i class="fa-solid fa-file-lines"></i>
+
+<span>Posts</span>
+
+</div>
+
+<div class="sidebarItem"
+id="storiesBtn">
+
+<i class="fa-solid fa-book-open"></i>
+
+<span>Stories</span>
+
+</div>
+
+<div class="sidebarItem"
+id="reelsBtn">
+
+<i class="fa-solid fa-clapperboard"></i>
+
+<span>Reels</span>
+
+</div>
+
+<div class="sidebarItem"
+id="reportsBtn">
+
+<i class="fa-solid fa-flag"></i>
+
+<span>Reports</span>
+
+</div>
+
+<div class="sidebarItem"
+id="adsBtn">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+<span>Advertisements</span>
+
+</div>
+
+<div class="sidebarItem"
+id="premiumBtn">
+
+<i class="fa-solid fa-crown"></i>
+
+<span>Premium</span>
+
+</div>
+
+</aside>
+
+<!-- ===========================
+Admin Main
+=========================== -->
+
+<main class="feed">
+
+<div class="createPost">
+
+<h2>
+
+Admin Dashboard
+
+</h2>
+
+<p>
+
+Welcome to Friendsbook V5 Admin Panel.
+
+</p>
+
+</div>
+
+<div id="adminContainer">
+
+</div>
+
+</main><!-- ===========================
+Dashboard Cards
+=========================== -->
+
+<div class="feed">
+
+<div class="createPost">
+
+<h2>Dashboard</h2>
+
+<div class="dashboardGrid">
+
+<div class="marketCard">
+
+<div class="marketInfo">
+
+<h3>Total Users</h3>
+
+<h1 id="totalUsers">0</h1>
+
+</div>
+
+</div>
+
+<div class="marketCard">
+
+<div class="marketInfo">
+
+<h3>Total Posts</h3>
+
+<h1 id="totalPosts">0</h1>
+
+</div>
+
+</div>
+
+<div class="marketCard">
+
+<div class="marketInfo">
+
+<h3>Total Stories</h3>
+
+<h1 id="totalStories">0</h1>
+
+</div>
+
+</div>
+
+<div class="marketCard">
+
+<div class="marketInfo">
+
+<h3>Total Reels</h3>
+
+<h1 id="totalReels">0</h1>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ===========================
+Users Management
+=========================== -->
+
+<div class="createPost">
+
+<h2>Users</h2>
+
+<div id="usersContainer">
+
+<!-- JS Load -->
+
+</div>
+
+</div>
+
+<!-- ===========================
+Reports
+=========================== -->
+
+<div class="createPost">
+
+<h2>Reported Content</h2>
+
+<div id="reportsContainer">
+
+<!-- JS Load -->
+
+</div>
+
+</div>
+
+<!-- ===========================
+Posts Management
+=========================== -->
+
+<div class="createPost">
+
+<h2>Posts</h2>
+
+<div id="postsContainer">
+
+<!-- JS Load -->
+
+</div>
+
+</div>
+
+<!-- ===========================
+Reels Management
+=========================== -->
+
+<div class="createPost">
+
+<h2>Reels</h2>
+
+<div id="reelsContainer">
+
+<!-- JS Load -->
+
+</div>
+
+</div>
+
+<!-- ===========================
+Stories Management
+=========================== -->
+
+<div class="createPost">
+
+<h2>Stories</h2>
+
+<div id="storiesContainer">
+
+<!-- JS Load -->
+
+</div>
+
+</div>
+
+</div><!-- ===========================
+Premium Management
+=========================== -->
+
+<div class="createPost">
+
+<h2>Premium Users</h2>
+
+<div id="premiumContainer">
+
+<!-- JS Load -->
+
+</div>
+
+</div>
+
+<!-- ===========================
+Advertisements
+=========================== -->
+
+<div class="createPost">
+
+<h2>Advertisements</h2>
+
+<div id="adsContainer">
+
+<!-- JS Load -->
+
+</div>
+
+</div>
+
+<!-- ===========================
+Analytics
+=========================== -->
+
+<div class="createPost">
+
+<h2>Analytics</h2>
+
+<div class="dashboardGrid">
+
+<div class="marketCard">
+
+<div class="marketInfo">
+
+<h3>Today's Visitors</h3>
+
+<h1 id="todayVisitors">0</h1>
+
+</div>
+
+</div>
+
+<div class="marketCard">
+
+<div class="marketInfo">
+
+<h3>Total Views</h3>
+
+<h1 id="totalViews">0</h1>
+
+</div>
+
+</div>
+
+<div class="marketCard">
+
+<div class="marketInfo">
+
+<h3>Online Users</h3>
+
+<h1 id="onlineUsers">0</h1>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ===========================
+Admin Settings
+=========================== -->
+
+<div class="createPost">
+
+<h2>Settings</h2>
+
+<button
+class="btn"
+onclick="location.href='index.html'">
+
+Back to Friendsbook
+
+</button>
+
+<button
+class="btn btnDanger mt10"
+onclick="logout()">
+
+Logout
+
+</button>
+
+</div>
+
+</main>
+
+</div>
+
+<!-- ===========================
+JavaScript
+=========================== -->
+
+<script type="module" src="firebase.js"></script>
+<script type="module" src="auth.js"></script>
+<script type="module" src="admin.js"></script>
+<script type="module" src="utils.js"></script>
+
+</body>
+  </html>
