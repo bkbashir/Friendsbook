@@ -57,7 +57,7 @@ if(data.cover){
 document.getElementById("coverPhoto").src=data.cover;
 
 }
-
+document.getElementById("bioText").innerText = data.bio || "";
 }
 
 }
@@ -79,7 +79,8 @@ bio:bioInput.value
 }
 
 );
-
+document.getElementById("bioText").innerText = bioInput.value;
+  
 alert("Profile Updated");
 
 };
@@ -122,6 +123,7 @@ document.getElementById("profileImage").src=url;
 
 document.getElementById("profilePhoto").src=url;
 
+  document.getElementById("headerProfile").src = url;
 };
 
 // ===============================
