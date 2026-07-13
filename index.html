@@ -226,7 +226,24 @@ id="storyContainer">
 </div>
 
 <!-- Create Post -->
-<div class="createPost" id="createPost">
+<div
+class="createPost"
+id="createPost">
+
+<!-- Part 3 -->
+
+</div>
+
+<!-- Feed Posts -->
+
+<div
+id="feedContainer">
+
+</div>
+
+</main><!-- ===========================
+Create Post Box
+============================ -->
 
 <div class="createTop">
 
@@ -244,34 +261,58 @@ placeholder="What's on your mind?">
 
 <div class="createMedia">
 
-<!-- Photo -->
-
 <div class="createBtn">
+
 <label for="postImage">
+
 <i class="fa-solid fa-image"></i>
+
 Photo
+
 </label>
-<input type="file" id="postImage" accept="image/*" hidden>
+
+<input
+type="file"
+id="postImage"
+accept="image/*"
+hidden>
+
 </div>
 
-<!-- Video -->
-
 <div class="createBtn">
+
 <label for="postVideo">
+
 <i class="fa-solid fa-video"></i>
+
 Video
+
 </label>
-<input type="file" id="postVideo" accept="video/*" hidden>
+
+<input
+type="file"
+id="postVideo"
+accept="video/*"
+hidden>
+
 </div>
 
-<!-- Story -->
-
 <div class="createBtn">
+
 <label for="storyImage">
+
 <i class="fa-solid fa-book-open"></i>
+
 Story
+
 </label>
-<input type="file" id="storyImage" accept="image/*" hidden>
+
+<input
+type="file"
+id="storyImage"
+accept="image/*"
+hidden>
+
 </div>
 
 </div>
@@ -308,8 +349,7 @@ class="fadeIn">
 
 </div>
 
-</main>
-  <!-- ===========================
+</main><!-- ===========================
 Right Sidebar
 ============================ -->
 
@@ -439,7 +479,7 @@ Online Friends
 End Main Container
 ============================ -->
 
-  <!-- ===========================
+</div><!-- ===========================
 Profile Page
 =========================== -->
 
@@ -602,66 +642,51 @@ id="notificationContainer">
 <!-- ===========================
 Settings Page
 =========================== -->
+
 <section
 class="page"
 id="settingsPage"
 style="display:none;">
-<div class="settingsCard">
-<h3>⚙️ Settings</h3>
 
-<div class="settingItem" id="editProfileBtn">
-<i class="fa-solid fa-user"></i>
-<span>Edit Profile</span>
-</div>
+<div class="settingItem">
 
-<div class="settingItem" id="changePasswordBtn">
-<i class="fa-solid fa-key"></i>
-<span>Change Password</span>
-</div>
+<span>
 
-<div class="settingItem" id="privacyBtn">
-<i class="fa-solid fa-lock"></i>
-<span>Privacy</span>
-</div>
+Dark Mode
 
-<div class="settingItem" id="notificationSettingBtn">
-<i class="fa-solid fa-bell"></i>
-<span>Notifications</span>
-</div>
+</span>
 
-<div class="settingItem" id="languageBtn">
-<i class="fa-solid fa-language"></i>
-<span>Language</span>
+<input
+type="checkbox"
+id="darkMode">
+
 </div>
 
 <div class="settingItem">
-<span>Dark Mode</span>
-<input type="checkbox" id="darkMode">
-</div>
 
-<div class="settingItem" id="clearCacheBtn">
-<i class="fa-solid fa-trash"></i>
-<span>Clear Cache</span>
-</div>
+<button
+class="btn"
+id="clearCacheBtn">
 
-<div class="settingItem" id="aboutBtn">
-<i class="fa-solid fa-circle-info"></i>
-<span>About Friendsbook</span>
-</div>
+Clear Cache
 
-<div class="settingItem adminOnly" id="settingsAdminBtn" style="display:none;">
-<i class="fa-solid fa-user-shield"></i>
-<span>Admin Panel</span>
-</div>
-
-<button class="logoutBtn" id="logoutBtn">
-Logout
 </button>
 
 </div>
 
-</section>
-  <!-- ===========================
+<div class="settingItem">
+
+<button
+class="btn btnDanger"
+onclick="logout()">
+
+Logout
+
+</button>
+
+</div>
+
+</section><!-- ===========================
 Marketplace Page
 =========================== -->
 
@@ -926,7 +951,7 @@ Create New Account
 
 </div>
 
-
+</div>
 
 <!-- ===========================
 JavaScript Files
@@ -964,6 +989,7 @@ JavaScript Files
 <script type="module" src="backup.js"></script>
 <script type="module" src="analytics.js"></script>
 <script type="module" src="utils.js"></script>
+
 </body>
 
-  </html>
+</html>
