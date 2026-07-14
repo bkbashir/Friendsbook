@@ -482,3 +482,6 @@ if (adminBtn) {
 // ===============================
 // End script.js
 // ===============================
+window.onerror = function(message, source, line, col) {
+    alert("ERROR:\n" + message + "\nLine: " + line);
+};
