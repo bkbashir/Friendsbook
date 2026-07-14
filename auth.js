@@ -133,9 +133,6 @@ onAuthStateChanged(auth, async(user)=>{
 
 if(user){
 
-loginPage.style.display="none";
-
-mainApp.style.display="block";
 
 const snap = await getDoc(
 
@@ -171,9 +168,6 @@ document.getElementById("coverPhoto").src = data.cover;
 
 }else{
 
-loginPage.style.display="flex";
-
-mainApp.style.display="none";
 
 }
 
