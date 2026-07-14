@@ -329,8 +329,7 @@ onAuthStateChanged(auth, async (user) => {
 
 const ADMIN_EMAIL = "bashirahmed0052@gmail.com";
 
-const adminBtn =
-document.getElementById("settingsAdminBtn");
+const adminBtn = document.getElementById("adminPanelBtn");
 
 onAuthStateChanged(auth, (user) => {
 
