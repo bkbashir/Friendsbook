@@ -1,339 +1,467 @@
-// ======================================
-// Friendsbook V6
+// ===============================
+// Friendsbook V5
 // script.js Part 1
-// Developer: Bashir Ahmed
-// ======================================
+// ===============================
 
+// Imports
 import { auth } from "./firebase.js";
-import {
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-// ==========================
+// ===============================
 // Elements
-// ==========================
+// ===============================
 
-const loadingScreen = document.getElementById("loadingScreen");
-const loginPage = document.getElementById("loginPage");
-const mainApp = document.getElementById("mainApp");
+const pages=document.querySelectorAll(".page");
 
-const pages = document.querySelectorAll(".page");
+const loadingScreen=document.getElementById("loadingScreen");
 
-// ==========================
-// Loading
-// ==========================
+const loginPage=document.getElementById("loginPage");
 
-window.addEventListener("load", () => {
-    if (loadingScreen) {
-        setTimeout(() => {
-            loadingScreen.style.display = "none";
-        }, 800);
-    }
-});
+const mainApp=document.getElementById("mainApp");
 
-// ==========================
+// ===============================
 // Hide All Pages
-// ==========================
+// ===============================
 
-function hidePages() {
-    pages.forEach(page => {
-        page.style.display = "none";
-    });
+export function hidePages(){
+
+pages.forEach(page=>{
+
+page.style.display="none";
+
+});
+
 }
 
-// ==========================
+// ===============================
 // Show Page
-// ==========================
+// ===============================
 
-function showPage(pageId) {
+export function showPage(id){
 
-    hidePages();
+hidePages();
 
-    const page = document.getElementById(pageId);
+const page=document.getElementById(id);
 
-    if (page) {
-        page.style.display = "block";
-    }
+if(page){
 
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
+page.style.display="block";
 
-}
+window.scrollTo({
 
-// ==========================
-// Open Home
-// ==========================
+top:0,
 
-function openHome() {
-    showPage("feedPage");
-}
-
-// ==========================
-// Firebase Login Check
-// ==========================
-
-onAuthStateChanged(auth, user => {
-
-    if (user) {
-
-        if (loginPage)
-            loginPage.style.display = "none";
-
-        if (mainApp)
-            mainApp.style.display = "block";
-
-        openHome();
-
-    } else {
-
-        if (mainApp)
-            mainApp.style.display = "none";
-
-        if (loginPage)
-            loginPage.style.display = "flex";
-
-    }
+behavior:"smooth"
 
 });
 
-// ==========================
-// Navigation
-// ==========================
+}
 
-document.getElementById("homePageBtn")?.addEventListener("click", () => openHome());
+}
 
-document.getElementById("profilePageBtn")?.addEventListener("click", () => showPage("profilePage"));
+// ===============================
+// Open Feed
+// ===============================
 
-document.getElementById("friendsPageBtn")?.addEventListener("click", () => showPage("friendsPage"));
+export function openFeed(){
 
-document.getElementById("storyPageBtn")?.addEventListener("click", () => showPage("storyPage"));
+showPage("feedPage");
 
-document.getElementById("reelsPageBtn")?.addEventListener("click", () => showPage("reelsPage"));
+}
 
-document.getElementById("messageBtn")?.addEventListener("click", () => showPage("messagePage"));
+// ===============================
+// Authentication
+// ===============================
 
-document.getElementById("notificationBtn")?.addEventListener("click", () => showPage("notificationPage"));
+onAuthStateChanged(auth,(user)=>{
 
-document.getElementById("settingsPageBtn")?.addEventListener("click", () => showPage("settingsPage"));
+if(user){
 
-// ==========================
-// Logout
-// ==========================
+if(loginPage){
 
-document.getElementById("logoutBtn")?.addEventListener("click", async () => {
+loginPage.style.display="none";
 
-    await signOut(auth);
+}
+
+if(mainApp){
+
+mainApp.style.display="block";
+
+}
+
+openFeed();
+
+}else{
+
+if(loginPage){
+
+loginPage.style.display="flex";
+
+}
+
+if(mainApp){
+
+mainApp.style.display="none";
+
+}
+
+}
 
 });
 
-// ==========================
+// ===============================
+// Loading Screen
+// ===============================
+
+window.addEventListener("load",()=>{
+
+setTimeout(()=>{
+
+if(loadingScreen){
+
+loadingScreen.style.display="none";
+
+}
+
+},1000);
+
+});
+
+// ===============================
+// Navigation Buttons
+// ===============================
+
+document.getElementById("homePageBtn")?.addEventListener("click",()=>{
+
+openFeed();
+
+});
+
+document.getElementById("profilePageBtn")?.addEventListener("click",()=>{
+
+showPage("profilePage");
+
+});
+
+document.getElementById("friendsPageBtn")?.addEventListener("click",()=>{
+
+showPage("friendsPage");
+
+});
+
+document.getElementById("storyPageBtn")?.addEventListener("click",()=>{
+
+showPage("storyPage");
+
+});
+
+document.getElementById("reelsPageBtn")?.addEventListener("click",()=>{
+
+showPage("reelsPage");
+
+});
+
+document.getElementById("messageBtn")?.addEventListener("click",()=>{
+
+showPage("messagePage");
+
+});
+
+document.getElementById("notificationBtn")?.addEventListener("click",()=>{
+
+showPage("notificationPage");
+
+});
+
+document.getElementById("settingsPageBtn")?.addEventListener("click",()=>{
+
+showPage("settingsPage");
+
+});
+
+// ===============================
 // End Part 1
-// ==========================
-// ======================================
-// Friendsbook V6
+// ===============================// ===============================
+// Friendsbook V5
 // script.js Part 2
-// ======================================
+// ===============================
 
-// ---------- Search ----------
+// ===============================
+// Search
+// ===============================
 
-const searchInput = document.getElementById("searchInput");
+const searchInput=document.getElementById("searchInput");
 
-if (searchInput) {
+if(searchInput){
 
-    searchInput.addEventListener("keyup", () => {
+searchInput.addEventListener("keyup",()=>{
 
-        const value = searchInput.value.toLowerCase();
+const value=searchInput.value.toLowerCase();
 
-        document.querySelectorAll(".postCard").forEach(post => {
+document.querySelectorAll(".postCard").forEach(post=>{
 
-            const txt = post.innerText.toLowerCase();
+const text=post.innerText.toLowerCase();
 
-            post.style.display = txt.includes(value)
-                ? "block"
-                : "none";
+post.style.display=text.includes(value)?"block":"none";
 
-        });
+});
 
-    });
+});
 
 }
 
-// ---------- Dark Mode ----------
+// ===============================
+// Dark Mode
+// ===============================
 
-const darkMode = document.getElementById("darkMode");
+const darkMode=document.getElementById("darkMode");
 
-if (localStorage.getItem("theme") === "dark") {
+if(localStorage.getItem("theme")==="dark"){
 
-    document.body.classList.add("dark");
+document.body.classList.add("dark");
 
-    if (darkMode) darkMode.checked = true;
+if(darkMode){
+
+darkMode.checked=true;
 
 }
 
-darkMode?.addEventListener("change", () => {
+}
 
-    if (darkMode.checked) {
+if(darkMode){
 
-        document.body.classList.add("dark");
+darkMode.addEventListener("change",()=>{
 
-        localStorage.setItem("theme", "dark");
+if(darkMode.checked){
 
-    } else {
+document.body.classList.add("dark");
 
-        document.body.classList.remove("dark");
+localStorage.setItem("theme","dark");
 
-        localStorage.setItem("theme", "light");
+}else{
 
-    }
+document.body.classList.remove("dark");
 
-});
+localStorage.setItem("theme","light");
 
-// ---------- Mobile Menu ----------
-
-const menuBtn = document.getElementById("menuBtn");
-
-const leftSidebar = document.getElementById("leftSidebar");
-
-let menuOpen = false;
-
-menuBtn?.addEventListener("click", () => {
-
-    if (window.innerWidth <= 1100) {
-
-        menuOpen = !menuOpen;
-
-        leftSidebar.style.display = menuOpen
-            ? "block"
-            : "none";
-
-    }
+}
 
 });
 
-window.addEventListener("resize", () => {
+}
 
-    if (!leftSidebar) return;
+// ===============================
+// Mobile Menu
+// ===============================
 
-    if (window.innerWidth > 1100) {
+const menuBtn=document.getElementById("menuBtn");
 
-        leftSidebar.style.display = "block";
+const leftSidebar=document.getElementById("leftSidebar");
 
-    } else {
+let menuOpen=false;
 
-        leftSidebar.style.display = "none";
+if(menuBtn){
 
-        menuOpen = false;
+menuBtn.addEventListener("click",()=>{
 
-    }
+if(window.innerWidth<=1100){
 
-});
+menuOpen=!menuOpen;
 
-// ---------- Profile Shortcut ----------
+if(leftSidebar){
 
-document.getElementById("profileImage")
-?.addEventListener("click", () => {
+leftSidebar.style.display=
 
-    showPage("profilePage");
+menuOpen?"block":"none";
 
-});
+}
 
-document.getElementById("profilePhoto")
-?.addEventListener("click", () => {
-
-    showPage("profilePage");
+}
 
 });
 
-// ---------- Logo ----------
+}
 
-document.querySelector(".logo")
-?.addEventListener("click", () => {
+// ===============================
+// Responsive
+// ===============================
 
-    openHome();
+window.addEventListener("resize",()=>{
+
+if(!leftSidebar) return;
+
+if(window.innerWidth>1100){
+
+leftSidebar.style.display="block";
+
+}else{
+
+leftSidebar.style.display="none";
+
+menuOpen=false;
+
+}
 
 });
 
-// ======================================
+// ===============================
+// Profile Shortcut
+// ===============================
+
+document.getElementById("profilePhoto")?.addEventListener("click",()=>{
+
+showPage("profilePage");
+
+});
+
+document.getElementById("profileImage")?.addEventListener("click",()=>{
+
+showPage("profilePage");
+
+});
+
+// ===============================
+// Logo Shortcut
+// ===============================
+
+document.querySelector(".logo")?.addEventListener("click",()=>{
+
+openFeed();
+
+});
+
+// ===============================
 // End Part 2
-// ======================================
-// ======================================
-// Friendsbook V6
-// script.js Part 3
-// ======================================
+// ===============================// ===============================
+// Friendsbook V5
+// script.js Part 3 (Final)
+// ===============================
 
-import { db } from "./firebase.js";
+// ===============================
+// Clear Local Cache
+// ===============================
 
-import {
-    doc,
-    getDoc
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+document.getElementById("clearCacheBtn")?.addEventListener("click",()=>{
 
-// ==========================
-// User Profile Load
-// ==========================
+if(confirm("সব Local Data Delete করবেন?")){
 
-onAuthStateChanged(auth, async (user) => {
+localStorage.clear();
 
-    if (!user) return;
+sessionStorage.clear();
 
-    try {
+location.reload();
 
-        const snap = await getDoc(
-            doc(db, "users", user.email)
-        );
-
-        if (!snap.exists()) return;
-
-        const data = snap.data();
-
-        document.getElementById("myName") &&
-        (document.getElementById("myName").innerHTML = data.name);
-
-        document.getElementById("profileName") &&
-        (document.getElementById("profileName").innerHTML = data.name);
-
-        document.getElementById("profileBio") &&
-        (document.getElementById("profileBio").innerHTML = data.bio || "");
-
-        if (data.profile) {
-
-            document.getElementById("profileImage") &&
-            (document.getElementById("profileImage").src = data.profile);
-
-            document.getElementById("profilePhoto") &&
-            (document.getElementById("profilePhoto").src = data.profile);
-
-        }
-
-        if (data.cover) {
-
-            document.getElementById("coverPhoto") &&
-            (document.getElementById("coverPhoto").src = data.cover);
-
-        }
-
-    } catch (e) {
-
-        console.log(e);
-
-    }
+}
 
 });
 
-// ==========================
-// Admin Panel
-// ==========================
+// ===============================
+// Online / Offline Status
+// ===============================
 
-const ADMIN_EMAIL = "bashirahmed0052@gmail.com";
+window.addEventListener("online",()=>{
+
+console.log("Internet Connected");
+
+});
+
+window.addEventListener("offline",()=>{
+
+console.log("Internet Disconnected");
+
+});
+
+// ===============================
+// Keyboard Shortcut
+// ===============================
+
+window.addEventListener("keydown",(e)=>{
+
+// Home
+
+if(e.altKey && e.key==="1"){
+
+openFeed();
+
+}
+
+// Profile
+
+if(e.altKey && e.key==="2"){
+
+showPage("profilePage");
+
+}
+
+// Friends
+
+if(e.altKey && e.key==="3"){
+
+showPage("friendsPage");
+
+}
+
+// Messages
+
+if(e.altKey && e.key==="4"){
+
+showPage("messagePage");
+
+}
+
+});
+
+// ===============================
+// Global Logout
+// ===============================
+
+window.logout=async()=>{
+
+await auth.signOut();
+
+localStorage.clear();
+
+sessionStorage.clear();
+
+location.reload();
+
+};
+
+// ===============================
+// App Version
+// ===============================
+
+window.FRIENDSBOOK={
+
+name:"Friendsbook",
+
+version:"5.0.0",
+
+developer:"Bashir Ahmed"
+
+};
+
+// ===============================
+// Initialize App
+// ===============================
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+console.log(
+
+`${FRIENDSBOOK.name} ${FRIENDSBOOK.version} Loaded`
+
+);
+
+});
+
+// ===============================
+// End script.js
+// ===============================const ADMIN_EMAIL = "bashirahmed0052@gmail.com";
 
 const adminBtn = document.getElementById("adminPanelBtn");
 
 onAuthStateChanged(auth, (user) => {
-
-    if (!adminBtn) return;
 
     if (user && user.email === ADMIN_EMAIL) {
 
@@ -352,21 +480,3 @@ adminBtn?.addEventListener("click", () => {
     location.href = "admin.html";
 
 });
-
-// ==========================
-// App Info
-// ==========================
-
-window.FRIENDSBOOK = {
-
-    version: "6.0",
-
-    developer: "Bashir Ahmed"
-
-};
-
-console.log("Friendsbook V6 Loaded");
-
-// ======================================
-// End Part 3
-// ======================================
