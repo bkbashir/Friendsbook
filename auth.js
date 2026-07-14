@@ -129,49 +129,6 @@ alert(error.message);
 // Auto Login
 // ===============================
 
-onAuthStateChanged(auth, async(user)=>{
-
-if(user){
-
-
-const snap = await getDoc(
-
-doc(db,"users",user.email)
-
-);
-
-if(snap.exists()){
-
-const data = snap.data();
-
-document.getElementById("myName").innerHTML = data.name;
-
-document.getElementById("profileName").innerHTML = data.name;
-
-document.getElementById("profileBio").innerHTML = data.bio || "";
-
-if(data.profile){
-
-document.getElementById("profileImage").src = data.profile;
-
-document.getElementById("profilePhoto").src = data.profile;
-
-}
-
-if(data.cover){
-
-document.getElementById("coverPhoto").src = data.cover;
-
-}
-
-}
-
-}else{
-
-
-}
-
-});
 
 // ===============================
 // Logout
