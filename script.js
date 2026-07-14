@@ -454,14 +454,13 @@ console.log(
 );
 
 });
-
-// ===============================
-// End script.js
-// ===============================const ADMIN_EMAIL = "bashirahmed0052@gmail.com";
+const ADMIN_EMAIL = "bashirahmed0052@gmail.com";
 
 const adminBtn = document.getElementById("adminPanelBtn");
 
 onAuthStateChanged(auth, (user) => {
+
+    if (!adminBtn) return;
 
     if (user && user.email === ADMIN_EMAIL) {
 
@@ -475,8 +474,11 @@ onAuthStateChanged(auth, (user) => {
 
 });
 
-adminBtn?.addEventListener("click", () => {
-
-    location.href = "admin.html";
-
-});
+if (adminBtn) {
+    adminBtn.addEventListener("click", () => {
+        location.href = "admin.html";
+    });
+}
+// ===============================
+// End script.js
+// ===============================
