@@ -5,253 +5,283 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
+<meta
+name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>Friendsbook V5</title>
+<title>Friendsbook</title>
 
-<link rel="stylesheet"
+<link
+rel="stylesheet"
 href="style.css">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<link
+rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
 
 </head>
 
 <body>
 
-<!-- ===========================
-Loading Screen
-============================ -->
+<!-- ========================= -->
+<!-- Splash Screen -->
+<!-- ========================= -->
 
 <div id="loadingScreen">
 
-<div class="loader"></div>
+<div class="loadingBox">
 
-<h1 class="loadingText">
+<img
+src="logo.png"
+id="appLogo">
+
+<h1>
+
 Friendsbook
+
 </h1>
 
+<div class="loader"></div>
+
+<p>
+
+Connecting People...
+
+</p>
+
 </div>
 
-<!-- ===========================
-Main App
-============================ -->
+</div>
 
-<div id="mainApp">
+<!-- ========================= -->
+<!-- Login Page -->
+<!-- ========================= -->
 
-<!-- ===========================
-Header
-============================ -->
+<section
+id="loginPage"
+class="page">
 
-<header class="header">
+<div class="loginCard">
 
-<div class="logo">
+<img
+src="logo.png"
+class="loginLogo">
+
+<h2>
+
 Friendsbook
-</div>
 
-<div class="searchBox">
+</h2>
+
+<p>
+
+Welcome Back
+
+</p>
 
 <input
-id="searchInput"
+type="email"
+id="loginEmail"
+placeholder="Email">
+
+<input
+type="password"
+id="loginPassword"
+placeholder="Password">
+
+<button id="loginBtn">
+
+Login
+
+</button>
+
+<button id="googleLoginBtn">
+
+<i class="fa-brands fa-google"></i>
+
+Continue with Google
+
+</button>
+
+<p
+class="registerText">
+
+Don't have an account?
+
+<span
+id="openRegister">
+
+Create Account
+
+</span>
+
+</p>
+
+<p
+id="forgotPassword">
+
+Forgot Password?
+
+</p>
+
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- Register Page -->
+<!-- ========================= -->
+
+<section
+id="registerPage"
+class="page"
+style="display:none;">
+
+<div class="loginCard">
+
+<h2>
+
+Create Account
+
+</h2>
+
+<input
 type="text"
-placeholder="Search Friendsbook">
+id="registerName"
+placeholder="Full Name">
+
+<input
+type="email"
+id="registerEmail"
+placeholder="Email">
+
+<input
+type="password"
+id="registerPassword"
+placeholder="Password">
+
+<button
+id="registerBtn">
+
+Create Account
+
+</button>
+
+<p>
+
+Already have an account?
+
+<span
+id="openLogin">
+
+Login
+
+</span>
+
+</p>
 
 </div>
 
-<div class="headerRight">
+</section>
+
+<!-- ========================= -->
+<!-- Main App -->
+<!-- ========================= -->
 
 <div
-class="headerIcon"
-id="notificationBtn">
+id="mainApp"
+style="display:none;">
+<!-- ========================= -->
+<!-- Header -->
+<!-- ========================= -->
 
-<i class="fa-solid fa-bell"></i>
+<header class="topHeader">
+
+<div class="leftHeader">
+
+<img
+src="logo.png"
+class="headerLogo">
+
+<h2>
+
+Friendsbook
+
+</h2>
 
 </div>
 
-<div
-class="headerIcon"
-id="messageBtn">
+<div class="rightHeader">
+
+<button id="searchBtn">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+</button>
+
+<button id="messageBtn">
 
 <i class="fa-solid fa-comments"></i>
 
-</div>
-<div
-class="headerIcon"
-id="adminPanelBtn"
-style="display:none;">
+</button>
 
-<i class="fa-solid fa-user-shield"></i>
+<button id="notificationBtn">
 
-</div>
-<div
-class="headerIcon"
-id="menuBtn">
+<i class="fa-solid fa-bell"></i>
 
-<i class="fa-solid fa-bars"></i>
+<span id="notificationCount">0</span>
 
-</div>
+</button>
 
 </div>
 
 </header>
 
-<!-- ===========================
-Main Container Start
-============================ -->
-
-<div class="mainContainer"><!-- ===========================
-Left Sidebar
-============================ -->
-
-<aside
-class="leftSidebar"
-id="leftSidebar">
+<!-- ========================= -->
+<!-- Search -->
+<!-- ========================= -->
 
 <div
-class="sidebarItem"
-id="homePageBtn">
+id="searchBox"
+style="display:none;">
 
-<i class="fa-solid fa-house"></i>
-
-<span>Home</span>
+<input
+type="text"
+id="searchInput"
+placeholder="Search Friendsbook...">
 
 </div>
 
-<div
-class="sidebarItem"
-id="profilePageBtn">
+<!-- ========================= -->
+<!-- Feed Page -->
+<!-- ========================= -->
 
-<i class="fa-solid fa-user"></i>
-
-<span>Profile</span>
-
-</div>
-
-<div
-class="sidebarItem"
-id="friendsPageBtn">
-
-<i class="fa-solid fa-user-group"></i>
-
-<span>Friends</span>
-
-</div>
-
-<div
-class="sidebarItem"
-id="storyPageBtn">
-
-<i class="fa-solid fa-book-open"></i>
-
-<span>Stories</span>
-
-</div>
-
-<div
-class="sidebarItem"
-id="reelsPageBtn">
-
-<i class="fa-solid fa-clapperboard"></i>
-
-<span>Reels</span>
-
-</div>
-
-<div
-class="sidebarItem"
-id="watchPageBtn">
-
-<i class="fa-solid fa-circle-play"></i>
-
-<span>Watch</span>
-
-</div>
-
-<div
-class="sidebarItem"
-id="marketplacePageBtn">
-
-<i class="fa-solid fa-shop"></i>
-
-<span>Marketplace</span>
-
-</div>
-
-<div
-class="sidebarItem"
-id="gamingPageBtn">
-
-<i class="fa-solid fa-gamepad"></i>
-
-<span>Gaming</span>
-
-</div>
-
-<div
-class="sidebarItem"
-id="jobsPageBtn">
-
-<i class="fa-solid fa-briefcase"></i>
-
-<span>Jobs</span>
-
-</div>
-
-<div
-class="sidebarItem"
-id="settingsPageBtn">
-
-<i class="fa-solid fa-gear"></i>
-
-<span>Settings</span>
-
-</div>
-
-</aside>
-
-<!-- ===========================
-Feed Container
-============================ -->
-
-<main
-class="feed page"
+<section
 id="feedPage"
-style="display:block;">
-
-<!-- Story -->
-<div
-class="storyContainer"
-id="storyContainer">
-
-</div>
+class="page">
 
 <!-- Create Post -->
-<div
-class="createPost"
-id="createPost">
 
-<!-- Part 3 -->
-
-</div>
-
-<!-- Feed Posts -->
-
-<div
-id="feedContainer">
-
-</div>
-
-</main><!-- ===========================
-Create Post Box
-============================ -->
+<div class="createPostCard">
 
 <div class="createTop">
 
 <img
-id="profileImage"
-src="assets/profile.png"
-alt="Profile">
+src="default-profile.png"
+id="profilePhoto">
 
 <input
 type="text"
@@ -260,75 +290,33 @@ placeholder="What's on your mind?">
 
 </div>
 
-<div class="createMedia">
+<div class="createBottom">
 
-<div class="createBtn">
-
-<label for="postImage">
+<button id="photoPostBtn">
 
 <i class="fa-solid fa-image"></i>
 
 Photo
 
-</label>
+</button>
 
-<input
-type="file"
-id="postImage"
-accept="image/*"
-hidden>
-
-</div>
-
-<div class="createBtn">
-
-<label for="postVideo">
+<button id="videoPostBtn">
 
 <i class="fa-solid fa-video"></i>
 
 Video
 
-</label>
+</button>
 
-<input
-type="file"
-id="postVideo"
-accept="video/*"
-hidden>
+<button id="feelingBtn">
 
-</div>
+<i class="fa-solid fa-face-smile"></i>
 
-<div class="createBtn">
+Feeling
 
-<label for="storyImage">
+</button>
 
-<i class="fa-solid fa-book-open"></i>
-
-Story
-
-</label>
-
-<input
-type="file"
-id="storyImage"
-accept="image/*"
-hidden>
-
-</div>
-
-</div>
-
-<div id="imagePreview"></div>
-
-<div id="videoPreview"></div>
-
-<div class="createBottom">
-
-<button
-class="btn"
-id="postBtn">
-
-<i class="fa-solid fa-paper-plane"></i>
+<button id="postBtn">
 
 Post
 
@@ -338,189 +326,520 @@ Post
 
 </div>
 
-<!-- ===========================
-Posts Container
-============================ -->
+<!-- Story -->
 
 <div
-id="feedContainer"
-class="fadeIn">
+id="storyContainer"
+class="storyContainer">
 
-<!-- JS will load posts here -->
-
-</div>
-
-</main><!-- ===========================
-Right Sidebar
-============================ -->
-
-<aside
-class="rightSidebar"
-id="rightSidebar">
-
-<!-- Sponsored -->
-
-<div class="rightSection">
-
-<h3 class="rightTitle">
-
-Sponsored
-
-</h3>
-
-<div class="marketCard">
+<div class="storyCard addStory">
 
 <img
-src="assets/ad1.jpg"
-alt="Advertisement">
+src="default-profile.png">
 
-<div class="marketInfo">
+<p>
 
-<div class="marketTitle">
+Create Story
 
-Friendsbook Premium
-
-</div>
-
-<div class="marketLocation">
-
-Upgrade your account
+</p>
 
 </div>
 
 </div>
 
-</div>
+<!-- Feed -->
+
+<div
+id="feedContainer">
+
+<!-- All Posts Here -->
 
 </div>
 
-<!-- Birthdays -->
+</section>
 
-<div class="rightSection">
+<!-- ========================= -->
+<!-- Bottom Navigation -->
+<!-- ========================= -->
 
-<h3 class="rightTitle">
+<nav
+class="bottomNav">
 
-Birthdays
+<button id="homeBtn">
 
-</h3>
+<i class="fa-solid fa-house"></i>
 
-<div class="friendCard">
+<span>
 
-<img
-src="assets/profile.png"
-alt="Birthday">
+Home
 
-<div class="friendInfo">
+</span>
 
-<div class="friendName">
+</button>
 
-Today is your friend's birthday 🎂
+<button id="friendsBtn">
 
-</div>
+<i class="fa-solid fa-user-group"></i>
 
-</div>
+<span>
 
-</div>
+Friends
 
-</div>
+</span>
 
-<!-- Contacts -->
+</button>
 
-<div class="rightSection">
+<button id="createBtn">
 
-<h3 class="rightTitle">
+<i class="fa-solid fa-plus"></i>
 
-Contacts
+</button>
+<button id="reelsBtn">
 
-</h3>
+<i class="fa-solid fa-circle-play"></i>
 
-<div id="contactList">
+<span>
 
-<div class="friendCard">
+Reels
 
-<img
-src="assets/profile.png"
-alt="Profile">
+</span>
 
-<div class="friendInfo">
+</button>
 
-<div class="friendName">
+<button id="profileBtn">
 
-Loading...
+<i class="fa-solid fa-user"></i>
 
-</div>
+<span>
 
-</div>
+Profile
 
-</div>
+</span>
 
-</div>
+</button>
 
-</div>
+</nav>
 
-<!-- Online Friends -->
-
-<div class="rightSection">
-
-<h3 class="rightTitle">
-
-Online Friends
-
-</h3>
-
-<div id="onlineFriends">
-
-</div>
-
-</div>
-
-</aside>
-
-<!-- ===========================
-End Main Container
-============================ -->
-
-</div><!-- ===========================
-Profile Page
-=========================== -->
+<!-- ========================= -->
+<!-- Profile Page -->
+<!-- ========================= -->
 
 <section
-class="page profilePage"
 id="profilePage"
+class="page"
 style="display:none;">
 
-<div class="coverPhoto">
+<div class="coverSection">
 
 <img
-id="coverImage"
-src="assets/cover.jpg"
-alt="Cover">
+src="default-cover.jpg"
+id="coverPhoto">
+
+<button
+id="changeCoverBtn">
+
+<i class="fa-solid fa-camera"></i>
+
+</button>
 
 </div>
 
-<div class="profileInfo">
+<div class="profileSection">
 
 <img
-id="profilePhoto"
-class="profileImage"
-src="assets/profile.png"
-alt="Profile">
+src="default-profile.png"
+id="profileImage">
 
-<h2
-id="profileName"
-class="profileName">
+<button
+id="changeProfileBtn">
+
+<i class="fa-solid fa-camera"></i>
+
+</button>
+
+<h2 id="profileName">
 
 Your Name
 
 </h2>
 
-<p
-id="profileBio"
-class="profileBio">
+<p id="profileBio">
 
-No bio yet...
+No Bio Yet
 
 </p>
+
+<button id="editProfileBtn">
+
+Edit Profile
+
+</button>
+
+</div>
+
+<div class="profileCount">
+
+<div>
+
+<h3 id="postCount">
+
+0
+
+</h3>
+
+<p>
+
+Posts
+
+</p>
+
+</div>
+
+<div>
+
+<h3 id="friendCount">
+
+0
+
+</h3>
+
+<p>
+
+Friends
+
+</p>
+
+</div>
+
+<div>
+
+<h3 id="followersCount">
+
+0
+
+</h3>
+
+<p>
+
+Followers
+
+</p>
+
+</div>
+
+<div>
+
+<h3 id="followingCount">
+
+0
+
+</h3>
+
+<p>
+
+Following
+
+</p>
+
+</div>
+
+</div>
+
+<div id="profilePosts">
+
+<!-- User Posts -->
+
+</div>
+
+</section>
+<!-- ========================= -->
+<!-- Friends Page -->
+<!-- ========================= -->
+
+<section
+id="friendsPage"
+class="page"
+style="display:none;">
+
+<div class="pageHeader">
+
+<h2>
+
+Friends
+
+</h2>
+
+</div>
+
+<div id="friendRequestList">
+
+<!-- Friend Requests -->
+
+</div>
+
+<div id="friendsList">
+
+<!-- Friends List -->
+
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- Reels Page -->
+<!-- ========================= -->
+
+<section
+id="reelsPage"
+class="page"
+style="display:none;">
+
+<div class="pageHeader">
+
+<h2>
+
+Reels
+
+</h2>
+
+</div>
+
+<div id="reelsContainer">
+
+<!-- Reels Here -->
+
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- Messenger Page -->
+<!-- ========================= -->
+
+<section
+id="messagePage"
+class="page"
+style="display:none;">
+
+<div class="pageHeader">
+
+<h2>
+
+Messenger
+
+</h2>
+
+</div>
+
+<input
+type="text"
+id="chatSearch"
+placeholder="Search Chat...">
+
+<div id="chatList">
+
+<!-- Chats -->
+
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- Notification Page -->
+<!-- ========================= -->
+
+<section
+id="notificationPage"
+class="page"
+style="display:none;">
+
+<div class="pageHeader">
+
+<h2>
+
+Notifications
+
+</h2>
+
+</div>
+
+<div id="notificationList">
+
+<!-- Notifications -->
+
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- Settings Page -->
+<!-- ========================= -->
+
+<section
+id="settingsPage"
+class="page"
+style="display:none;">
+
+<div class="settingsCard">
+
+<h2>
+
+Settings
+
+</h2>
+
+<div class="settingItem" id="editProfileSetting">
+
+<i class="fa-solid fa-user-pen"></i>
+
+<span>Edit Profile</span>
+
+</div>
+
+<div class="settingItem" id="changePasswordSetting">
+
+<i class="fa-solid fa-key"></i>
+
+<span>Change Password</span>
+
+</div>
+
+<div class="settingItem" id="privacySetting">
+
+<i class="fa-solid fa-lock"></i>
+
+<span>Privacy</span>
+
+</div>
+
+<div class="settingItem" id="notificationSetting">
+
+<i class="fa-solid fa-bell"></i>
+
+<span>Notifications</span>
+
+</div>
+
+<div class="settingItem" id="languageSetting">
+
+<i class="fa-solid fa-language"></i>
+
+<span>Language</span>
+
+</div>
+<div class="settingItem">
+
+<span>
+
+Dark Mode
+
+</span>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="darkMode">
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+<div class="settingItem" id="storageSetting">
+
+<i class="fa-solid fa-database"></i>
+
+<span>
+
+Storage
+
+</span>
+
+</div>
+
+<div class="settingItem" id="clearCacheBtn">
+
+<i class="fa-solid fa-trash"></i>
+
+<span>
+
+Clear Cache
+
+</span>
+
+</div>
+
+<div class="settingItem" id="helpCenterBtn">
+
+<i class="fa-solid fa-circle-question"></i>
+
+<span>
+
+Help Center
+
+</span>
+
+</div>
+
+<div class="settingItem" id="feedbackBtn">
+
+<i class="fa-solid fa-comment-dots"></i>
+
+<span>
+
+Feedback
+
+</span>
+
+</div>
+
+<div class="settingItem" id="aboutBtn">
+
+<i class="fa-solid fa-circle-info"></i>
+
+<span>
+
+About Friendsbook
+
+</span>
+
+</div>
+
+<!-- Admin Panel -->
+
+<div
+class="settingItem"
+id="adminPanelBtn"
+style="display:none;">
+
+<i class="fa-solid fa-user-shield"></i>
+
+<span>
+
+Admin Panel
+
+</span>
+
+</div>
+
+<button
+id="logoutBtn"
+class="logoutBtn">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+Logout
+
+</button>
+
+</div>
+
+</section>
+<!-- ========================= -->
+<!-- Hidden File Inputs -->
+<!-- ========================= -->
 
 <input
 type="file"
@@ -534,463 +853,110 @@ id="coverInput"
 accept="image/*"
 hidden>
 
-<button
-class="btn"
-onclick="document.getElementById('profileInput').click()">
-
-Change Profile
-
-</button>
-
-<button
-class="btn mt10"
-onclick="document.getElementById('coverInput').click()">
-
-Change Cover
-
-</button>
-
-</div>
-
-<div
-id="profilePosts">
-
-</div>
-
-</section>
-
-<!-- ===========================
-Friends Page
-=========================== -->
-
-<section
-class="page"
-id="friendsPage"
-style="display:none;">
-
-<h2 class="rightTitle">
-
-Friends
-
-</h2>
-
-<div
-id="friendsContainer">
-
-</div>
-
-</section>
-
-<!-- ===========================
-Message Page
-=========================== -->
-
-<section
-class="page"
-id="messagePage"
-style="display:none;">
-
-<div class="chatBox">
-
-<div
-class="chatMessages"
-id="chatMessages">
-
-</div>
-
-<div class="chatInput">
+<input
+type="file"
+id="storyInput"
+accept="image/*"
+hidden>
 
 <input
-type="text"
-id="messageInput"
-placeholder="Write a message...">
+type="file"
+id="postImageInput"
+accept="image/*"
+hidden>
 
-<button
-id="sendMessageBtn">
+<input
+type="file"
+id="reelVideoInput"
+accept="video/*"
+hidden>
 
-<i class="fa-solid fa-paper-plane"></i>
-
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- ===========================
-Notification Page
-=========================== -->
-
-<section
-class="page"
-id="notificationPage"
-style="display:none;">
-
-<h2 class="rightTitle">
-
-Notifications
-
-</h2>
+<!-- ========================= -->
+<!-- Image Preview -->
+<!-- ========================= -->
 
 <div
-id="notificationContainer">
-
-</div>
-
-</section>
-
-<!-- ===========================
-Settings Page
-=========================== -->
-
-<section
-class="page"
-id="settingsPage"
+id="imagePreviewModal"
+class="imagePreviewModal"
 style="display:none;">
 
-<div class="settingItem">
+<span
+id="closePreview">
 
-<span>
-
-Dark Mode
+&times;
 
 </span>
 
-<input
-type="checkbox"
-id="darkMode">
+<img
+id="previewImage"
+src="">
 
 </div>
 
-<div class="settingItem">
-
-<button
-class="btn"
-id="clearCacheBtn">
-
-Clear Cache
-
-</button>
-
-</div>
-
-<div class="settingItem">
-
-<button
-class="btn btnDanger"
-onclick="logout()">
-
-Logout
-
-</button>
-
-</div>
-
-</section><!-- ===========================
-Marketplace Page
-=========================== -->
-
-<section
-class="page"
-id="marketplacePage"
-style="display:none;">
-
-<h2 class="rightTitle">Marketplace</h2>
-
-<div id="marketplaceContainer"></div>
-
-</section>
-
-<!-- ===========================
-Reels Page
-=========================== -->
-
-<section
-class="page"
-id="reelsPage"
-style="display:none;">
+<!-- ========================= -->
+<!-- Loading Overlay -->
+<!-- ========================= -->
 
 <div
-class="reelsContainer"
-id="reelsContainer">
-
-</div>
-
-</section>
-
-<!-- ===========================
-Watch Page
-=========================== -->
-
-<section
-class="page"
-id="watchPage"
+id="uploadLoading"
 style="display:none;">
 
-<h2 class="rightTitle">Watch</h2>
-
-<div
-id="watchContainer">
-
-</div>
-
-</section>
-
-<!-- ===========================
-Live Page
-=========================== -->
-
-<section
-class="page"
-id="livePage"
-style="display:none;">
-
-<h2 class="rightTitle">Live Videos</h2>
-
-<div
-id="liveContainer">
-
-</div>
-
-</section>
-
-<!-- ===========================
-Gaming Page
-=========================== -->
-
-<section
-class="page"
-id="gamingPage"
-style="display:none;">
-
-<h2 class="rightTitle">Gaming</h2>
-
-<div
-id="gamingContainer">
-
-</div>
-
-</section>
-
-<!-- ===========================
-Jobs Page
-=========================== -->
-
-<section
-class="page"
-id="jobsPage"
-style="display:none;">
-
-<h2 class="rightTitle">Jobs</h2>
-
-<div
-id="jobsContainer">
-
-</div>
-
-</section>
-
-<!-- ===========================
-Dating Page
-=========================== -->
-
-<section
-class="page"
-id="datingPage"
-style="display:none;">
-
-<h2 class="rightTitle">Dating</h2>
-
-<div
-id="datingContainer">
-
-</div>
-
-</section>
-
-<!-- ===========================
-Premium Page
-=========================== -->
-
-<section
-class="page"
-id="premiumPage"
-style="display:none;">
-
-<div class="premiumCard">
-
-<h2>
-
-Friendsbook Premium
-
-</h2>
+<div class="loadingSpinner"></div>
 
 <p>
 
-Unlock all premium features.
+Uploading...
 
 </p>
 
-<select id="premiumPlan">
+</div>
 
-<option value="Monthly">
-
-Monthly Plan
-
-</option>
-
-<option value="Yearly">
-
-Yearly Plan
-
-</option>
-
-</select>
-
-<button
-class="btn"
-id="buyPremiumBtn">
-
-Buy Premium
-
-</button>
+<!-- ========================= -->
+<!-- Toast Message -->
+<!-- ========================= -->
 
 <div
-id="premiumStatus"
-class="mt20">
+id="toastMessage">
+
+Done
 
 </div>
 
-</div>
+<!-- ========================= -->
+<!-- App Version -->
+<!-- ========================= -->
 
-</section><!-- ===========================
-Bottom Navigation
-=========================== -->
+<footer
+class="appFooter">
 
-<nav class="bottomNav">
+<p>
 
-<div class="bottomItem" id="bottomHome">
+Friendsbook Mobile V1
 
-<i class="fa-solid fa-house"></i>
+</p>
 
-<span>Home</span>
+<p>
 
-</div>
+Developed by
 
-<div class="bottomItem" id="bottomFriends">
+<b>
 
-<i class="fa-solid fa-user-group"></i>
+Bashir Ahmed
 
-<span>Friends</span>
+</b>
 
-</div>
+</p>
 
-<div class="bottomItem" id="bottomReels">
-
-<i class="fa-solid fa-clapperboard"></i>
-
-<span>Reels</span>
+</footer>
 
 </div>
-
-<div class="bottomItem" id="bottomMessage">
-
-<i class="fa-solid fa-comments"></i>
-
-<span>Chats</span>
-
-</div>
-
-<div class="bottomItem" id="bottomProfile">
-
-<i class="fa-solid fa-user"></i>
-
-<span>Profile</span>
-
-</div>
-
-</nav>
-
-<!-- ===========================
-Login Page
-=========================== -->
-
-<div id="loginPage" style="display:none;">
-
-<div class="loginCard">
-
-<h1>Friendsbook</h1>
-
-<input
-type="email"
-id="loginEmail"
-placeholder="Email">
-
-<input
-type="password"
-id="loginPassword"
-placeholder="Password">
-
-<button
-class="btn"
-id="loginBtn">
-
-Login
-
-</button>
-
-<button
-class="btn mt10"
-id="registerBtn">
-
-Create New Account
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- ===========================
-JavaScript Files
-=========================== -->
 
 <script type="module" src="firebase.js"></script>
+
 <script type="module" src="auth.js"></script>
+
 <script type="module" src="script.js"></script>
-<script type="module" src="post.js"></script>
-<script type="module" src="story.js"></script>
-<script type="module" src="friends.js"></script>
-<script type="module" src="message.js"></script>
-<script type="module" src="notification.js"></script>
-<script type="module" src="profile.js"></script>
-<script type="module" src="reaction.js"></script>
-<script type="module" src="comment.js"></script>
-<script type="module" src="reels.js"></script>
-<script type="module" src="videoCall.js"></script>
-<script type="module" src="group.js"></script>
-<script type="module" src="page.js"></script>
-<script type="module" src="admin.js"></script>
-<script type="module" src="search.js"></script>
-<script type="module" src="settings.js"></script>
-<script type="module" src="security.js"></script>
-<script type="module" src="marketplace.js"></script>
-<script type="module" src="events.js"></script>
-<script type="module" src="watch.js"></script>
-<script type="module" src="memories.js"></script>
-<script type="module" src="gaming.js"></script>
-<script type="module" src="dating.js"></script>
-<script type="module" src="jobs.js"></script>
-<script type="module" src="live.js"></script>
-<script type="module" src="ads.js"></script>
-<script type="module" src="premium.js"></script>
-<script type="module" src="backup.js"></script>
-<script type="module" src="analytics.js"></script>
-<script type="module" src="utils.js"></script>
 
 </body>
 
-</html>
+  </html>
