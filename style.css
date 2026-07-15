@@ -936,137 +936,141 @@ background:#3a3b3c;
 color:#fff;
 
 }
-/* ========================= */
-/* Profile */
-/* ========================= */
+
+/* ===== Facebook Profile ===== */
 
 .coverSection{
-
 position:relative;
-
 width:100%;
-
-height:220px;
-
+height:260px;
 overflow:hidden;
-
-border-radius:0 0 20px 20px;
-
+border-radius:0 0 12px 12px;
 background:#ddd;
-
 }
 
 #coverPhoto{
-
 width:100%;
-
 height:100%;
-
 object-fit:cover;
-
+display:block;
 }
 
 #changeCoverBtn{
-
 position:absolute;
-
 right:15px;
-
 bottom:15px;
-
 width:42px;
-
 height:42px;
-
 border:none;
-
 border-radius:50%;
-
 background:#fff;
-
+box-shadow:0 2px 8px rgba(0,0,0,.25);
 cursor:pointer;
-
 font-size:18px;
-
-box-shadow:0 2px 8px rgba(0,0,0,.2);
-
 }
 
 .profileSection{
-
+position:relative;
 text-align:center;
-
-margin-top:-60px;
-
-padding:15px;
-
+margin-top:-70px;
+padding-bottom:20px;
 }
 
 #profileImage{
-
-width:120px;
-
-height:120px;
-
+width:150px;
+height:150px;
 border-radius:50%;
-
 border:5px solid #fff;
-
 object-fit:cover;
-
-background:#ddd;
-
+background:#fff;
+box-shadow:0 3px 12px rgba(0,0,0,.25);
 }
 
 #changeProfileBtn{
-
 position:absolute;
-
-margin-left:-35px;
-
-margin-top:85px;
-
-width:36px;
-
-height:36px;
-
+left:calc(50% + 40px);
+top:105px;
+width:40px;
+height:40px;
 border:none;
-
 border-radius:50%;
-
 background:#1877f2;
-
 color:#fff;
-
 cursor:pointer;
-
 }
 
 #profileName{
-
 margin-top:12px;
-
-font-size:24px;
-
-font-weight:700;
-
+font-size:28px;
+font-weight:bold;
 }
 
 #profileBio{
-
-margin-top:8px;
-
+margin-top:6px;
 color:#666;
+font-size:15px;
+}
+/* ===== Profile Info ===== */
 
-font-size:14px;
+.profileCount{
+
+display:flex;
+
+justify-content:space-around;
+
+align-items:center;
+
+background:#fff;
+
+margin:15px;
+
+padding:15px;
+
+border-radius:15px;
+
+box-shadow:0 2px 10px rgba(0,0,0,.08);
 
 }
 
+.profileCount div{
+
+flex:1;
+
+text-align:center;
+
+}
+
+.profileCount h3{
+
+font-size:22px;
+
+font-weight:bold;
+
+color:#1877f2;
+
+margin-bottom:5px;
+
+}
+
+.profileCount p{
+
+font-size:14px;
+
+color:#666;
+
+}
+
+/* ===== Buttons ===== */
+
 #editProfileBtn{
 
-margin-top:15px;
+width:90%;
 
-padding:12px 20px;
+max-width:320px;
+
+height:45px;
+
+margin-top:15px;
 
 border:none;
 
@@ -1076,11 +1080,232 @@ background:#1877f2;
 
 color:#fff;
 
-font-size:15px;
+font-size:16px;
 
-font-weight:600;
+font-weight:bold;
 
 cursor:pointer;
+
+transition:.3s;
+
+}
+
+#editProfileBtn:hover{
+
+background:#166fe5;
+
+}
+
+/* ===== Action Buttons ===== */
+
+.profileActions{
+
+display:flex;
+
+gap:10px;
+
+justify-content:center;
+
+margin:15px;
+
+}
+
+.profileActions button{
+
+flex:1;
+
+max-width:180px;
+
+height:45px;
+
+border:none;
+
+border-radius:10px;
+
+font-size:15px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+}
+
+#addStoryBtn{
+
+background:#1877f2;
+
+color:#fff;
+
+}
+
+#shareProfileBtn{
+
+background:#e4e6eb;
+
+color:#000;
+
+}
+
+/* ===== User Posts ===== */
+
+#profilePosts{
+
+margin:15px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:15px;
+
+}
+
+/* ===== Mobile ===== */
+
+@media(max-width:768px){
+
+#profileImage{
+
+width:120px;
+
+height:120px;
+
+}
+
+#changeProfileBtn{
+
+top:82px;
+
+left:calc(50% + 28px);
+
+}
+
+#profileName{
+
+font-size:22px;
+
+}
+
+.profileCount h3{
+
+font-size:18px;
+
+}
+
+  }
+/* ===== Facebook Profile Part 3 ===== */
+
+/* Cover Hover */
+
+.coverSection:hover #changeCoverBtn{
+
+opacity:1;
+
+transform:scale(1.05);
+
+}
+
+#changeCoverBtn{
+
+opacity:.9;
+
+transition:.3s;
+
+}
+
+/* Profile Hover */
+
+#profileImage{
+
+transition:.35s;
+
+}
+
+#profileImage:hover{
+
+transform:scale(1.05);
+
+}
+
+/* Camera Button */
+
+#changeProfileBtn{
+
+transition:.3s;
+
+box-shadow:0 2px 8px rgba(0,0,0,.25);
+
+}
+
+#changeProfileBtn:hover{
+
+transform:rotate(10deg) scale(1.1);
+
+background:#166fe5;
+
+}
+
+/* Verified Badge */
+
+.verifiedBadge{
+
+display:inline-flex;
+
+align-items:center;
+
+justify-content:center;
+
+width:20px;
+
+height:20px;
+
+margin-left:6px;
+
+border-radius:50%;
+
+background:#1877f2;
+
+color:#fff;
+
+font-size:12px;
+
+}
+
+/* Online Dot */
+
+.onlineDot{
+
+position:absolute;
+
+bottom:8px;
+
+right:8px;
+
+width:22px;
+
+height:22px;
+
+background:#31a24c;
+
+border:3px solid #fff;
+
+border-radius:50%;
+
+}
+
+/* Shadow */
+
+.profileSection{
+
+filter:drop-shadow(0 4px 10px rgba(0,0,0,.15));
+
+}
+
+/* Smooth */
+
+*{
+
+scroll-behavior:smooth;
 
 }
 
@@ -1129,7 +1354,107 @@ color:#666;
 margin-top:4px;
 
 }
+/* ===== Facebook Profile Part 4 ===== */
 
+/* Profile Tabs */
+
+.profileTabs{
+
+display:flex;
+
+justify-content:space-around;
+
+align-items:center;
+
+background:#fff;
+
+margin:15px;
+
+border-radius:12px;
+
+overflow:hidden;
+
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+
+}
+
+.profileTabs button{
+
+flex:1;
+
+padding:14px;
+
+background:none;
+
+border:none;
+
+font-size:15px;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.profileTabs button:hover{
+
+background:#f0f2f5;
+
+}
+
+.profileTabs button.active{
+
+color:#1877f2;
+
+border-bottom:3px solid #1877f2;
+
+}
+
+/* Post Card */
+
+.profilePost{
+
+background:#fff;
+
+margin:15px;
+
+padding:15px;
+
+border-radius:15px;
+
+box-shadow:0 2px 8px rgba(0,0,0,.08);
+
+}
+
+.profilePost img{
+
+width:100%;
+
+border-radius:12px;
+
+margin-top:10px;
+
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+.profileTabs{
+
+overflow-x:auto;
+
+}
+
+.profileTabs button{
+
+min-width:90px;
+
+}
+
+                           }
 /* ========================= */
 /* Friends */
 /* ========================= */
