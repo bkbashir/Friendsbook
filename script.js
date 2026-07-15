@@ -1,29 +1,36 @@
-// ===============================
-// Friendsbook V5
+// ======================================
+// Friendsbook Mobile V1
 // script.js Part 1
-// ===============================
+// ======================================
 
-// Imports
-import { auth } from "./firebase.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { auth, db, storage } from "./firebase.js";
 
-// ===============================
-// Elements
-// ===============================
+import {
+
+doc,
+updateDoc,
+collection,
+addDoc,
+getDocs,
+serverTimestamp
+
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+
+ref,
+uploadBytes,
+getDownloadURL
+
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-storage.js";
+
+// ======================================
+// Pages
+// ======================================
 
 const pages=document.querySelectorAll(".page");
 
-const loadingScreen=document.getElementById("loadingScreen");
-
-const loginPage=document.getElementById("loginPage");
-
-const mainApp=document.getElementById("mainApp");
-
-// ===============================
-// Hide All Pages
-// ===============================
-
-export function hidePages(){
+function hidePages(){
 
 pages.forEach(page=>{
 
@@ -33,11 +40,7 @@ page.style.display="none";
 
 }
 
-// ===============================
-// Show Page
-// ===============================
-
-export function showPage(id){
+function showPage(id){
 
 hidePages();
 
@@ -59,142 +62,87 @@ behavior:"smooth"
 
 }
 
-// ===============================
-// Open Feed
-// ===============================
+// ======================================
+// Bottom Navigation
+// ======================================
 
-export function openFeed(){
+document.getElementById("homeBtn").onclick=()=>{
 
 showPage("feedPage");
 
-}
+};
 
-// ===============================
-// Authentication
-// ===============================
-
-onAuthStateChanged(auth,(user)=>{
-
-if(user){
-
-if(loginPage){
-
-loginPage.style.display="none";
-
-}
-
-if(mainApp){
-
-mainApp.style.display="block";
-
-}
-
-openFeed();
-
-}else{
-
-if(loginPage){
-
-loginPage.style.display="flex";
-
-}
-
-if(mainApp){
-
-mainApp.style.display="none";
-
-}
-
-}
-
-});
-
-// ===============================
-// Loading Screen
-// ===============================
-
-window.addEventListener("load",()=>{
-
-setTimeout(()=>{
-
-if(loadingScreen){
-
-loadingScreen.style.display="none";
-
-}
-
-},1000);
-
-});
-
-// ===============================
-// Navigation Buttons
-// ===============================
-
-document.getElementById("homePageBtn")?.addEventListener("click",()=>{
-
-openFeed();
-
-});
-
-document.getElementById("profilePageBtn")?.addEventListener("click",()=>{
-
-showPage("profilePage");
-
-});
-
-document.getElementById("friendsPageBtn")?.addEventListener("click",()=>{
+document.getElementById("friendsBtn").onclick=()=>{
 
 showPage("friendsPage");
 
-});
+};
 
-document.getElementById("storyPageBtn")?.addEventListener("click",()=>{
-
-showPage("storyPage");
-
-});
-
-document.getElementById("reelsPageBtn")?.addEventListener("click",()=>{
+document.getElementById("reelsBtn").onclick=()=>{
 
 showPage("reelsPage");
 
-});
+};
 
-document.getElementById("messageBtn")?.addEventListener("click",()=>{
+document.getElementById("profileBtn").onclick=()=>{
+
+showPage("profilePage");
+
+};
+
+document.getElementById("messageBtn").onclick=()=>{
 
 showPage("messagePage");
 
-});
+};
 
-document.getElementById("notificationBtn")?.addEventListener("click",()=>{
+document.getElementById("notificationBtn").onclick=()=>{
 
 showPage("notificationPage");
 
-});
+};
 
-document.getElementById("settingsPageBtn")?.addEventListener("click",()=>{
+// ======================================
+// Settings
+// ======================================
+
+document.getElementById("settingsBtn")?.onclick=()=>{
 
 showPage("settingsPage");
 
-});
+};
 
-// ===============================
-// End Part 1
-// ===============================// ===============================
-// Friendsbook V5
+// ======================================
+// Logo
+// ======================================
+
+document.querySelector(".headerLogo")?.onclick=()=>{
+
+showPage("feedPage");
+
+};
+
+console.log("script.js Part 1 Loaded");
+// ======================================
 // script.js Part 2
-// ===============================
+// Search + Dark Mode + Profile Upload
+// ======================================
 
-// ===============================
+import { auth, db, storage } from "./firebase.js";
+
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+import { doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-storage.js";
+
+// ======================================
 // Search
-// ===============================
+// ======================================
 
 const searchInput=document.getElementById("searchInput");
 
-if(searchInput){
-
-searchInput.addEventListener("keyup",()=>{
+searchInput?.addEventListener("keyup",()=>{
 
 const value=searchInput.value.toLowerCase();
 
@@ -208,29 +156,21 @@ post.style.display=text.includes(value)?"block":"none";
 
 });
 
-}
-
-// ===============================
+// ======================================
 // Dark Mode
-// ===============================
+// ======================================
 
 const darkMode=document.getElementById("darkMode");
 
-if(localStorage.getItem("theme")==="dark"){
+if(localStorage.getItem("theme")=="dark"){
 
 document.body.classList.add("dark");
 
-if(darkMode){
-
-darkMode.checked=true;
+if(darkMode) darkMode.checked=true;
 
 }
 
-}
-
-if(darkMode){
-
-darkMode.addEventListener("change",()=>{
+darkMode?.addEventListener("change",()=>{
 
 if(darkMode.checked){
 
@@ -248,237 +188,517 @@ localStorage.setItem("theme","light");
 
 });
 
-}
+// ======================================
+// Profile Photo Upload
+// ======================================
 
-// ===============================
-// Mobile Menu
-// ===============================
+const profileInput=document.getElementById("profileInput");
 
-const menuBtn=document.getElementById("menuBtn");
+document.getElementById("changeProfileBtn")?.addEventListener("click",()=>{
 
-const leftSidebar=document.getElementById("leftSidebar");
-
-let menuOpen=false;
-
-if(menuBtn){
-
-menuBtn.addEventListener("click",()=>{
-
-if(window.innerWidth<=1100){
-
-menuOpen=!menuOpen;
-
-if(leftSidebar){
-
-leftSidebar.style.display=
-
-menuOpen?"block":"none";
-
-}
-
-}
+profileInput.click();
 
 });
 
-}
+profileInput?.addEventListener("change",async(e)=>{
 
-// ===============================
-// Responsive
-// ===============================
+const file=e.target.files[0];
 
-window.addEventListener("resize",()=>{
+if(!file) return;
 
-if(!leftSidebar) return;
+const user=auth.currentUser;
 
-if(window.innerWidth>1100){
+if(!user) return;
 
-leftSidebar.style.display="block";
+const storageRef=ref(storage,"profiles/"+user.uid);
 
-}else{
+await uploadBytes(storageRef,file);
 
-leftSidebar.style.display="none";
+const url=await getDownloadURL(storageRef);
 
-menuOpen=false;
+await updateDoc(doc(db,"users",user.uid),{
 
-}
+profile:url
 
 });
 
-// ===============================
-// Profile Shortcut
-// ===============================
+document.getElementById("profileImage").src=url;
 
-document.getElementById("profilePhoto")?.addEventListener("click",()=>{
-
-showPage("profilePage");
+document.getElementById("profilePhoto").src=url;
 
 });
 
-document.getElementById("profileImage")?.addEventListener("click",()=>{
+// ======================================
+// Cover Upload
+// ======================================
 
-showPage("profilePage");
+const coverInput=document.getElementById("coverInput");
 
-});
+document.getElementById("changeCoverBtn")?.onclick=()=>{
 
-// ===============================
-// Logo Shortcut
-// ===============================
-
-document.querySelector(".logo")?.addEventListener("click",()=>{
-
-openFeed();
-
-});
-
-// ===============================
-// End Part 2
-// ===============================// ===============================
-// Friendsbook V5
-// script.js Part 3 (Final)
-// ===============================
-
-// ===============================
-// Clear Local Cache
-// ===============================
-
-document.getElementById("clearCacheBtn")?.addEventListener("click",()=>{
-
-if(confirm("সব Local Data Delete করবেন?")){
-
-localStorage.clear();
-
-sessionStorage.clear();
-
-location.reload();
-
-}
-
-});
-
-// ===============================
-// Online / Offline Status
-// ===============================
-
-window.addEventListener("online",()=>{
-
-console.log("Internet Connected");
-
-});
-
-window.addEventListener("offline",()=>{
-
-console.log("Internet Disconnected");
-
-});
-
-// ===============================
-// Keyboard Shortcut
-// ===============================
-
-window.addEventListener("keydown",(e)=>{
-
-// Home
-
-if(e.altKey && e.key==="1"){
-
-openFeed();
-
-}
-
-// Profile
-
-if(e.altKey && e.key==="2"){
-
-showPage("profilePage");
-
-}
-
-// Friends
-
-if(e.altKey && e.key==="3"){
-
-showPage("friendsPage");
-
-}
-
-// Messages
-
-if(e.altKey && e.key==="4"){
-
-showPage("messagePage");
-
-}
-
-});
-
-// ===============================
-// Global Logout
-// ===============================
-
-window.logout=async()=>{
-
-await auth.signOut();
-
-localStorage.clear();
-
-sessionStorage.clear();
-
-location.reload();
+coverInput.click();
 
 };
 
-// ===============================
-// App Version
-// ===============================
+coverInput?.addEventListener("change",async(e)=>{
 
-window.FRIENDSBOOK={
+const file=e.target.files[0];
 
-name:"Friendsbook",
+if(!file) return;
 
-version:"5.0.0",
+const user=auth.currentUser;
 
-developer:"Bashir Ahmed"
+if(!user) return;
 
-};
+const storageRef=ref(storage,"covers/"+user.uid);
 
-// ===============================
-// Initialize App
-// ===============================
+await uploadBytes(storageRef,file);
 
-document.addEventListener("DOMContentLoaded",()=>{
+const url=await getDownloadURL(storageRef);
 
-console.log(
+await updateDoc(doc(db,"users",user.uid),{
 
-`${FRIENDSBOOK.name} ${FRIENDSBOOK.version} Loaded`
+cover:url
+
+});
+
+document.getElementById("coverPhoto").src=url;
+
+});
+
+console.log("script.js Part 2 Loaded");
+// ======================================
+// Friendsbook Mobile V1
+// script.js Part 3
+// Post System
+// ======================================
+
+import { auth, db } from "./firebase.js";
+
+import {
+
+collection,
+addDoc,
+getDocs,
+query,
+orderBy,
+deleteDoc,
+doc,
+serverTimestamp
+
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+// ======================================
+// Elements
+// ======================================
+
+const postBtn=document.getElementById("postBtn");
+
+const postText=document.getElementById("postText");
+
+const feedContainer=document.getElementById("feedContainer");
+
+// ======================================
+// Create Post
+// ======================================
+
+postBtn?.addEventListener("click",async()=>{
+
+const user=auth.currentUser;
+
+if(!user){
+
+alert("Login Required");
+
+return;
+
+}
+
+const text=postText.value.trim();
+
+if(text===""){
+
+alert("Write Something");
+
+return;
+
+}
+
+await addDoc(collection(db,"posts"),{
+
+uid:user.uid,
+
+name:user.displayName,
+
+text:text,
+
+profile:user.photoURL ||
+
+"default-profile.png",
+
+likes:0,
+
+comments:0,
+
+createdAt:serverTimestamp()
+
+});
+
+postText.value="";
+
+loadPosts();
+
+});
+
+// ======================================
+// Load Posts
+// ======================================
+
+async function loadPosts(){
+
+feedContainer.innerHTML="";
+
+const q=query(
+
+collection(db,"posts"),
+
+orderBy("createdAt","desc")
 
 );
 
+const snap=await getDocs(q);
+
+snap.forEach(post=>{
+
+const data=post.data();
+
+feedContainer.innerHTML+=`
+
+<div class="postCard">
+
+<div class="postHeader">
+
+<div class="postUser">
+
+<img src="${data.profile}">
+
+<div>
+
+<h3>${data.name}</h3>
+
+<span>Just Now</span>
+
+</div>
+
+</div>
+
+<button
+
+class="deletePost"
+
+data-id="${post.id}">
+
+🗑️
+
+</button>
+
+</div>
+
+<div class="postText">
+
+${data.text}
+
+</div>
+
+<div class="reactionBar">
+
+<button class="likeBtn" data-id="${post.id}">
+
+👍 Like (${data.likes})
+
+</button>
+
+<button>
+
+💬 Comment
+
+</button>
+
+<button>
+
+📤 Share
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
 });
-const ADMIN_EMAIL = "bashirahmed0052@gmail.com";
 
-const adminBtn = document.getElementById("adminPanelBtn");
+deletePosts();
 
-onAuthStateChanged(auth, (user) => {
-
-    if (!adminBtn) return;
-
-    if (user && user.email === ADMIN_EMAIL) {
-
-        adminBtn.style.display = "flex";
-
-    } else {
-
-        adminBtn.style.display = "none";
-
-    }
-
-});
-
-if (adminBtn) {
-    adminBtn.addEventListener("click", () => {
-        location.href = "admin.html";
-    });
 }
-// ===============================
-// End script.js
-// ===============================
+
+// ======================================
+// Delete Post
+// ======================================
+
+function deletePosts(){
+
+document.querySelectorAll(".deletePost")
+
+.forEach(btn=>{
+
+btn.onclick=async()=>{
+
+if(confirm("Delete this post?")){
+
+await deleteDoc(
+
+doc(db,"posts",btn.dataset.id)
+
+);
+
+loadPosts();
+
+}
+
+};
+
+});
+
+}
+
+// ======================================
+// First Load
+// ======================================
+
+loadPosts();
+
+console.log("script.js Part 3 Loaded");
+// ======================================
+// Friendsbook Mobile V1
+// script.js Part 4
+// Facebook Reaction UI
+// ======================================
+
+// Long Press Time
+
+let pressTimer = null;
+
+// Create Reaction Box
+
+const reactionBox = document.createElement("div");
+
+reactionBox.id = "reactionBox";
+
+reactionBox.innerHTML = `
+
+<span data-reaction="👍">👍</span>
+
+<span data-reaction="❤️">❤️</span>
+
+<span data-reaction="😂">😂</span>
+
+<span data-reaction="😮">😮</span>
+
+<span data-reaction="😢">😢</span>
+
+<span data-reaction="😡">😡</span>
+
+`;
+
+document.body.appendChild(reactionBox);
+
+// Style
+
+reactionBox.style.position = "fixed";
+
+reactionBox.style.display = "none";
+
+reactionBox.style.background = "#fff";
+
+reactionBox.style.padding = "8px";
+
+reactionBox.style.borderRadius = "35px";
+
+reactionBox.style.boxShadow = "0 5px 20px rgba(0,0,0,.25)";
+
+reactionBox.style.zIndex = "99999";
+
+// Long Press
+
+document.addEventListener("mousedown",(e)=>{
+
+const btn=e.target.closest(".likeBtn");
+
+if(!btn)return;
+
+pressTimer=setTimeout(()=>{
+
+const rect=btn.getBoundingClientRect();
+
+reactionBox.style.left=rect.left+"px";
+
+reactionBox.style.top=(rect.top-60)+"px";
+
+reactionBox.style.display="flex";
+
+reactionBox.dataset.target=btn.dataset.id;
+
+},500);
+
+});
+
+document.addEventListener("mouseup",()=>{
+
+clearTimeout(pressTimer);
+
+});
+
+// Hide
+
+document.addEventListener("click",(e)=>{
+
+if(!reactionBox.contains(e.target)){
+
+reactionBox.style.display="none";
+
+}
+
+});
+
+// Select Reaction
+
+reactionBox.querySelectorAll("span").forEach(icon=>{
+
+icon.onclick=()=>{
+
+const reaction=icon.dataset.reaction;
+
+const targetId=reactionBox.dataset.target;
+
+const btn=document.querySelector(
+
+`.likeBtn[data-id="${targetId}"]`
+
+);
+
+if(btn){
+
+btn.innerHTML=reaction+" Like";
+
+}
+
+reactionBox.style.display="none";
+
+};
+
+});
+
+console.log("Reaction UI Loaded");
+// ======================================
+// Friendsbook Mobile V1
+// script.js Part 5
+// Reaction System
+// ======================================
+
+import {
+
+doc,
+updateDoc,
+increment,
+getDoc
+
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+// ======================================
+// Save Reaction
+// ======================================
+
+async function saveReaction(postId,reaction){
+
+const postRef=doc(db,"posts",postId);
+
+await updateDoc(postRef,{
+
+likes:increment(1),
+
+lastReaction:reaction
+
+});
+
+}
+
+// ======================================
+// Reaction Click
+// ======================================
+
+reactionBox.querySelectorAll("span")
+
+.forEach(icon=>{
+
+icon.onclick=async()=>{
+
+const reaction=icon.dataset.reaction;
+
+const postId=reactionBox.dataset.target;
+
+await saveReaction(postId,reaction);
+
+const btn=document.querySelector(
+
+`.likeBtn[data-id="${postId}"]`
+
+);
+
+if(btn){
+
+btn.innerHTML=`${reaction} Liked`;
+
+}
+
+reactionBox.style.display="none";
+
+};
+
+});
+
+// ======================================
+// Normal Like
+// ======================================
+
+document.addEventListener("click",async(e)=>{
+
+const btn=e.target.closest(".likeBtn");
+
+if(!btn)return;
+
+const postId=btn.dataset.id;
+
+if(!postId)return;
+
+const postRef=doc(db,"posts",postId);
+
+const snap=await getDoc(postRef);
+
+if(!snap.exists()) return;
+
+const data=snap.data();
+
+await updateDoc(postRef,{
+
+likes:increment(1),
+
+lastReaction:"👍"
+
+});
+
+btn.innerHTML=`👍 Liked (${(data.likes||0)+1})`;
+
+});
+
+console.log("Reaction Save Ready");
