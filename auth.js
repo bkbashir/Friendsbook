@@ -129,3 +129,36 @@ location.href="login.html";
 });
 
 console.log("auth.js Loaded");
+import {
+sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+// =============================
+// Forgot Password
+// =============================
+
+document.getElementById("forgotPasswordBtn")?.addEventListener("click",async()=>{
+
+const email=document.getElementById("loginEmail").value.trim();
+
+if(email==""){
+
+alert("Enter your email first");
+
+return;
+
+}
+
+try{
+
+await sendPasswordResetEmail(auth,email);
+
+alert("Password reset link sent to your email.");
+
+}catch(err){
+
+alert(err.message);
+
+}
+
+});
