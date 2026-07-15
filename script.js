@@ -1471,3 +1471,127 @@ initializeApp();
 // ======================================
 
 console.log("Friendsbook Official V2 Completed");
+// =============================
+// Profile Tabs
+// =============================
+
+const profileTabs = document.querySelectorAll(".profileTabs button");
+
+profileTabs.forEach(tab => {
+
+tab.addEventListener("click", () => {
+
+profileTabs.forEach(btn => btn.classList.remove("active"));
+
+tab.classList.add("active");
+
+const tabName = tab.innerText;
+
+switch(tabName){
+
+case "Posts":
+console.log("Posts Opened");
+break;
+
+case "About":
+console.log("About Opened");
+break;
+
+case "Friends":
+console.log("Friends Opened");
+break;
+
+case "Photos":
+console.log("Photos Opened");
+break;
+
+case "Reels":
+console.log("Reels Opened");
+break;
+
+}
+
+});
+
+});
+// =============================
+// Profile Tab Content
+// =============================
+
+const profilePosts =
+document.getElementById("profilePosts");
+
+const friendsList =
+document.getElementById("friendsList");
+
+const aboutSection =
+document.getElementById("aboutSection");
+
+const photosSection =
+document.getElementById("photosSection");
+
+const reelsSection =
+document.getElementById("reelsSection");
+
+document.querySelectorAll(".profileTabs button")
+.forEach(btn=>{
+
+btn.addEventListener("click",()=>{
+
+if(profilePosts)
+profilePosts.style.display="none";
+
+if(friendsList)
+friendsList.style.display="none";
+
+if(aboutSection)
+aboutSection.style.display="none";
+
+if(photosSection)
+photosSection.style.display="none";
+
+if(reelsSection)
+reelsSection.style.display="none";
+
+switch(btn.innerText){
+
+case "Posts":
+
+if(profilePosts)
+profilePosts.style.display="block";
+
+break;
+
+case "Friends":
+
+if(friendsList)
+friendsList.style.display="block";
+
+break;
+
+case "About":
+
+if(aboutSection)
+aboutSection.style.display="block";
+
+break;
+
+case "Photos":
+
+if(photosSection)
+photosSection.style.display="block";
+
+break;
+
+case "Reels":
+
+if(reelsSection)
+reelsSection.style.display="block";
+
+break;
+
+}
+
+});
+
+});
