@@ -1,37 +1,31 @@
-// ===============================
-// Friendsbook V5
+// ======================================
+// Friendsbook Admin
 // admin.js Part 1
-// ===============================
-const ADMIN_EMAIL = "bashirahmed0052@gmail.com";
+// ======================================
+
 import { auth, db } from "./firebase.js";
 
 import {
-
-onAuthStateChanged
-
+onAuthStateChanged,
+signOut
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 import {
-
 collection,
 getDocs
-
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-// ===============================
+// ==========================
 // Admin Email
-// ===============================
+// ==========================
 
-const ADMIN_EMAIL="your_admin_email@gmail.com";
+const ADMIN_EMAIL="bashirahmed0052@gmail.com";
 
-// উদাহরণ:
-// const ADMIN_EMAIL="bashir@gmail.com";
+// ==========================
+// Auth Check
+// ==========================
 
-// ===============================
-// Admin Authentication
-// ===============================
-
-onAuthStateChanged(auth,(user)=>{
+onAuthStateChanged(auth,async(user)=>{
 
 if(!user){
 
@@ -43,7 +37,7 @@ return;
 
 if(user.email!==ADMIN_EMAIL){
 
-alert("Access Denied!");
+alert("Access Denied");
 
 location.href="index.html";
 
@@ -55,123 +49,96 @@ loadDashboard();
 
 });
 
-// ===============================
+// ==========================
 // Dashboard
-// ===============================
+// ==========================
 
 async function loadDashboard(){
 
-loadUsers();
+const users=await getDocs(collection(db,"users"));
 
-loadPosts();
+const posts=await getDocs(collection(db,"posts"));
 
-loadStories();
+const stories=await getDocs(collection(db,"stories"));
 
-loadReels();
+const reels=await getDocs(collection(db,"reels"));
+
+document.getElementById("totalUsers").innerText=users.size;
+
+document.getElementById("totalPosts").innerText=posts.size;
+
+document.getElementById("totalStories").innerText=stories.size;
+
+document.getElementById("totalReels").innerText=reels.size;
 
 }
 
-// ===============================
-// Users Count
-// ===============================
+// ==========================
+// Logout
+// ==========================
+
+document.getElementById("logoutAdmin")?.addEventListener("click",async()=>{
+
+await signOut(auth);
+
+location.href="index.html";
+
+});
+
+console.log("Admin Part 1 Loaded");
+// ======================================
+// Friendsbook Admin
+// admin.js Part 2
+// Users + Delete + Ban
+// ======================================
+
+// ==========================
+// Load Users
+// ==========================
 
 async function loadUsers(){
 
-const snap=
+const adminContent=document.getElementById("adminContent");
 
-await getDocs(collection(db,"users"));
+adminContent.innerHTML="";
 
-document.getElementById("totalUsers").innerText=snap.size;
+const snap=await getDocs(collection(db,"users"));
 
-}
+snap.forEach(userDoc=>{
 
-// ===============================
-// End Part 1
-// ===============================// ===============================
-// Friendsbook V5
-// admin.js Part 2
-// ===============================
+const data=userDoc.data();
 
-import {
+adminContent.innerHTML+=`
 
-collection,
-getDocs
+<div class="userCard">
 
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+<div class="userInfo">
 
-// ===============================
-// Total Posts
-// ===============================
+<img src="${data.profile||'default-profile.png'}">
 
-async function loadPosts(){
+<div>
 
-const snap=
+<h3>${data.name}</h3>
 
-await getDocs(collection(db,"posts"));
-
-document.getElementById("totalPosts").innerText=snap.size;
-
-}
-
-// ===============================
-// Total Stories
-// ===============================
-
-async function loadStories(){
-
-const snap=
-
-await getDocs(collection(db,"stories"));
-
-document.getElementById("totalStories").innerText=snap.size;
-
-}
-
-// ===============================
-// Total Reels
-// ===============================
-
-async function loadReels(){
-
-const snap=
-
-await getDocs(collection(db,"reels"));
-
-document.getElementById("totalReels").innerText=snap.size;
-
-}
-
-// ===============================
-// Premium Users
-// ===============================
-
-async function loadPremiumUsers(){
-
-const snap=
-
-await getDocs(collection(db,"premium"));
-
-const el=document.getElementById("premiumContainer");
-
-if(!el) return;
-
-el.innerHTML="";
-
-snap.forEach((doc)=>{
-
-const data=doc.data();
-
-el.innerHTML+=`
-
-<div class="friendCard">
-
-<div class="friendInfo">
-
-<div class="friendName">
-
-${data.email || "Unknown User"}
+<p>${data.email}</p>
 
 </div>
+
+</div>
+
+<div>
+
+<button
+class="banBtn"
+data-id="${userDoc.id}">
+Ban
+</button>
+
+<button
+class="deleteBtn"
+data-id="${userDoc.id}">
+Delete
+</button>
 
 </div>
 
@@ -181,112 +148,52 @@ ${data.email || "Unknown User"}
 
 });
 
-}
-
-// ===============================
-// Reports
-// ===============================
-
-async function loadReports(){
-
-const snap=
-
-await getDocs(collection(db,"reports"));
-
-const el=document.getElementById("reportsContainer");
-
-if(!el) return;
-
-el.innerHTML="";
-
-snap.forEach((doc)=>{
-
-const data=doc.data();
-
-el.innerHTML+=`
-
-<div class="notificationCard">
-
-<b>${data.type || "Report"}</b>
-
-<p>${data.reason || ""}</p>
-
-</div>
-
-`;
-
-});
+bindAdminButtons();
 
 }
 
-// ===============================
-// End Part 2
-// ===============================// ===============================
-// Friendsbook V5
-// admin.js Part 3 (Final)
-// ===============================
+// ==========================
+// Users Button
+// ==========================
 
-import {
-
-doc,
-deleteDoc,
-updateDoc
-
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-// ===============================
-// Delete User
-// ===============================
-
-window.deleteUser=async(id)=>{
-
-if(!confirm("Delete this user?")) return;
-
-await deleteDoc(
-
-doc(db,"users",id)
-
-);
-
-alert("User Deleted");
+document.getElementById("usersBtn")?.addEventListener("click",()=>{
 
 loadUsers();
 
+});
+
+// ==========================
+// Delete / Ban
+// ==========================
+
+function bindAdminButtons(){
+
+document.querySelectorAll(".deleteBtn").forEach(btn=>{
+
+btn.onclick=async()=>{
+
+if(!confirm("Delete User?")) return;
+
+await deleteDoc(doc(db,"users",btn.dataset.id));
+
+loadUsers();
+loadDashboard();
+
 };
 
-// ===============================
-// Delete Post
-// ===============================
+});
 
-window.deletePost=async(id)=>{
+document.querySelectorAll(".banBtn").forEach(btn=>{
 
-if(!confirm("Delete this post?")) return;
-
-await deleteDoc(
-
-doc(db,"posts",id)
-
-);
-
-alert("Post Deleted");
-
-loadPosts();
-
-};
-
-// ===============================
-// Ban User
-// ===============================
-
-window.banUser=async(id)=>{
+btn.onclick=async()=>{
 
 await updateDoc(
 
-doc(db,"users",id),
+doc(db,"users",btn.dataset.id),
 
 {
 
-status:"banned"
+banned:true
 
 }
 
@@ -294,68 +201,372 @@ status:"banned"
 
 alert("User Banned");
 
+loadUsers();
+
 };
 
-// ===============================
-// Unban User
-// ===============================
-
-window.unbanUser=async(id)=>{
-
-await updateDoc(
-
-doc(db,"users",id),
-
-{
-
-status:"active"
+});
 
 }
 
-);
+console.log("Admin Part 2 Loaded");
+// ======================================
+// Friendsbook Admin
+// admin.js Part 3
+// Posts + Stories + Reels
+// ======================================
 
-alert("User Unbanned");
+// ==========================
+// Posts
+// ==========================
 
-};
+async function loadPostsAdmin(){
 
-// ===============================
-// Refresh Dashboard
-// ===============================
+const adminContent=document.getElementById("adminContent");
 
-window.refreshDashboard=()=>{
+adminContent.innerHTML="";
+
+const snap=await getDocs(collection(db,"posts"));
+
+snap.forEach(postDoc=>{
+
+const data=postDoc.data();
+
+adminContent.innerHTML+=`
+
+<div class="userCard">
+
+<div class="userInfo">
+
+<img src="${data.profile||'default-profile.png'}">
+
+<div>
+
+<h3>${data.name}</h3>
+
+<p>${data.text||""}</p>
+
+</div>
+
+</div>
+
+<button
+class="deletePostBtn"
+data-id="${postDoc.id}">
+
+Delete Post
+
+</button>
+
+</div>
+
+`;
+
+});
+
+document.querySelectorAll(".deletePostBtn")
+
+.forEach(btn=>{
+
+btn.onclick=async()=>{
+
+if(!confirm("Delete this post?")) return;
+
+await deleteDoc(doc(db,"posts",btn.dataset.id));
+
+loadPostsAdmin();
 
 loadDashboard();
 
-loadPremiumUsers();
+};
+
+});
+
+}
+
+document.getElementById("postsBtn")?.onclick=loadPostsAdmin;
+
+// ==========================
+// Stories
+// ==========================
+
+async function loadStoriesAdmin(){
+
+const adminContent=document.getElementById("adminContent");
+
+adminContent.innerHTML="";
+
+const snap=await getDocs(collection(db,"stories"));
+
+snap.forEach(storyDoc=>{
+
+const data=storyDoc.data();
+
+adminContent.innerHTML+=`
+
+<div class="userCard">
+
+<div class="userInfo">
+
+<img src="${data.image}">
+
+<div>
+
+<h3>${data.name}</h3>
+
+<p>Story</p>
+
+</div>
+
+</div>
+
+<button
+class="deleteStoryBtn"
+data-id="${storyDoc.id}">
+
+Delete Story
+
+</button>
+
+</div>
+
+`;
+
+});
+
+document.querySelectorAll(".deleteStoryBtn")
+
+.forEach(btn=>{
+
+btn.onclick=async()=>{
+
+await deleteDoc(doc(db,"stories",btn.dataset.id));
+
+loadStoriesAdmin();
+
+loadDashboard();
+
+};
+
+});
+
+}
+
+document.getElementById("storiesBtn")?.onclick=loadStoriesAdmin;
+
+// ==========================
+// Reels
+// ==========================
+
+async function loadReelsAdmin(){
+
+const adminContent=document.getElementById("adminContent");
+
+adminContent.innerHTML="";
+
+const snap=await getDocs(collection(db,"reels"));
+
+snap.forEach(reelDoc=>{
+
+const data=reelDoc.data();
+
+adminContent.innerHTML+=`
+
+<div class="userCard">
+
+<div class="userInfo">
+
+<div>
+
+<h3>${data.name}</h3>
+
+<p>Reel Video</p>
+
+</div>
+
+</div>
+
+<button
+class="deleteReelBtn"
+data-id="${reelDoc.id}">
+
+Delete Reel
+
+</button>
+
+</div>
+
+`;
+
+});
+
+document.querySelectorAll(".deleteReelBtn")
+
+.forEach(btn=>{
+
+btn.onclick=async()=>{
+
+await deleteDoc(doc(db,"reels",btn.dataset.id));
+
+loadReelsAdmin();
+
+loadDashboard();
+
+};
+
+});
+
+}
+
+document.getElementById("reelsBtn")?.onclick=loadReelsAdmin;
+
+console.log("Admin Part 3 Loaded");
+// ======================================
+// Friendsbook Admin
+// admin.js Part 4
+// Reports + Search + Final
+// ======================================
+
+// ==========================
+// Reports
+// ==========================
+
+async function loadReports(){
+
+const adminContent=document.getElementById("adminContent");
+
+adminContent.innerHTML="<h2>Reports</h2>";
+
+const snap=await getDocs(collection(db,"reports"));
+
+if(snap.empty){
+
+adminContent.innerHTML+=`
+
+<p style="padding:20px">
+
+No Reports Found
+
+</p>
+
+`;
+
+return;
+
+}
+
+snap.forEach(reportDoc=>{
+
+const data=reportDoc.data();
+
+adminContent.innerHTML+=`
+
+<div class="userCard">
+
+<div class="userInfo">
+
+<div>
+
+<h3>${data.type||"Report"}</h3>
+
+<p>${data.message||""}</p>
+
+</div>
+
+</div>
+
+<button
+
+class="deleteReportBtn"
+
+data-id="${reportDoc.id}">
+
+Delete
+
+</button>
+
+</div>
+
+`;
+
+});
+
+document.querySelectorAll(".deleteReportBtn")
+
+.forEach(btn=>{
+
+btn.onclick=async()=>{
+
+if(!confirm("Delete Report?")) return;
+
+await deleteDoc(doc(db,"reports",btn.dataset.id));
 
 loadReports();
 
 };
 
-// ===============================
-// Logout
-// ===============================
+});
 
-window.logout=async()=>{
+}
 
-await auth.signOut();
+document.getElementById("reportsBtn")?.addEventListener("click",loadReports);
 
-location.href="index.html";
+// ==========================
+// Refresh
+// ==========================
 
-};
+document.getElementById("refreshBtn")?.addEventListener("click",()=>{
 
-// ===============================
-// Initialize
-// ===============================
-
-document.addEventListener("DOMContentLoaded",()=>{
-
-refreshDashboard();
-
-console.log("Friendsbook Admin Ready");
+loadDashboard();
 
 });
 
-// ===============================
-// End admin.js
-// ===============================
+// ==========================
+// Search User
+// ==========================
+
+const search=document.createElement("input");
+
+search.placeholder="Search User...";
+
+search.style.width="100%";
+
+search.style.padding="12px";
+
+search.style.marginBottom="15px";
+
+search.style.borderRadius="8px";
+
+search.style.border="1px solid #ddd";
+
+document.getElementById("adminContent").before(search);
+
+search.addEventListener("keyup",()=>{
+
+const value=search.value.toLowerCase();
+
+document.querySelectorAll(".userCard").forEach(card=>{
+
+card.style.display=
+
+card.innerText.toLowerCase().includes(value)
+
+? "flex"
+
+: "none";
+
+});
+
+});
+
+// ==========================
+// Initialize
+// ==========================
+
+window.addEventListener("load",()=>{
+
+loadDashboard();
+
+});
+
+console.log("Friendsbook Admin Complete");
