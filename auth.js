@@ -10,7 +10,8 @@ createUserWithEmailAndPassword,
 signInWithEmailAndPassword,
 updateProfile,
 onAuthStateChanged,
-signOut
+signOut,
+sendEmailVerification
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 import {
@@ -65,8 +66,11 @@ cover:"images/default-cover.jpg",
 createdAt:Date.now()
 
 });
+  await sendEmailVerification(userCredential.user);
 
-alert("Account Created");
+alert("Account Created!\n\nVerification email sent. Please verify your email.");
+
+await signOut(auth);
 
 location.href="index.html";
 
@@ -90,7 +94,17 @@ const password=document.getElementById("loginPassword").value;
 
 try{
 
-await signInWithEmailAndPassword(auth,email,password);
+const userCredential = await signInWithEmailAndPassword(auth,email,password);
+
+if(!userCredential.user.emailVerified){
+
+alert("Please verify your email first.");
+
+await signOut(auth);
+
+return;
+
+}
 
 location.href="index.html";
 
