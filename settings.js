@@ -1,235 +1,449 @@
-// ===============================
-// Friendsbook V5
+// ======================================
+// Friendsbook Settings
 // settings.js Part 1
-// ===============================
+// ======================================
 
-import { db, auth } from "./firebase.js";
+import { auth } from "./firebase.js";
 
 import {
+onAuthStateChanged,
+signOut
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-doc,
-getDoc,
-updateDoc
+// ==========================
+// Dark Mode
+// ==========================
 
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+const darkToggle=document.getElementById("darkModeToggle");
 
-const darkMode=document.getElementById("darkMode");
-const language=document.getElementById("language");
-const privacy=document.getElementById("privacy");
-const saveSettingsBtn=document.getElementById("saveSettingsBtn");
-
-// ===============================
-// Load Settings
-// ===============================
-
-async function loadSettings(){
-
-const snap=await getDoc(
-
-doc(db,"settings",auth.currentUser.uid)
-
-);
-
-if(snap.exists()){
-
-const data=snap.data();
-
-darkMode.checked=data.darkMode||false;
-
-language.value=data.language||"English";
-
-privacy.value=data.privacy||"Public";
-
-if(data.darkMode){
+if(localStorage.getItem("theme")=="dark"){
 
 document.body.classList.add("dark");
 
-}
+if(darkToggle) darkToggle.checked=true;
 
 }
 
-}
+darkToggle?.addEventListener("change",()=>{
 
-loadSettings();
-
-// ===============================
-// Save Settings
-// ===============================
-
-saveSettingsBtn.onclick=async()=>{
-
-await updateDoc(
-
-doc(db,"settings",auth.currentUser.uid),
-
-{
-
-darkMode:darkMode.checked,
-
-language:language.value,
-
-privacy:privacy.value
-
-}
-
-);
-
-alert("Settings Saved");
-
-};// ===============================
-// Friendsbook V5
-// settings.js Part 2
-// ===============================
-
-// ===============================
-// Dark Mode Toggle
-// ===============================
-
-darkMode.addEventListener("change",()=>{
-
-if(darkMode.checked){
+if(darkToggle.checked){
 
 document.body.classList.add("dark");
+
+localStorage.setItem("theme","dark");
 
 }else{
 
 document.body.classList.remove("dark");
 
+localStorage.setItem("theme","light");
+
 }
 
 });
 
-// ===============================
-// Language Change
-// ===============================
+// ==========================
+// Admin Panel
+// ==========================
 
-language.addEventListener("change",()=>{
+onAuthStateChanged(auth,(user)=>{
 
-localStorage.setItem(
+if(!user) return;
 
-"friendsbook_language",
+if(user.email==="bashirahmed0052@gmail.com"){
 
-language.value
+document.getElementById("adminPanelSetting").style.display="block";
 
-);
+}else{
 
-});
+document.getElementById("adminPanelSetting").style.display="none";
 
-// ===============================
-// Privacy Change
-// ===============================
-
-privacy.addEventListener("change",()=>{
-
-localStorage.setItem(
-
-"friendsbook_privacy",
-
-privacy.value
-
-);
+}
 
 });
 
-// ===============================
-// Clear Cache
-// ===============================
+// ==========================
+// Open Admin
+// ==========================
 
-window.clearCache=()=>{
+document.getElementById("adminPanelSetting")?.addEventListener("click",()=>{
 
-localStorage.clear();
+location.href="admin.html";
 
-sessionStorage.clear();
+});
 
-alert("Cache Cleared");
+// ==========================
+// Logout
+// ==========================
 
-};
+document.getElementById("logoutBtn")?.addEventListener("click",async()=>{
 
-// ===============================
-// Reset Settings
-// ===============================
+if(!confirm("Logout from Friendsbook?")) return;
 
-window.resetSettings=()=>{
-
-darkMode.checked=false;
-
-language.value="English";
-
-privacy.value="Public";
-
-document.body.classList.remove("dark");
-
-alert("Settings Reset");
-
-};// ===============================
-// Friendsbook V5
-// settings.js Part 3 (Final)
-// ===============================
-
-// ===============================
-// Account Logout
-// ===============================
-
-window.logoutAccount=async()=>{
-
-await auth.signOut();
+await signOut(auth);
 
 location.href="index.html";
 
-};
+});
 
-// ===============================
+console.log("Settings Part 1 Loaded");
+// ======================================
+// Friendsbook Settings
+// settings.js Part 2
+// Language + Font + Notifications
+// ======================================
+
+// ==========================
+// Language
+// ==========================
+
+const languageSelect=document.getElementById("languageSelect");
+
+if(localStorage.getItem("language")){
+
+languageSelect.value=localStorage.getItem("language");
+
+}
+
+languageSelect?.addEventListener("change",()=>{
+
+localStorage.setItem(
+
+"language",
+
+languageSelect.value
+
+);
+
+alert("Language Saved");
+
+});
+
+// ==========================
+// Font Size
+// ==========================
+
+const fontSizeSelect=document.getElementById("fontSizeSelect");
+
+if(localStorage.getItem("fontSize")){
+
+fontSizeSelect.value=
+
+localStorage.getItem("fontSize");
+
+document.body.style.fontSize=
+
+localStorage.getItem("fontSize");
+
+}
+
+fontSizeSelect?.addEventListener("change",()=>{
+
+let size="16px";
+
+if(fontSizeSelect.value=="small"){
+
+size="14px";
+
+}
+
+if(fontSizeSelect.value=="large"){
+
+size="18px";
+
+}
+
+document.body.style.fontSize=size;
+
+localStorage.setItem("fontSize",size);
+
+});
+
+// ==========================
+// Data Saver
+// ==========================
+
+const dataSaver=document.getElementById("dataSaverToggle");
+
+if(localStorage.getItem("dataSaver")=="true"){
+
+dataSaver.checked=true;
+
+}
+
+dataSaver?.addEventListener("change",()=>{
+
+localStorage.setItem(
+
+"dataSaver",
+
+dataSaver.checked
+
+);
+
+});
+
+// ==========================
+// Notification
+// ==========================
+
+document.querySelectorAll(
+
+"#notificationSettingsPage input[type='checkbox']"
+
+).forEach(item=>{
+
+const key=item.id;
+
+if(localStorage.getItem(key)!=null){
+
+item.checked=
+
+localStorage.getItem(key)=="true";
+
+}
+
+item.addEventListener("change",()=>{
+
+localStorage.setItem(
+
+key,
+
+item.checked
+
+);
+
+});
+
+});
+
+console.log("Settings Part 2 Loaded");
+// ======================================
+// Friendsbook Settings
+// settings.js Part 3
+// Account Settings
+// ======================================
+
+import {
+updatePassword,
+updateEmail
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+// ==========================
+// Change Email
+// ==========================
+
+document.getElementById("changeEmailBtn")?.addEventListener("click",async()=>{
+
+const newEmail=prompt("Enter New Email");
+
+if(!newEmail) return;
+
+try{
+
+await updateEmail(auth.currentUser,newEmail);
+
+alert("Email Updated Successfully");
+
+}catch(err){
+
+alert(err.message);
+
+}
+
+});
+
+// ==========================
+// Change Password
+// ==========================
+
+document.getElementById("changePasswordBtn")?.addEventListener("click",async()=>{
+
+const newPassword=prompt("Enter New Password");
+
+if(!newPassword) return;
+
+if(newPassword.length<6){
+
+alert("Password must be at least 6 characters");
+
+return;
+
+}
+
+try{
+
+await updatePassword(auth.currentUser,newPassword);
+
+alert("Password Updated Successfully");
+
+}catch(err){
+
+alert(err.message);
+
+}
+
+});
+
+// ==========================
+// Phone Number
+// ==========================
+
+document.getElementById("changePhoneBtn")?.addEventListener("click",()=>{
+
+const phone=prompt("Enter Phone Number");
+
+if(phone){
+
+localStorage.setItem("userPhone",phone);
+
+document.getElementById("userPhone").innerText=phone;
+
+}
+
+});
+
+// ==========================
+// Personal Information
+// ==========================
+
+document.getElementById("personalInfoBtn")?.addEventListener("click",()=>{
+
+alert("Personal Information Page Coming Soon");
+
+});
+
+// ==========================
+// Download Data
+// ==========================
+
+document.getElementById("downloadDataBtn")?.addEventListener("click",()=>{
+
+alert("Download Data Feature Coming Soon");
+
+});
+
+// ==========================
+// Recovery
+// ==========================
+
+document.getElementById("recoveryBtn")?.addEventListener("click",()=>{
+
+alert("Recovery Settings Coming Soon");
+
+});
+
+console.log("Settings Part 3 Loaded");
+// ======================================
+// Friendsbook Settings
+// settings.js Part 4 (Final)
+// ======================================
+
+import {
+deleteUser
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+// ==========================
 // Delete Account
-// ===============================
+// ==========================
 
-window.deleteAccount=()=>{
+document.getElementById("deleteAccountBtn")?.addEventListener("click",async()=>{
 
 const ok=confirm(
-
-"Are you sure you want to delete your account?"
-
+"Delete your Friendsbook account permanently?"
 );
 
 if(!ok) return;
 
+try{
+
+await deleteUser(auth.currentUser);
+
+alert("Account Deleted Successfully");
+
+location.href="index.html";
+
+}catch(err){
+
+alert(err.message);
+
+}
+
+});
+
+// ==========================
+// Deactivate Account
+// ==========================
+
+document.getElementById("deactivateAccountBtn")?.addEventListener("click",()=>{
+
 alert(
-
-"Account Delete Feature Enabled"
-
+"Deactivate Account feature will be available soon."
 );
 
-// Firebase Auth delete() এখানে পরে যোগ হবে
+});
 
-};
+// ==========================
+// Help Center
+// ==========================
 
-// ===============================
+document.getElementById("helpCenterBtn")?.addEventListener("click",()=>{
+
+window.open(
+"https://support.google.com/",
+"_blank"
+);
+
+});
+
+// ==========================
+// Report Problem
+// ==========================
+
+document.getElementById("reportProblemBtn")?.addEventListener("click",()=>{
+
+const report=prompt("Describe your problem");
+
+if(report){
+
+alert("Thank you! Your report has been received.");
+
+}
+
+});
+
+// ==========================
+// Terms & Privacy
+// ==========================
+
+document.getElementById("termsBtn")?.addEventListener("click",()=>{
+
+alert(
+"Friendsbook Terms & Privacy Policy"
+);
+
+});
+
+// ==========================
+// Refresh Button
+// ==========================
+
+document.getElementById("refreshBtn")?.addEventListener("click",()=>{
+
+location.reload();
+
+});
+
+// ==========================
 // App Version
-// ===============================
+// ==========================
 
-window.showAppVersion=()=>{
+console.log("Friendsbook Official V2");
+console.log("Settings Module Loaded");
+console.log("Version 2.0");
 
-alert(
+// ==========================
+// End
+// ==========================
 
-"Friendsbook V5\nVersion : 5.0.0"
-
-);
-
-};
-
-// ===============================
-// About App
-// ===============================
-
-window.aboutFriendsbook=()=>{
-
-alert(
-
-"Friendsbook V5\nCreated by Bashir Ahmed"
-
-);
-
-};
-
-// ===============================
-// End settings.js
-// ===============================
+console.log("Settings Part 4 Loaded Successfully");
