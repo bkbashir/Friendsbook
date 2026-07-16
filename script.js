@@ -238,3 +238,125 @@ alert("Post Saved");
 }
 
 };
+// =========================
+// Friendsbook 2026
+// Profile System
+// =========================
+
+const profileName=document.getElementById("profileName");
+
+const profileBio=document.getElementById("profileBio");
+
+const editProfileBtn=document.getElementById("editProfileBtn");
+
+const shareProfileBtn=document.getElementById("shareProfileBtn");
+
+const changeProfileBtn=document.getElementById("changeProfileBtn");
+
+const changeCoverBtn=document.getElementById("changeCoverBtn");
+
+const profilePhoto=document.getElementById("profilePhoto");
+
+const coverPhoto=document.getElementById("coverPhoto");
+
+const profileContent=document.getElementById("profileContent");
+
+// =========================
+// Edit Profile
+// =========================
+
+editProfileBtn.onclick=()=>{
+
+let name=prompt("Enter Name",profileName.innerText);
+
+if(name){
+
+profileName.innerText=name;
+
+}
+
+let bio=prompt("Enter Bio",profileBio.innerText);
+
+if(bio){
+
+profileBio.innerText=bio;
+
+}
+
+};
+
+// =========================
+// Share Profile
+// =========================
+
+shareProfileBtn.onclick=()=>{
+
+if(navigator.share){
+
+navigator.share({
+
+title:"Friendsbook Profile",
+
+text:"Visit my Friendsbook profile",
+
+url:location.href
+
+});
+
+}else{
+
+alert("Profile Shared");
+
+}
+
+};
+
+// =========================
+// Change Photo
+// =========================
+
+changeProfileBtn.onclick=()=>{
+
+alert("Profile Photo Upload Coming Soon");
+
+};
+
+changeCoverBtn.onclick=()=>{
+
+alert("Cover Photo Upload Coming Soon");
+
+};
+
+// =========================
+// Tabs
+// =========================
+
+const tabBtns=document.querySelectorAll(".tabBtn");
+
+tabBtns.forEach(btn=>{
+
+btn.onclick=()=>{
+
+tabBtns.forEach(item=>{
+
+item.classList.remove("active");
+
+});
+
+btn.classList.add("active");
+
+profileContent.innerHTML=
+
+"<h3 style='color:white'>"+btn.innerText+"</h3>";
+
+};
+
+});
+
+// =========================
+// Default
+// =========================
+
+profileContent.innerHTML=
+
+"<h3 style='color:white'>Posts</h3>";
