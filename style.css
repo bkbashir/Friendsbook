@@ -1,10 +1,37 @@
-/* ===== Header ===== */
+/* ========================= */
+/* Header */
+/* ========================= */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
+
+body{
+
+background:#f0f2f5;
+
+padding-top:70px;
+
+padding-bottom:75px;
+
+}
 
 .fbHeader{
 
-position:sticky;
+position:fixed;
 
 top:0;
+
+left:0;
+
+width:100%;
+
+height:65px;
+
+background:#fff;
 
 display:flex;
 
@@ -12,17 +39,15 @@ justify-content:space-between;
 
 align-items:center;
 
-padding:12px;
+padding:0 15px;
 
-background:#fff;
+box-shadow:0 2px 10px rgba(0,0,0,.08);
 
-box-shadow:0 2px 8px rgba(0,0,0,.08);
-
-z-index:999;
+z-index:1000;
 
 }
 
-.logoArea{
+.headerLeft{
 
 display:flex;
 
@@ -32,11 +57,23 @@ gap:10px;
 
 }
 
-.headerLogo{
+.logo{
 
 width:42px;
 
 height:42px;
+
+border-radius:50%;
+
+}
+
+.appName{
+
+font-size:22px;
+
+font-weight:700;
+
+color:#1877f2;
 
 }
 
@@ -48,7 +85,7 @@ gap:10px;
 
 }
 
-.fbHeader button{
+.iconBtn{
 
 width:42px;
 
@@ -60,13 +97,23 @@ border-radius:50%;
 
 background:#f0f2f5;
 
+cursor:pointer;
+
 font-size:18px;
 
-cursor:pointer;
+transition:.3s;
 
 }
 
-/* ===== Bottom ===== */
+.iconBtn:hover{
+
+background:#e4e6eb;
+
+}
+
+/* ========================= */
+/* Bottom Navigation */
+/* ========================= */
 
 .bottomNav{
 
@@ -78,21 +125,27 @@ left:0;
 
 width:100%;
 
+height:65px;
+
+background:#fff;
+
 display:flex;
 
 justify-content:space-around;
 
-background:#fff;
+align-items:center;
 
-box-shadow:0 -2px 8px rgba(0,0,0,.08);
+box-shadow:0 -2px 10px rgba(0,0,0,.08);
 
-padding:8px 0;
-
-z-index:999;
+z-index:1000;
 
 }
 
-.bottomNav button{
+.navItem{
+
+border:none;
+
+background:none;
 
 display:flex;
 
@@ -100,22 +153,38 @@ flex-direction:column;
 
 align-items:center;
 
-border:none;
+cursor:pointer;
 
-background:none;
+color:#65676b;
 
 font-size:12px;
 
-cursor:pointer;
-
 }
 
-.bottomNav i{
+.navItem i{
 
-font-size:20px;
+font-size:22px;
 
 margin-bottom:4px;
 
+}
+
+.navItem.active{
+
 color:#1877f2;
+
+font-weight:600;
+
+}
+
+/* ========================= */
+/* Main */
+/* ========================= */
+
+#mainContainer{
+
+padding:15px;
+
+min-height:100vh;
 
 }
