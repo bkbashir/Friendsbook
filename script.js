@@ -83,3 +83,71 @@ profileBtn.onclick=()=>{
 console.log("Profile");
 
 };
+// =========================
+// Feature 2
+// Menu Drawer
+// =========================
+
+const menuBtn = document.getElementById("menuBtn");
+const menuDrawer = document.getElementById("menuDrawer");
+const menuOverlay = document.getElementById("menuOverlay");
+
+menuBtn.addEventListener("click", () => {
+
+    menuDrawer.classList.add("active");
+    menuOverlay.classList.add("active");
+
+});
+
+menuOverlay.addEventListener("click", () => {
+
+    menuDrawer.classList.remove("active");
+    menuOverlay.classList.remove("active");
+
+});
+
+// =========================
+// Menu Buttons
+// =========================
+
+document.getElementById("profileMenuBtn").onclick = () => {
+
+    alert("Profile");
+
+};
+
+document.getElementById("friendsMenuBtn").onclick = () => {
+
+    alert("Friends");
+
+};
+
+document.getElementById("savedMenuBtn").onclick = () => {
+
+    alert("Saved");
+
+};
+
+document.getElementById("reelsMenuBtn").onclick = () => {
+
+    alert("Reels");
+
+};
+
+document.getElementById("marketMenuBtn").onclick = () => {
+
+    alert("Marketplace");
+
+};
+
+document.getElementById("settingMenuBtn").onclick = () => {
+
+    alert("Settings");
+
+};
+
+document.getElementById("logoutMenuBtn").onclick = () => {
+
+    alert("Logout");
+
+};
