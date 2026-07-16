@@ -131,3 +131,110 @@ console.log("Open Story");
 });
 
 });
+// =========================
+// Friendsbook 2026
+// Feed Reaction System
+// =========================
+
+const likeBtn=document.querySelector(".likeBtn");
+const likeCount=document.querySelector(".likeCount");
+
+const reactions=document.querySelectorAll(".reaction");
+
+let totalLike=0;
+
+// =========================
+// Reactions
+// =========================
+
+reactions.forEach(item=>{
+
+item.onclick=()=>{
+
+const emoji=item.innerHTML;
+
+likeBtn.innerHTML=emoji+" Like";
+
+likeBtn.style.color="#1877F2";
+
+totalLike++;
+
+likeCount.innerHTML=emoji+" "+totalLike;
+
+};
+
+});
+
+// =========================
+// Comment
+// =========================
+
+document.querySelector(".commentBtn").onclick=()=>{
+
+let comment=prompt("Write a comment");
+
+if(comment){
+
+alert("Comment Added:\n\n"+comment);
+
+}
+
+};
+
+// =========================
+// Share
+// =========================
+
+document.querySelector(".shareBtn").onclick=()=>{
+
+if(navigator.share){
+
+navigator.share({
+
+title:"Friendsbook",
+
+text:"Check this post",
+
+url:location.href
+
+});
+
+}else{
+
+alert("Post Shared");
+
+}
+
+};
+
+// =========================
+// 3 Dot Menu
+// =========================
+
+document.querySelector(".postMenu").onclick=()=>{
+
+let option=prompt(
+
+"1 = Edit\n2 = Delete\n3 = Save"
+
+);
+
+if(option=="1"){
+
+alert("Edit Post");
+
+}
+
+else if(option=="2"){
+
+document.querySelector(".postCard").remove();
+
+}
+
+else if(option=="3"){
+
+alert("Post Saved");
+
+}
+
+};
