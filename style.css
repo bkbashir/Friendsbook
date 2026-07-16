@@ -1,25 +1,35 @@
 /* ========================= */
-/* Header */
+/* Friendsbook 2026 */
+/* Part 1 */
 /* ========================= */
 
 *{
+
 margin:0;
+
 padding:0;
+
 box-sizing:border-box;
-font-family:Poppins,sans-serif;
+
+font-family:Arial,sans-serif;
+
 }
 
 body{
 
-background:#f0f2f5;
+background:#18191A;
+
+color:#fff;
 
 padding-top:70px;
 
-padding-bottom:75px;
-
 }
 
-.fbHeader{
+/* ========================= */
+/* Header */
+/* ========================= */
+
+.header{
 
 position:fixed;
 
@@ -31,17 +41,17 @@ width:100%;
 
 height:65px;
 
-background:#fff;
+background:#242526;
 
 display:flex;
 
-justify-content:space-between;
-
 align-items:center;
+
+justify-content:space-between;
 
 padding:0 15px;
 
-box-shadow:0 2px 10px rgba(0,0,0,.08);
+border-bottom:1px solid #3A3B3C;
 
 z-index:1000;
 
@@ -53,39 +63,23 @@ display:flex;
 
 align-items:center;
 
-gap:10px;
+gap:15px;
 
 }
 
 .logo{
 
-width:42px;
+font-size:32px;
 
-height:42px;
+font-weight:bold;
 
-border-radius:50%;
+color:#fff;
 
-}
-
-.appName{
-
-font-size:22px;
-
-font-weight:700;
-
-color:#1877f2;
+letter-spacing:-1px;
 
 }
 
-.headerRight{
-
-display:flex;
-
-gap:10px;
-
-}
-
-.iconBtn{
+.header button{
 
 width:42px;
 
@@ -95,218 +89,11 @@ border:none;
 
 border-radius:50%;
 
-background:#f0f2f5;
+background:#3A3B3C;
 
-cursor:pointer;
+color:#fff;
 
 font-size:18px;
-
-transition:.3s;
-
-}
-
-.iconBtn:hover{
-
-background:#e4e6eb;
-
-}
-
-/* ========================= */
-/* Bottom Navigation */
-/* ========================= */
-
-.bottomNav{
-
-position:fixed;
-
-bottom:0;
-
-left:0;
-
-width:100%;
-
-height:65px;
-
-background:#fff;
-
-display:flex;
-
-justify-content:space-around;
-
-align-items:center;
-
-box-shadow:0 -2px 10px rgba(0,0,0,.08);
-
-z-index:1000;
-
-}
-
-.navItem{
-
-border:none;
-
-background:none;
-
-display:flex;
-
-flex-direction:column;
-
-align-items:center;
-
-cursor:pointer;
-
-color:#65676b;
-
-font-size:12px;
-
-}
-
-.navItem i{
-
-font-size:22px;
-
-margin-bottom:4px;
-
-}
-
-.navItem.active{
-
-color:#1877f2;
-
-font-weight:600;
-
-}
-
-/* ========================= */
-/* Main */
-/* ========================= */
-
-#mainContainer{
-
-padding:15px;
-
-min-height:100vh;
-
-}
-/* ========================= */
-/* Menu Drawer */
-/* ========================= */
-
-#menuOverlay{
-
-position:fixed;
-
-top:0;
-
-left:0;
-
-width:100%;
-
-height:100%;
-
-background:rgba(0,0,0,.45);
-
-display:none;
-
-z-index:1998;
-
-}
-
-#menuDrawer{
-
-position:fixed;
-
-top:0;
-
-left:-300px;
-
-width:280px;
-
-height:100%;
-
-background:#fff;
-
-box-shadow:3px 0 15px rgba(0,0,0,.2);
-
-transition:.35s;
-
-z-index:1999;
-
-overflow-y:auto;
-
-}
-
-#menuDrawer.active{
-
-left:0;
-
-}
-
-#menuOverlay.active{
-
-display:block;
-
-}
-
-.drawerHeader{
-
-padding:20px;
-
-display:flex;
-
-align-items:center;
-
-gap:12px;
-
-border-bottom:1px solid #eee;
-
-}
-
-.drawerLogo{
-
-width:55px;
-
-height:55px;
-
-border-radius:50%;
-
-}
-
-.drawerHeader h2{
-
-font-size:22px;
-
-color:#1877f2;
-
-}
-
-.drawerMenu{
-
-padding:10px;
-
-}
-
-.drawerMenu button{
-
-width:100%;
-
-display:flex;
-
-align-items:center;
-
-gap:15px;
-
-padding:14px;
-
-margin-bottom:8px;
-
-border:none;
-
-background:#fff;
-
-border-radius:12px;
-
-font-size:16px;
 
 cursor:pointer;
 
@@ -314,20 +101,46 @@ transition:.25s;
 
 }
 
-.drawerMenu button:hover{
+.header button:hover{
 
-background:#f0f2f5;
+background:#4E4F50;
+
+}
+
+.headerRight{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
 
 }
 
-.drawerMenu i{
+/* Mobile */
 
-font-size:20px;
+@media(max-width:768px){
 
-color:#1877f2;
+.logo{
 
-width:25px;
-
-text-align:center;
+font-size:24px;
 
 }
+
+.header{
+
+padding:0 10px;
+
+}
+
+.header button{
+
+width:40px;
+
+height:40px;
+
+font-size:17px;
+
+}
+
+  }
