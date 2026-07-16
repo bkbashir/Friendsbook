@@ -360,3 +360,105 @@ profileContent.innerHTML=
 profileContent.innerHTML=
 
 "<h3 style='color:white'>Posts</h3>";
+// =========================
+// Menu Drawer
+// Friendsbook 2026
+// =========================
+
+const menuBtn=document.getElementById("menuBtn");
+
+const menuDrawer=document.getElementById("menuDrawer");
+
+const menuOverlay=document.getElementById("menuOverlay");
+
+// =========================
+// Open Menu
+// =========================
+
+menuBtn.onclick=()=>{
+
+menuDrawer.classList.add("active");
+
+menuOverlay.classList.add("active");
+
+};
+
+// =========================
+// Close Menu
+// =========================
+
+menuOverlay.onclick=()=>{
+
+menuDrawer.classList.remove("active");
+
+menuOverlay.classList.remove("active");
+
+};
+
+// =========================
+// Menu Buttons
+// =========================
+
+friendsBtn.onclick=()=>{
+
+alert("Friends");
+
+};
+
+savedBtn.onclick=()=>{
+
+alert("Saved");
+
+};
+
+memoryBtn.onclick=()=>{
+
+alert("Memories");
+
+};
+
+reelsMenuBtn.onclick=()=>{
+
+alert("Reels");
+
+};
+
+marketBtn.onclick=()=>{
+
+alert("Marketplace");
+
+};
+
+groupsBtn.onclick=()=>{
+
+alert("Groups");
+
+};
+
+pagesBtn.onclick=()=>{
+
+alert("Pages");
+
+};
+
+settingsBtn.onclick=()=>{
+
+alert("Settings & Privacy");
+
+};
+
+helpBtn.onclick=()=>{
+
+alert("Help & Support");
+
+};
+
+logoutBtn.onclick=()=>{
+
+if(confirm("Logout from Friendsbook?")){
+
+alert("Logged Out");
+
+}
+
+};
