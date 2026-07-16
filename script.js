@@ -1,153 +1,64 @@
 // =========================
-// Friendsbook V3
-// Feature 1
-// Header + Navigation
+// Friendsbook 2026
+// Part 1
 // =========================
 
-const navItems=document.querySelectorAll(".navItem");
-
-navItems.forEach(btn=>{
-
-btn.addEventListener("click",()=>{
-
-navItems.forEach(item=>{
-
-item.classList.remove("active");
-
-});
-
-btn.classList.add("active");
-
-});
-
-});
-
-// =========================
 // Header Buttons
-// =========================
 
-menuBtn.onclick=()=>{
+const menuBtn=document.getElementById("menuBtn");
 
-alert("Menu Coming Soon");
+const createBtn=document.getElementById("createBtn");
 
-};
+const searchBtn=document.getElementById("searchBtn");
 
-createBtn.onclick=()=>{
-
-alert("Create Coming Soon");
-
-};
-
-searchBtn.onclick=()=>{
-
-alert("Search Coming Soon");
-
-};
-
-messageBtn.onclick=()=>{
-
-alert("Messenger Coming Soon");
-
-};
+const messageBtn=document.getElementById("messageBtn");
 
 // =========================
-// Navigation
+// Menu
 // =========================
 
-homeBtn.onclick=()=>{
+menuBtn.addEventListener("click",()=>{
 
-console.log("Home");
-
-};
-
-reelsBtn.onclick=()=>{
-
-console.log("Reels");
-
-};
-
-marketBtn.onclick=()=>{
-
-console.log("Marketplace");
-
-};
-
-notifyBtn.onclick=()=>{
-
-console.log("Notifications");
-
-};
-
-profileBtn.onclick=()=>{
-
-console.log("Profile");
-
-};
-// =========================
-// Feature 2
-// Menu Drawer
-// =========================
-
-const menuBtn = document.getElementById("menuBtn");
-const menuDrawer = document.getElementById("menuDrawer");
-const menuOverlay = document.getElementById("menuOverlay");
-
-menuBtn.addEventListener("click", () => {
-
-    menuDrawer.classList.add("active");
-    menuOverlay.classList.add("active");
-
-});
-
-menuOverlay.addEventListener("click", () => {
-
-    menuDrawer.classList.remove("active");
-    menuOverlay.classList.remove("active");
+console.log("Open Menu");
 
 });
 
 // =========================
-// Menu Buttons
+// Create
 // =========================
 
-document.getElementById("profileMenuBtn").onclick = () => {
+createBtn.addEventListener("click",()=>{
 
-    alert("Profile");
+console.log("Create");
 
-};
+});
 
-document.getElementById("friendsMenuBtn").onclick = () => {
+// =========================
+// Search
+// =========================
 
-    alert("Friends");
+searchBtn.addEventListener("click",()=>{
 
-};
+console.log("Search");
 
-document.getElementById("savedMenuBtn").onclick = () => {
+});
 
-    alert("Saved");
+// =========================
+// Messenger
+// =========================
 
-};
+messageBtn.addEventListener("click",()=>{
 
-document.getElementById("reelsMenuBtn").onclick = () => {
+console.log("Messenger");
 
-    alert("Reels");
+});
 
-};
+// =========================
+// App Ready
+// =========================
 
-document.getElementById("marketMenuBtn").onclick = () => {
+window.onload=()=>{
 
-    alert("Marketplace");
-
-};
-
-document.getElementById("settingMenuBtn").onclick = () => {
-
-    alert("Settings");
-
-};
-
-document.getElementById("logoutMenuBtn").onclick = () => {
-
-    alert("Logout");
+console.log("Friendsbook 2026 Loaded");
 
 };
