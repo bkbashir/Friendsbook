@@ -18,474 +18,123 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <body>
 
-<!-- ========================= -->
+<!-- Loading -->
+<div id="loader">
+
+<div class="loaderLogo">
+
+Friendsbook
+
+</div>
+
+</div>
+
+<!-- Main App -->
+<div id="app" style="display:none;">
+
 <!-- Header -->
-<!-- ========================= -->
 
 <header class="header">
 
 <div class="headerLeft">
 
 <button id="menuBtn">
+
 <i class="fa-solid fa-bars"></i>
+
 </button>
 
-<h2 class="logo">friendsbook</h2>
+<h2 class="logo">
+
+Friendsbook
+
+</h2>
 
 </div>
 
 <div class="headerRight">
 
 <button id="createBtn">
+
 <i class="fa-solid fa-plus"></i>
+
 </button>
 
 <button id="searchBtn">
+
 <i class="fa-solid fa-magnifying-glass"></i>
+
 </button>
 
 <button id="messageBtn">
+
 <i class="fa-brands fa-facebook-messenger"></i>
+
 </button>
 
 </div>
 
 </header>
-<!-- ========================= -->
-<!-- Create Post -->
-<!-- ========================= -->
 
-<section class="createPost">
+<!-- Home Page -->
 
-<div class="postTop">
+<main id="homePage">
 
-<img src="images/profile.jpg" id="myProfile">
+</main>
 
-<input
-type="text"
-placeholder="What's on your mind?">
+<!-- Drawer -->
 
-</div>
+<aside id="drawer">
 
-<div class="postBottom">
+</aside>
 
-<button id="livePostBtn">
-<i class="fa-solid fa-video"></i>
-Live
-</button>
+<!-- Bottom Navigation -->
 
-<button id="photoPostBtn">
-<i class="fa-solid fa-image"></i>
-Photo
-</button>
+<nav class="bottomNav">
 
-<button id="feelingPostBtn">
-<i class="fa-solid fa-face-smile"></i>
-Feeling
-</button>
+<button id="homeBtn">
 
-</div>
+<i class="fa-solid fa-house"></i>
 
-</section>
-
-<!-- ========================= -->
-<!-- Story Section -->
-<!-- ========================= -->
-
-<section class="storySection">
-
-<div class="story createStory">
-
-<img src="images/profile.jpg">
-
-<div class="addStory">
-
-<i class="fa-solid fa-plus"></i>
-
-</div>
-
-<p>Create Story</p>
-
-</div>
-
-<div class="story">
-
-<img src="images/story1.jpg">
-
-<span>Rahim</span>
-
-</div>
-
-<div class="story">
-
-<img src="images/story2.jpg">
-
-<span>Karim</span>
-
-</div>
-
-<div class="story">
-
-<img src="images/story3.jpg">
-
-<span>Hasan</span>
-
-</div>
-
-<div class="story">
-
-<img src="images/story4.jpg">
-
-<span>Jannat</span>
-
-</div>
-
-</section>
-  <!-- ========================= -->
-<!-- ========================= -->
-<!-- Feed -->
-<!-- ========================= -->
-
-<section id="feedContainer">
-
-<div class="postCard">
-
-<div class="postHeader">
-
-<img src="images/profile.jpg" class="postProfile">
-
-<div class="postInfo">
-
-<h4>Bashir Ahmed</h4>
-
-<p>Just now · 🌍</p>
-
-</div>
-
-<button class="postMenu">
-
-<i class="fa-solid fa-ellipsis"></i>
+<span>Home</span>
 
 </button>
 
-</div>
+<button id="reelsBtn">
 
-<div class="postText">
-
-Hello Friends 👋
-
-Welcome to Friendsbook 2026 ❤️
-
-</div>
-
-<img src="images/post1.jpg" class="postImage">
-
-<div class="postReactInfo">
-
-<span class="likeCount">
-
-👍 0
-
-</span>
-
-<span>
-
-0 Comments
-
-</span>
-
-<span>
-
-0 Shares
-
-</span>
-
-</div>
-
-<div class="postActions">
-
-<div class="reactionBox">
-
-<div class="reactionPopup">
-
-<span class="reaction">👍</span>
-
-<span class="reaction">❤️</span>
-
-<span class="reaction">🥰</span>
-
-<span class="reaction">😂</span>
-
-<span class="reaction">😮</span>
-
-<span class="reaction">😢</span>
-
-<span class="reaction">😡</span>
-
-</div>
-
-<button class="likeBtn">
-
-👍 Like
-
-</button>
-
-</div>
-
-<button class="commentBtn">
-
-<i class="fa-regular fa-comment"></i>
-
-Comment
-
-</button>
-
-<button class="shareBtn">
-
-<i class="fa-solid fa-share"></i>
-
-Share
-
-</button>
-
-</div>
-
-</div>
-
-</section>
-  <!-- ========================= -->
-<!-- Profile Page -->
-<!-- ========================= -->
-
-<section id="profilePage">
-
-<!-- Cover -->
-
-<div class="coverSection">
-
-<img src="images/cover.jpg" id="coverPhoto">
-
-<button id="changeCoverBtn">
-
-<i class="fa-solid fa-camera"></i>
-
-</button>
-
-</div>
-
-<!-- Profile -->
-
-<div class="profileSection">
-
-<img src="images/profile.jpg" id="profilePhoto">
-
-<button id="changeProfileBtn">
-
-<i class="fa-solid fa-camera"></i>
-
-</button>
-
-<h2 id="profileName">
-
-Bashir Ahmed
-
-</h2>
-
-<p id="profileBio">
-
-No Bio Yet
-
-</p>
-
-<div class="profileButtons">
-
-<button id="editProfileBtn">
-
-Edit Profile
-
-</button>
-
-<button id="shareProfileBtn">
-
-Share Profile
-
-</button>
-
-</div>
-
-</div>
-
-<!-- Count -->
-
-<div class="profileCount">
-
-<div>
-
-<h3 id="postCount">
-
-0
-
-</h3>
-
-<p>Posts</p>
-
-</div>
-
-<div>
-
-<h3 id="followersCount">
-
-0
-
-</h3>
-
-<p>Followers</p>
-
-</div>
-
-<div>
-
-<h3 id="followingCount">
-
-0
-
-</h3>
-
-<p>Following</p>
-
-</div>
-
-</div>
-
-<!-- Tabs -->
-
-<div class="profileTabs">
-
-<button class="tabBtn active">
-
-Posts
-
-</button>
-
-<button class="tabBtn">
-
-Photos
-
-</button>
-
-<button class="tabBtn">
-
-Reels
-
-</button>
-
-<button class="tabBtn">
-
-Friends
-
-</button>
-
-<button class="tabBtn">
-
-About
-
-</button>
-
-</div>
-
-<!-- Content -->
-
-<div id="profileContent">
-
-</div>
-
-  </section>
-  <!-- ========================= -->
-<!-- Menu Drawer -->
-<!-- ========================= -->
-
-<div id="menuOverlay"></div>
-
-<aside id="menuDrawer">
-
-<div class="menuProfile">
-
-<img src="images/profile.jpg" id="menuProfileImg">
-
-<div>
-
-<h3 id="menuProfileName">
-
-Bashir Ahmed
-
-</h3>
-
-<p>
-
-See your profile
-
-</p>
-
-</div>
-
-</div>
-
-<div class="menuList">
-
-<button id="friendsBtn">
-<i class="fa-solid fa-user-group"></i>
-<span>Friends</span>
-</button>
-
-<button id="savedBtn">
-<i class="fa-solid fa-bookmark"></i>
-<span>Saved</span>
-</button>
-
-<button id="memoryBtn">
-<i class="fa-solid fa-clock-rotate-left"></i>
-<span>Memories</span>
-</button>
-
-<button id="reelsMenuBtn">
 <i class="fa-solid fa-circle-play"></i>
+
 <span>Reels</span>
+
 </button>
 
 <button id="marketBtn">
+
 <i class="fa-solid fa-shop"></i>
-<span>Marketplace</span>
+
+<span>Market</span>
+
 </button>
 
-<button id="groupsBtn">
-<i class="fa-solid fa-users"></i>
-<span>Groups</span>
+<button id="notifyBtn">
+
+<i class="fa-solid fa-bell"></i>
+
+<span>Notify</span>
+
 </button>
 
-<button id="pagesBtn">
-<i class="fa-solid fa-flag"></i>
-<span>Pages</span>
+<button id="profileBtn">
+
+<i class="fa-solid fa-user"></i>
+
+<span>Profile</span>
+
 </button>
 
-<button id="settingsBtn">
-<i class="fa-solid fa-gear"></i>
-<span>Settings & Privacy</span>
-</button>
-
-<button id="helpBtn">
-<i class="fa-solid fa-circle-question"></i>
-<span>Help & Support</span>
-</button>
-
-<button id="logoutBtn">
-<i class="fa-solid fa-right-from-bracket"></i>
-<span>Logout</span>
-</button>
+</nav>
 
 </div>
-
-</aside>
-<!-- এখানে পরের Part-এ Story Section শুরু হবে -->
 
 <script src="script.js"></script>
 
