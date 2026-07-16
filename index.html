@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ppp<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -28,70 +28,730 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <div id="loader"></div>
 
-<!-- Login -->
+<!-- ========================= -->
+<!-- Login Page -->
+<!-- ========================= -->
 
-<section id="loginPage"></section>
+<section id="loginPage">
 
-<!-- Signup -->
+<div class="authBox">
 
-<section id="signupPage"></section>
+<h1>Friendsbook</h1>
 
+<p>Connect with the world</p>
+
+<form id="loginForm">
+
+<input
+type="email"
+id="loginEmail"
+placeholder="Email">
+
+<input
+type="password"
+id="loginPassword"
+placeholder="Password">
+
+<button
+type="submit">
+
+Log In
+
+</button>
+
+</form>
+
+<div class="authLinks">
+
+<button id="forgotPasswordBtn">
+
+Forgot Password?
+
+</button>
+
+<button id="openSignupBtn">
+
+Create New Account
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- Signup Page -->
+<!-- ========================= -->
+
+<section id="signupPage">
+
+<div class="authBox">
+
+<h2>Create Account</h2>
+
+<form id="signupForm">
+
+<input
+type="text"
+id="fullName"
+placeholder="Full Name">
+
+<input
+type="email"
+id="signupEmail"
+placeholder="Email Address">
+
+<input
+type="tel"
+id="signupPhone"
+placeholder="Phone Number">
+
+<input
+type="date"
+id="birthDate">
+
+<select id="gender">
+
+<option value="">Gender</option>
+
+<option>Male</option>
+
+<option>Female</option>
+
+<option>Custom</option>
+
+</select>
+
+<input
+type="password"
+id="signupPassword"
+placeholder="Password">
+
+<input
+type="password"
+id="confirmPassword"
+placeholder="Confirm Password">
+
+<button
+type="submit">
+
+Create Account
+
+</button>
+
+</form>
+
+<button id="backLoginBtn">
+
+Already have an account?
+
+</button>
+
+</div>
+
+</section>
+
+<!-- ========================= -->
 <!-- Forgot Password -->
+<!-- ========================= -->
 
-<section id="forgotPage"></section>
+<section id="forgotPage">
 
+<div class="authBox">
+
+<h2>Reset Password</h2>
+
+<form id="forgotForm">
+
+<input
+type="email"
+id="forgotEmail"
+placeholder="Enter your Email">
+
+<button
+type="submit">
+
+Send Verification Link
+
+</button>
+
+</form>
+
+<button id="backLoginBtn2">
+
+Back to Login
+
+</button>
+
+</div>
+
+</section>
 <!-- Main -->
 
 <section id="mainPage">
 
+<!-- ========================= -->
 <!-- Header -->
+<!-- ========================= -->
 
-<header id="header"></header>
+<header id="header">
 
-<!-- Drawer -->
+<div class="headerLeft">
 
-<aside id="drawer"></aside>
+<button id="menuBtn">
 
-<!-- Home -->
+<i class="fa-solid fa-bars"></i>
 
-<section id="homePage"></section>
+</button>
 
-<!-- Friends -->
+<h2 class="logo">
 
-<section id="friendsPage"></section>
+Friendsbook
 
-<!-- Reels -->
+</h2>
 
-<section id="reelsPage"></section>
+</div>
 
-<!-- Marketplace -->
+<div class="headerCenter">
 
-<section id="marketplacePage"></section>
+<input
+type="search"
+id="searchInput"
+placeholder="Search Friendsbook">
 
-<!-- Notifications -->
+</div>
 
-<section id="notificationPage"></section>
+<div class="headerRight">
 
+<button id="createPostBtn">
+
+<i class="fa-solid fa-plus"></i>
+
+</button>
+
+<button id="messageBtn">
+
+<i class="fa-brands fa-facebook-messenger"></i>
+
+</button>
+
+</div>
+
+</header>
+
+<!-- ========================= -->
+<!-- Drawer Menu -->
+<!-- ========================= -->
+
+<aside id="drawer">
+
+<div id="drawerHeader">
+
+<div id="drawerProfile">
+
+<img id="drawerProfilePhoto">
+
+<div>
+
+<h3 id="drawerProfileName"></h3>
+
+<p>See your profile</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="drawerMenu">
+
+<button id="friendsMenuBtn">
+<i class="fa-solid fa-user-group"></i>
+<span>Friends</span>
+</button>
+
+<button id="savedMenuBtn">
+<i class="fa-solid fa-bookmark"></i>
+<span>Saved</span>
+</button>
+
+<button id="memoryMenuBtn">
+<i class="fa-solid fa-clock-rotate-left"></i>
+<span>Memories</span>
+</button>
+
+<button id="groupsMenuBtn">
+<i class="fa-solid fa-users"></i>
+<span>Groups</span>
+</button>
+
+<button id="marketMenuBtn">
+<i class="fa-solid fa-shop"></i>
+<span>Marketplace</span>
+</button>
+
+<button id="reelsMenuBtn">
+<i class="fa-solid fa-circle-play"></i>
+<span>Reels</span>
+</button>
+
+<button id="settingsMenuBtn">
+<i class="fa-solid fa-gear"></i>
+<span>Settings</span>
+</button>
+
+<button id="helpMenuBtn">
+<i class="fa-solid fa-circle-question"></i>
+<span>Help & Support</span>
+</button>
+
+<button id="logoutBtn">
+<i class="fa-solid fa-right-from-bracket"></i>
+<span>Logout</span>
+</button>
+
+<!-- শুধু Admin Account-এর জন্য -->
+
+<div id="adminPanelButton">
+
+<button id="adminMenuBtn">
+
+<i class="fa-solid fa-shield-halved"></i>
+
+<span>Admin Panel</span>
+
+</button>
+
+</div>
+
+</div>
+
+</aside>
+<!-- ========================= -->
+<!-- Home Page -->
+<!-- ========================= -->
+
+<section id="homePage">
+
+<!-- Create Post -->
+
+<div id="createPostCard">
+
+<div id="createPostTop">
+
+<img id="myProfilePhoto">
+
+<div id="postInputBox">
+
+<input
+type="text"
+id="postText"
+placeholder="What's on your mind?">
+
+<button id="publishPostBtn">
+
+Post
+
+</button>
+
+</div>
+
+</div>
+
+<div id="createPostBottom">
+
+<button id="liveBtn">
+
+<i class="fa-solid fa-video"></i>
+
+<span>Live</span>
+
+</button>
+
+<button id="photoBtn">
+
+<i class="fa-solid fa-image"></i>
+
+<span>Photo</span>
+
+</button>
+
+<button id="feelingBtn">
+
+<i class="fa-solid fa-face-smile"></i>
+
+<span>Feeling</span>
+
+</button>
+
+</div>
+
+</div>
+
+<!-- Stories -->
+
+<section id="storySection">
+
+<div id="createStoryCard">
+
+<img id="myStoryPhoto">
+
+<button id="addStoryBtn">
+
+<i class="fa-solid fa-plus"></i>
+
+</button>
+
+<p>Create Story</p>
+
+</div>
+
+<!-- Firebase থেকে Story এখানে Load হবে -->
+
+<div id="storyContainer">
+
+</div>
+
+</section>
+
+<!-- Feed -->
+
+<section id="feedSection">
+
+<!-- Firebase থেকে সব Post এখানে Load হবে -->
+
+<div id="feedContainer">
+
+</div>
+
+</section>
+
+</section>
+
+<!-- ========================= -->
+<!-- Friends Page -->
+<!-- ========================= -->
+
+<section id="friendsPage">
+
+<div class="pageHeader">
+
+<h2>Friends</h2>
+
+</div>
+
+<div id="friendRequestContainer"></div>
+
+<div id="friendsContainer"></div>
+
+</section>
+
+<!-- ========================= -->
 <!-- Messenger -->
+<!-- ========================= -->
 
-<section id="messagePage"></section>
+<section id="messagePage">
 
-<!-- Search -->
+<div class="pageHeader">
 
-<section id="searchPage"></section>
+<h2>Messenger</h2>
+
+</div>
+
+<div id="chatList"></div>
+
+<div id="chatBox"></div>
+
+</section>
+
+<!-- ========================= -->
+<!-- Notifications -->
+<!-- ========================= -->
+
+<section id="notificationPage">
+
+<div class="pageHeader">
+
+<h2>Notifications</h2>
+
+</div>
+
+<div id="notificationContainer"></div>
+
+</section>
+
+<!-- ========================= -->
+<!-- Reels -->
+<!-- ========================= -->
+
+<section id="reelsPage">
+
+<div class="pageHeader">
+
+<h2>Reels</h2>
+
+</div>
+
+<div id="reelsContainer"></div>
+
+</section>
+
+<!-- ========================= -->
+<!-- Marketplace -->
+<!-- ========================= -->
+
+<section id="marketplacePage">
+
+<div class="pageHeader">
+
+<h2>Marketplace</h2>
+
+</div>
+
+<button id="sellItemBtn">
+
+Sell Item
+
+</button>
+
+<div id="marketplaceContainer"></div>
+
+</section>
+<!-- ========================= -->
+<!-- Search Page -->
+<!-- ========================= -->
+
+<section id="searchPage">
+
+<div class="pageHeader">
+
+<h2>Search</h2>
+
+</div>
+
+<input
+type="search"
+id="globalSearchInput"
+placeholder="Search people, posts, pages...">
+
+<div id="searchResultContainer"></div>
+
+</section>
+
+<!-- ========================= -->
+<!-- Profile Page -->
+<!-- ========================= -->
+
+<section id="profilePage">
+
+<!-- Cover -->
+
+<div id="coverSection">
+
+<img id="coverPhoto">
+
+<button id="changeCoverBtn">
+
+<i class="fa-solid fa-camera"></i>
+
+</button>
+
+</div>
 
 <!-- Profile -->
 
-<section id="profilePage"></section>
+<div id="profileHeader">
 
+<div id="profilePhotoBox">
+
+<img id="profilePhoto">
+
+<button id="changeProfileBtn">
+
+<i class="fa-solid fa-camera"></i>
+
+</button>
+
+</div>
+
+<h2 id="profileName"></h2>
+
+<p id="profileBio"></p>
+
+<div id="profileAction">
+
+<button id="editProfileBtn">
+
+Edit Profile
+
+</button>
+
+<button id="shareProfileBtn">
+
+Share Profile
+
+</button>
+
+</div>
+
+</div>
+
+<!-- Statistics -->
+
+<div id="profileStats">
+
+<div>
+
+<h3 id="totalPosts">0</h3>
+
+<p>Posts</p>
+
+</div>
+
+<div>
+
+<h3 id="totalFollowers">0</h3>
+
+<p>Followers</p>
+
+</div>
+
+<div>
+
+<h3 id="totalFollowing">0</h3>
+
+<p>Following</p>
+
+</div>
+
+</div>
+
+<!-- Tabs -->
+
+<div id="profileTabs">
+
+<button class="profileTab active" data-tab="posts">
+
+Posts
+
+</button>
+
+<button class="profileTab" data-tab="photos">
+
+Photos
+
+</button>
+
+<button class="profileTab" data-tab="reels">
+
+Reels
+
+</button>
+
+<button class="profileTab" data-tab="friends">
+
+Friends
+
+</button>
+
+<button class="profileTab" data-tab="about">
+
+About
+
+</button>
+
+</div>
+
+<!-- Tab Content -->
+
+<div id="profileContent">
+
+<div id="profilePosts"></div>
+
+<div id="profilePhotos"></div>
+
+<div id="profileReels"></div>
+
+<div id="profileFriends"></div>
+
+<div id="profileAbout"></div>
+
+</div>
+
+</section>
+
+<!-- ========================= -->
 <!-- Settings -->
+<!-- ========================= -->
 
-<section id="settingsPage"></section>
+<section id="settingsPage">
 
+<div class="pageHeader">
+
+<h2>Settings</h2>
+
+</div>
+
+<div id="settingsList">
+
+<button id="profileSettingsBtn">Profile Settings</button>
+
+<button id="privacyBtn">Privacy</button>
+
+<button id="securityBtn">Security</button>
+
+<button id="changePasswordBtn">Change Password</button>
+
+<button id="notificationSettingsBtn">Notifications</button>
+
+<button id="languageBtn">Language</button>
+
+<button id="themeBtn">Theme</button>
+
+<button id="blockedUsersBtn">Blocked Users</button>
+
+<button id="downloadDataBtn">Download My Data</button>
+
+<button id="deleteAccountBtn">Delete Account</button>
+
+</div>
+
+</section>
+
+<!-- ========================= -->
 <!-- Admin Panel -->
+<!-- Only Admin Email Can Open -->
+<!-- ========================= -->
 
-<section id="adminPage"></section>
+<section id="adminPage">
 
+<div class="pageHeader">
+
+<h2>Admin Panel</h2>
+
+</div>
+
+<div id="adminDashboard">
+
+<button id="manageUsersBtn">Manage Users</button>
+
+<button id="managePostsBtn">Manage Posts</button>
+
+<button id="manageReportsBtn">Reports</button>
+
+<button id="verifyUsersBtn">Verify Users</button>
+
+<button id="announcementBtn">Announcement</button>
+
+<button id="appSettingsBtn">App Settings</button>
+
+<button id="adminLogoutBtn">Exit Admin Panel</button>
+
+</div>
+
+</section>
 <!-- Bottom Navigation -->
 
 <nav id="bottomNav"></nav>
