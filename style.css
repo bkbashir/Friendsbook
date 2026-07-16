@@ -987,3 +987,182 @@ font-weight:600;
 padding:15px;
 
 }
+/* ========================= */
+/* Menu Drawer */
+/* ========================= */
+
+#menuOverlay{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:100%;
+
+height:100%;
+
+background:rgba(0,0,0,.45);
+
+display:none;
+
+z-index:1998;
+
+}
+
+#menuDrawer{
+
+position:fixed;
+
+top:0;
+
+left:-320px;
+
+width:300px;
+
+height:100%;
+
+background:#242526;
+
+overflow-y:auto;
+
+transition:.35s;
+
+z-index:1999;
+
+box-shadow:4px 0 15px rgba(0,0,0,.35);
+
+}
+
+#menuDrawer.active{
+
+left:0;
+
+}
+
+#menuOverlay.active{
+
+display:block;
+
+}
+
+/* ========================= */
+/* Profile */
+/* ========================= */
+
+.menuProfile{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+padding:18px;
+
+border-bottom:1px solid #3A3B3C;
+
+}
+
+#menuProfileImg{
+
+width:55px;
+
+height:55px;
+
+border-radius:50%;
+
+object-fit:cover;
+
+}
+
+.menuProfile h3{
+
+font-size:18px;
+
+color:#fff;
+
+}
+
+.menuProfile p{
+
+font-size:13px;
+
+color:#B0B3B8;
+
+margin-top:4px;
+
+}
+
+/* ========================= */
+/* Menu List */
+/* ========================= */
+
+.menuList{
+
+padding:10px;
+
+}
+
+.menuList button{
+
+width:100%;
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+padding:14px;
+
+margin-bottom:8px;
+
+background:none;
+
+border:none;
+
+border-radius:12px;
+
+color:#fff;
+
+font-size:15px;
+
+cursor:pointer;
+
+transition:.2s;
+
+text-align:left;
+
+}
+
+.menuList button:hover{
+
+background:#3A3B3C;
+
+}
+
+.menuList i{
+
+width:24px;
+
+font-size:20px;
+
+color:#1877F2;
+
+text-align:center;
+
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+#menuDrawer{
+
+width:280px;
+
+}
+
+}
