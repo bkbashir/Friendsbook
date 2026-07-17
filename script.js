@@ -1,4 +1,4 @@
-alert("script.js loaded");
+
 /*==================================
 Friendsbook 2026
 Core System
@@ -213,7 +213,6 @@ document.getElementById("forgotPage").style.display="none";
 
 document.getElementById("mainPage").style.display="block";
 
-  await loadMyProfile();
   
 if(user.email===ADMIN_EMAIL){
 
