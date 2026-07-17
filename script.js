@@ -204,7 +204,6 @@ return;
 
 currentUser=user;
 
-  await loadMyProfile();
 document.getElementById("loginPage").style.display="none";
 
 document.getElementById("signupPage").style.display="none";
@@ -213,6 +212,8 @@ document.getElementById("forgotPage").style.display="none";
 
 document.getElementById("mainPage").style.display="block";
 
+  await loadMyProfile();
+  
 if(user.email===ADMIN_EMAIL){
 
 document.getElementById("adminPanelButton").style.display="block";
