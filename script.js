@@ -426,7 +426,7 @@ Load User Profile
 ==================================*/
 
 async function loadMyProfile(){
-alert("loadMyProfile started");
+
 if(!currentUser) return;
 
 try{
