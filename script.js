@@ -3,7 +3,6 @@ Friendsbook 2026
 Core System
 ==================================*/
 
-const ADMIN_EMAIL="bashirahmed0052@gmail.com";
 
 /*==================================
 Pages
@@ -67,7 +66,7 @@ pages[name].style.display="block";
 Default Page
 ==================================*/
 
-openPage("home");
+// openPage("home");
 
 /*==================================
 Bottom Navigation
