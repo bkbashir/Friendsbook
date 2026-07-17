@@ -204,6 +204,7 @@ return;
 
 currentUser=user;
 
+  await loadMyProfile();
 document.getElementById("loginPage").style.display="none";
 
 document.getElementById("signupPage").style.display="none";
