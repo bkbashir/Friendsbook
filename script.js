@@ -2090,3 +2090,377 @@ Start Reels
 ==================================*/
 
 loadReels();
+/*==================================
+Marketplace
+==================================*/
+
+/* Sell Product */
+
+sellItemBtn.onclick = async ()=>{
+
+if(!currentUser) return;
+
+const name = prompt("Product Name");
+
+if(!name) return;
+
+const price = prompt("Price");
+
+if(!price) return;
+
+const image = prompt("Product Image URL");
+
+await db.collection("marketplace").add({
+
+uid:currentUser.uid,
+
+seller:currentUser.email,
+
+product:name,
+
+price:price,
+
+image:image||"",
+
+createdAt:firebase.firestore.FieldValue.serverTimestamp()
+
+});
+
+showToast("Product Listed");
+
+};
+
+/*==================================
+Load Marketplace
+==================================*/
+
+function loadMarketplace(){
+
+db.collection("marketplace")
+
+.orderBy("createdAt","desc")
+
+.onSnapshot((snapshot)=>{
+
+marketplaceContainer.innerHTML="";
+
+snapshot.forEach((doc)=>{
+
+const item=doc.data();
+
+marketplaceContainer.innerHTML+=`
+
+<div class="listCard">
+
+<img src="${item.image||''}">
+
+<div style="flex:1">
+
+<h3>${item.product}</h3>
+
+<p>৳ ${item.price}</p>
+
+</div>
+
+<button
+
+class="primaryBtn"
+
+onclick="buyProduct('${doc.id}')">
+
+Buy
+
+</button>
+
+</div>
+
+`;
+
+});
+
+});
+
+}
+
+/*==================================
+Buy Product
+==================================*/
+
+async function buyProduct(id){
+
+showToast("Purchase request sent.");
+
+}
+
+/*==================================
+Start Marketplace
+==================================*/
+
+loadMarketplace();
+/*==================================
+Admin Panel
+==================================*/
+
+/* Only Admin */
+
+function isAdmin(){
+
+return currentUser &&
+currentUser.email===ADMIN_EMAIL;
+
+}
+
+/*==================================
+Load All Users
+==================================*/
+
+async function loadAdminUsers(){
+
+if(!isAdmin()) return;
+
+const snapshot=await db.collection("users").get();
+
+const adminUsers=document.getElementById("adminUsers");
+
+if(!adminUsers) return;
+
+adminUsers.innerHTML="";
+
+snapshot.forEach((doc)=>{
+
+const user=doc.data();
+
+adminUsers.innerHTML+=`
+
+<div class="listCard">
+
+<div style="flex:1">
+
+<h3>${user.name}</h3>
+
+<p>${user.email}</p>
+
+</div>
+
+<button class="secondaryBtn"
+
+onclick="banUser('${doc.id}')">
+
+Ban
+
+</button>
+
+<button class="primaryBtn"
+
+onclick="deleteUser('${doc.id}')">
+
+Delete
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+/*==================================
+Delete User
+==================================*/
+
+async function deleteUser(uid){
+
+if(!confirm("Delete this user?")) return;
+
+await db.collection("users")
+
+.doc(uid)
+
+.delete();
+
+showToast("User Deleted");
+
+loadAdminUsers();
+
+}
+
+/*==================================
+Ban User
+==================================*/
+
+async function banUser(uid){
+
+await db.collection("users")
+
+.doc(uid)
+
+.update({
+
+banned:true
+
+});
+
+showToast("User Banned");
+
+}
+
+/*==================================
+Delete Post
+==================================*/
+
+async function adminDeletePost(postID){
+
+if(!confirm("Delete this post?")) return;
+
+await db.collection("posts")
+
+.doc(postID)
+
+.delete();
+
+showToast("Post Deleted");
+
+}
+
+/*==================================
+Announcement
+==================================*/
+
+async function publishAnnouncement(){
+
+const text=prompt("Write Announcement");
+
+if(!text) return;
+
+await db.collection("announcement")
+
+.add({
+
+text:text,
+
+time:firebase.firestore.FieldValue.serverTimestamp(),
+
+admin:currentUser.email
+
+});
+
+showToast("Announcement Published");
+
+}
+
+/*==================================
+Open Admin
+==================================*/
+
+if(document.getElementById("announcementBtn")){
+
+announcementBtn.onclick=()=>{
+
+publishAnnouncement();
+
+};
+
+}
+
+/*==================================
+Start Admin
+==================================*/
+
+loadAdminUsers();
+/*==================================
+Final Initialization
+==================================*/
+
+window.onload = function(){
+
+hidePages();
+
+openPage("home");
+
+loadPosts();
+
+loadStories();
+
+loadFriends();
+
+loadMessenger();
+
+loadNotifications();
+
+loadReels();
+
+loadMarketplace();
+
+if(currentUser){
+
+loadMyProfile();
+
+}
+
+};
+
+/*==================================
+Security Check
+==================================*/
+
+auth.onAuthStateChanged(async(user)=>{
+
+if(!user){
+
+location.reload();
+
+return;
+
+}
+
+await user.reload();
+
+if(!user.emailVerified){
+
+alert("Please verify your email.");
+
+await auth.signOut();
+
+return;
+
+}
+
+});
+
+/*==================================
+Online Status
+==================================*/
+
+window.addEventListener("online",()=>{
+
+showToast("Internet Connected");
+
+});
+
+window.addEventListener("offline",()=>{
+
+showToast("No Internet");
+
+});
+
+/*==================================
+Prevent Double Click
+==================================*/
+
+document.querySelectorAll("button").forEach(btn=>{
+
+btn.addEventListener("dblclick",(e)=>{
+
+e.preventDefault();
+
+});
+
+});
+
+/*==================================
+End Friendsbook 2026
+==================================*/
+
+console.log("Friendsbook 2026 Ready");
