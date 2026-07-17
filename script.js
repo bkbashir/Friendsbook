@@ -1298,3 +1298,795 @@ Start Friends
 ==================================*/
 
 loadFriends();
+
+/*==================================
+Messenger
+==================================*/
+
+let chatUserUID = null;
+
+/*==================================
+Open Chat
+==================================*/
+
+async function openChat(friendUID){
+
+chatUserUID = friendUID;
+
+chatBox.innerHTML = "";
+
+db.collection("messages")
+
+.orderBy("time")
+
+.onSnapshot((snapshot)=>{
+
+chatBox.innerHTML = "";
+
+snapshot.forEach((doc)=>{
+
+const msg = doc.data();
+
+const room1 = currentUser.uid+"_"+friendUID;
+
+const room2 = friendUID+"_"+currentUser.uid;
+
+if(msg.room===room1 || msg.room===room2){
+
+chatBox.innerHTML += `
+
+<div class="${
+msg.sender===currentUser.uid
+?
+'myMessage'
+:
+'friendMessage'
+}">
+
+${msg.text}
+
+</div>
+
+`;
+
+}
+
+});
+
+chatBox.scrollTop = chatBox.scrollHeight;
+
+});
+
+}
+
+/*==================================
+Send Message
+==================================*/
+
+async function sendMessage(){
+
+if(!chatUserUID)return;
+
+const text = messageInput.value.trim();
+
+if(text==="")return;
+
+await db.collection("messages").add({
+
+room:currentUser.uid+"_"+chatUserUID,
+
+sender:currentUser.uid,
+
+receiver:chatUserUID,
+
+text:text,
+
+time:firebase.firestore.FieldValue.serverTimestamp()
+
+});
+
+messageInput.value="";
+
+}
+
+/*==================================
+Message Button
+==================================*/
+
+sendMessageBtn.onclick=()=>{
+
+sendMessage();
+
+};
+
+/*==================================
+Load Friend List
+==================================*/
+
+function loadMessenger(){
+
+db.collection("users")
+
+.doc(currentUser.uid)
+
+.collection("friends")
+
+.onSnapshot(async(snapshot)=>{
+
+chatList.innerHTML="";
+
+for(const doc of snapshot.docs){
+
+const user = await db.collection("users")
+
+.doc(doc.id)
+
+.get();
+
+const data = user.data();
+
+chatList.innerHTML += `
+
+<div class="listCard"
+
+onclick="openChat('${doc.id}')">
+
+<img src="${data.profilePhoto||''}">
+
+<div>
+
+<h3>${data.name}</h3>
+
+<p>Tap to chat</p>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+});
+
+}
+
+loadMessenger();
+/*==================================
+Search Users
+==================================*/
+
+globalSearchInput.onkeyup = async function () {
+
+const keyword = this.value.trim().toLowerCase();
+
+searchResultContainer.innerHTML = "";
+
+if(keyword==="") return;
+
+const snapshot = await db.collection("users").get();
+
+snapshot.forEach((doc)=>{
+
+const user = doc.data();
+
+if(user.uid===currentUser.uid) return;
+
+if(user.name.toLowerCase().includes(keyword)){
+
+searchResultContainer.innerHTML += `
+
+<div class="listCard">
+
+<img src="${user.profilePhoto || ''}">
+
+<div style="flex:1;">
+
+<h3>${user.name}</h3>
+
+<p>${user.bio || "No Bio Yet"}</p>
+
+</div>
+
+<button
+
+class="primaryBtn"
+
+onclick="sendFriendRequest('${user.uid}')">
+
+Add Friend
+
+</button>
+
+<button
+
+class="secondaryBtn"
+
+onclick="viewUserProfile('${user.uid}')">
+
+View
+
+</button>
+
+</div>
+
+`;
+
+}
+
+});
+
+};
+
+/*==================================
+View User Profile
+==================================*/
+
+async function viewUserProfile(uid){
+
+const doc = await db.collection("users")
+
+.doc(uid)
+
+.get();
+
+if(!doc.exists) return;
+
+const user = doc.data();
+
+openPage("profile");
+
+profileName.innerHTML = user.name;
+
+profileBio.innerHTML = user.bio || "No Bio Yet";
+
+totalPosts.innerHTML = user.posts || 0;
+
+totalFollowers.innerHTML = user.followers || 0;
+
+totalFollowing.innerHTML = user.following || 0;
+
+if(user.profilePhoto){
+
+profilePhoto.src = user.profilePhoto;
+
+}
+
+if(user.coverPhoto){
+
+coverPhoto.src = user.coverPhoto;
+
+}
+
+}
+/*==================================
+Notifications
+==================================*/
+
+async function addNotification(uid,type,text){
+
+if(uid===currentUser.uid) return;
+
+await db.collection("notifications").add({
+
+uid:uid,
+
+type:type,
+
+text:text,
+
+seen:false,
+
+time:firebase.firestore.FieldValue.serverTimestamp()
+
+});
+
+}
+
+/*==================================
+Load Notifications
+==================================*/
+
+function loadNotifications(){
+
+if(!currentUser) return;
+
+db.collection("notifications")
+
+.where("uid","==",currentUser.uid)
+
+.orderBy("time","desc")
+
+.onSnapshot((snapshot)=>{
+
+notificationContainer.innerHTML="";
+
+snapshot.forEach((doc)=>{
+
+const notify=doc.data();
+
+notificationContainer.innerHTML+=`
+
+<div class="listCard">
+
+<div style="flex:1">
+
+<h3>${notify.type}</h3>
+
+<p>${notify.text}</p>
+
+</div>
+
+<button
+
+class="secondaryBtn"
+
+onclick="markNotificationSeen('${doc.id}')">
+
+OK
+
+</button>
+
+</div>
+
+`;
+
+});
+
+});
+
+}
+
+/*==================================
+Seen Notification
+==================================*/
+
+async function markNotificationSeen(id){
+
+await db.collection("notifications")
+
+.doc(id)
+
+.update({
+
+seen:true
+
+});
+
+}
+
+/*==================================
+Notification Examples
+==================================*/
+
+async function notifyLike(postOwner){
+
+await addNotification(
+
+postOwner,
+
+"👍 Like",
+
+currentUser.email+" liked your post."
+
+);
+
+}
+
+async function notifyComment(postOwner){
+
+await addNotification(
+
+postOwner,
+
+"💬 Comment",
+
+currentUser.email+" commented on your post."
+
+);
+
+}
+
+async function notifyShare(postOwner){
+
+await addNotification(
+
+postOwner,
+
+"📤 Share",
+
+currentUser.email+" shared your post."
+
+);
+
+}
+
+async function notifyFriend(friendUID){
+
+await addNotification(
+
+friendUID,
+
+"👥 Friend Request",
+
+currentUser.email+" sent you a friend request."
+
+);
+
+}
+
+/*==================================
+Start Notification
+==================================*/
+
+loadNotifications();
+/*==================================
+Settings System
+==================================*/
+
+/* Edit Bio */
+
+editProfileBtn.onclick = async ()=>{
+
+if(!currentUser) return;
+
+const bio = prompt("Write your bio",profileBio.innerText);
+
+if(bio===null) return;
+
+await db.collection("users")
+
+.doc(currentUser.uid)
+
+.update({
+
+bio:bio
+
+});
+
+profileBio.innerText=bio;
+
+showToast("Bio Updated");
+
+};
+
+/*==================================
+Change Password
+==================================*/
+
+changePasswordBtn.onclick=async()=>{
+
+const email=currentUser.email;
+
+await auth.sendPasswordResetEmail(email);
+
+showToast("Password reset link sent to your email.");
+
+};
+
+/*==================================
+Logout
+==================================*/
+
+logoutBtn.onclick=()=>{
+
+auth.signOut();
+
+showToast("Logged Out");
+
+};
+
+/*==================================
+Delete Account
+==================================*/
+
+deleteAccountBtn.onclick=async()=>{
+
+const ok=confirm(
+
+"Delete your Friendsbook account permanently?"
+
+);
+
+if(!ok)return;
+
+try{
+
+await db.collection("users")
+
+.doc(currentUser.uid)
+
+.delete();
+
+await currentUser.delete();
+
+showToast("Account Deleted");
+
+}catch(err){
+
+alert(
+
+"Please login again before deleting account."
+
+);
+
+}
+
+};
+
+/*==================================
+Open Settings
+==================================*/
+
+settingsMenuBtn.onclick=()=>{
+
+openPage("settings");
+
+};
+
+/*==================================
+Open Profile
+==================================*/
+
+drawerProfile.onclick=()=>{
+
+openPage("profile");
+
+};
+
+/*==================================
+Open Admin
+==================================*/
+
+adminMenuBtn.onclick=()=>{
+
+if(currentUser.email===ADMIN_EMAIL){
+
+openPage("admin");
+
+}
+
+};
+/*==================================
+Reels Upload
+==================================*/
+
+async function uploadReel(){
+
+if(!currentUser) return;
+
+const file = reelVideoInput.files[0];
+
+if(!file){
+
+showToast("Select a video first.");
+
+return;
+
+}
+
+try{
+
+const ref = storage.ref(
+
+"reels/"+currentUser.uid+"/"+Date.now()
+
+);
+
+await ref.put(file);
+
+const url = await ref.getDownloadURL();
+
+const userDoc = await db.collection("users")
+
+.doc(currentUser.uid)
+
+.get();
+
+const user = userDoc.data();
+
+await db.collection("reels").add({
+
+uid:currentUser.uid,
+
+name:user.name,
+
+profilePhoto:user.profilePhoto||"",
+
+video:url,
+
+likes:0,
+
+comments:0,
+
+shares:0,
+
+time:firebase.firestore.FieldValue.serverTimestamp()
+
+});
+
+showToast("Reel Uploaded");
+
+reelVideoInput.value="";
+
+}catch(err){
+
+alert(err.message);
+
+}
+
+}
+
+/*==================================
+Upload Button
+==================================*/
+
+document.getElementById("reelsMenuBtn").ondblclick=()=>{
+
+reelVideoInput.click();
+
+};
+
+reelVideoInput.onchange=()=>{
+
+uploadReel();
+
+};
+
+/*==================================
+Load Reels
+==================================*/
+
+function loadReels(){
+
+db.collection("reels")
+
+.orderBy("time","desc")
+
+.onSnapshot((snapshot)=>{
+
+reelsContainer.innerHTML="";
+
+snapshot.forEach((doc)=>{
+
+const reel = doc.data();
+
+reelsContainer.innerHTML += `
+
+<div class="reelCard">
+
+<div class="postHeader">
+
+<div class="postUser">
+
+<img src="${reel.profilePhoto||''}">
+
+<div>
+
+<div class="postName">
+
+${reel.name}
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<video
+
+class="reelVideo"
+
+src="${reel.video}"
+
+controls
+
+playsinline
+
+autoplay
+
+loop
+
+muted
+
+></video>
+
+<div class="postAction">
+
+<button onclick="likeReel('${doc.id}')">
+
+👍 ${reel.likes||0}
+
+</button>
+
+<button onclick="commentReel('${doc.id}')">
+
+💬 ${reel.comments||0}
+
+</button>
+
+<button onclick="shareReel('${doc.id}')">
+
+↗ ${reel.shares||0}
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+});
+
+}
+
+/*==================================
+Like Reel
+==================================*/
+
+async function likeReel(id){
+
+await db.collection("reels")
+
+.doc(id)
+
+.update({
+
+likes:firebase.firestore.FieldValue.increment(1)
+
+});
+
+}
+
+/*==================================
+Comment Reel
+==================================*/
+
+async function commentReel(id){
+
+const text = prompt("Write comment");
+
+if(!text) return;
+
+await db.collection("reels")
+
+.doc(id)
+
+.update({
+
+comments:firebase.firestore.FieldValue.increment(1)
+
+});
+
+}
+
+/*==================================
+Share Reel
+==================================*/
+
+async function shareReel(id){
+
+await db.collection("reels")
+
+.doc(id)
+
+.update({
+
+shares:firebase.firestore.FieldValue.increment(1)
+
+});
+
+showToast("Reel Shared");
+
+}
+
+/*==================================
+Start Reels
+==================================*/
+
+loadReels();
