@@ -1,94 +1,150 @@
-// ============================
-// Friendsbook 2026
-// Version 1.0
-// ============================
+/*==================================
+Friendsbook 2026
+Core System
+==================================*/
 
-// Loader
+const ADMIN_EMAIL="bashirahmed0052@gmail.com";
 
-window.onload=()=>{
+/*==================================
+Pages
+==================================*/
 
-setTimeout(()=>{
+const pages={
 
-document.getElementById("loader").style.display="none";
+home:document.getElementById("homePage"),
 
-document.getElementById("app").style.display="block";
+friends:document.getElementById("friendsPage"),
 
-},1000);
+message:document.getElementById("messagePage"),
+
+notify:document.getElementById("notificationPage"),
+
+reels:document.getElementById("reelsPage"),
+
+market:document.getElementById("marketplacePage"),
+
+search:document.getElementById("searchPage"),
+
+profile:document.getElementById("profilePage"),
+
+settings:document.getElementById("settingsPage"),
+
+admin:document.getElementById("adminPage")
 
 };
 
-// ============================
-// Drawer
-// ============================
+/*==================================
+Hide All
+==================================*/
 
-const menuBtn=document.getElementById("menuBtn");
+function hidePages(){
 
-const drawer=document.getElementById("drawer");
+Object.values(pages).forEach(page=>{
 
-let drawerOpen=false;
+if(page) page.style.display="none";
 
-menuBtn.onclick=()=>{
-
-if(drawerOpen){
-
-drawer.style.left="-320px";
-
-drawerOpen=false;
-
-}else{
-
-drawer.style.left="0";
-
-drawerOpen=true;
+});
 
 }
 
+/*==================================
+Open Page
+==================================*/
+
+function openPage(name){
+
+hidePages();
+
+if(pages[name]){
+
+pages[name].style.display="block";
+
+}
+
+}
+
+/*==================================
+Default Page
+==================================*/
+
+openPage("home");
+
+/*==================================
+Bottom Navigation
+==================================*/
+
+const navHome=document.getElementById("navHome");
+
+const navFriends=document.getElementById("navFriends");
+
+const navReels=document.getElementById("navReels");
+
+const navMarketplace=document.getElementById("navMarketplace");
+
+const navProfile=document.getElementById("navProfile");
+
+function clearNav(){
+
+document.querySelectorAll("#bottomNav button")
+
+.forEach(btn=>btn.classList.remove("active"));
+
+}
+
+navHome.onclick=()=>{
+
+clearNav();
+
+navHome.classList.add("active");
+
+openPage("home");
+
 };
 
-// ============================
-// Bottom Navigation
-// ============================
+navFriends.onclick=()=>{
 
-const navBtns=document.querySelectorAll(".bottomNav button");
+clearNav();
 
-navBtns.forEach(btn=>{
+navFriends.classList.add("active");
 
-btn.onclick=()=>{
-
-navBtns.forEach(item=>{
-
-item.classList.remove("active");
-
-});
-
-btn.classList.add("active");
+openPage("friends");
 
 };
 
-});
+navReels.onclick=()=>{
 
-// Default Active
+clearNav();
 
-document.getElementById("homeBtn").classList.add("active");
+navReels.classList.add("active");
 
-// ============================
-// Coming Features
-// ============================
-
-createBtn.onclick=()=>{
-
-console.log("Create");
+openPage("reels");
 
 };
 
-searchBtn.onclick=()=>{
+navMarketplace.onclick=()=>{
 
-console.log("Search");
+clearNav();
+
+navMarketplace.classList.add("active");
+
+openPage("market");
+
+};
+
+navProfile.onclick=()=>{
+
+clearNav();
+
+navProfile.classList.add("active");
+
+openPage("profile");
 
 };
 
-messageBtn.onclick=()=>{
+navHome.classList.add("active");
 
-console.log("Messenger");
+/*==================================
+Current User
+==================================*/
 
-};
+let currentUser=null;
