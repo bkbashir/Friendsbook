@@ -1700,3 +1700,24 @@ border-radius:50%;
 object-fit:cover;
 
   }
+#loginPage,
+#signupPage,
+#forgotPage{
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#f0f2f5;
+}
+
+#loginPage .card,
+#signupPage .card,
+#forgotPage .card{
+    width:380px;
+    max-width:95%;
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 4px 15px rgba(0,0,0,.15);
+}
