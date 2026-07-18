@@ -98,6 +98,49 @@ background:var(--bg);
 
   }
 /*==================================
+Login / Signup
+==================================*/
+
+#loginPage,
+#signupPage,
+#forgotPage{
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+background:#111827;
+padding:20px;
+}
+
+.authCard{
+width:100%;
+max-width:420px;
+background:#1B2333;
+padding:25px;
+border-radius:16px;
+box-shadow:0 0 20px rgba(0,0,0,.35);
+}
+
+.authCard input,
+.authCard select{
+width:100%;
+padding:12px;
+margin:8px 0;
+background:#232D40;
+border-radius:10px;
+color:#fff;
+}
+
+.authCard button{
+width:100%;
+padding:12px;
+margin-top:10px;
+background:#675CFF;
+color:#fff;
+border-radius:10px;
+font-weight:bold;
+}
+/*==================================
 Header
 ==================================*/
 
