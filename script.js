@@ -2472,3 +2472,38 @@ const drawer = document.getElementById("drawer");
 menuBtn.addEventListener("click", function () {
     drawer.classList.toggle("active");
 });
+/*=========================
+Drawer
+=========================*/
+
+const menuBtn = document.getElementById("menuBtn");
+const drawer = document.getElementById("drawer");
+
+if (menuBtn && drawer) {
+    menuBtn.onclick = function () {
+        drawer.classList.toggle("active");
+    };
+}
+
+/* Drawer Menu */
+
+const friendsMenuBtn = document.getElementById("friendsMenuBtn");
+const marketMenuBtn = document.getElementById("marketMenuBtn");
+const reelsMenuBtn = document.getElementById("reelsMenuBtn");
+const settingsMenuBtn = document.getElementById("settingsMenuBtn");
+
+if(friendsMenuBtn){
+    friendsMenuBtn.onclick = ()=>openPage("friends");
+}
+
+if(marketMenuBtn){
+    marketMenuBtn.onclick = ()=>openPage("market");
+}
+
+if(reelsMenuBtn){
+    reelsMenuBtn.onclick = ()=>openPage("reels");
+}
+
+if(settingsMenuBtn){
+    settingsMenuBtn.onclick = ()=>openPage("settings");
+}
