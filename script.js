@@ -230,8 +230,8 @@ signupForm.addEventListener("submit", async (e) => {
             gender:gender,
 
             bio:"",
-            profilePhoto:"",
-            coverPhoto:"",
+            profile:"",
+            cover:"",
 
             followers:0,
             following:0,
