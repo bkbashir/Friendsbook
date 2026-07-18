@@ -1,4 +1,4 @@
-
+alert("Script Start");
 /*==================================
 Friendsbook 2026
 Core System
