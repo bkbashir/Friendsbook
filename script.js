@@ -315,60 +315,36 @@ async function loadMyProfile() {
 
     try {
 
-        const doc = await db.collection("users")
-            .doc(currentUser.uid)
-            .get();
+        const doc = await db.collection("users").doc(currentUser.uid).get();
 
         if (!doc.exists) return;
 
         const data = doc.data();
 
-        /* Name */
+        // Name
+        document.getElementById("profileName").textContent = data.name || "";
 
-        if (document.getElementById("profileName"))
-            document.getElementById("profileName").textContent = data.name || "";
+        // Bio
+        document.getElementById("profileBio").textContent = data.bio || "";
 
-        if (document.getElementById("drawerProfileName"))
-            document.getElementById("drawerProfileName").textContent = data.name || "";
-
-        /* Bio */
-
-        if (document.getElementById("profileBio"))
-            document.getElementById("profileBio").textContent = data.bio || "";
-
-        /* Profile Photo */
-
-        if (data.profile && data.profile !== "") {
-
-            if (document.getElementById("profilePhoto"))
-                document.getElementById("profilePhoto").src = data.profile;
-
-            if (document.getElementById("drawerProfilePhoto"))
-                document.getElementById("drawerProfilePhoto").src = data.profile;
-
-            if (document.getElementById("myProfilePhoto"))
-                document.getElementById("myProfilePhoto").src = data.profile;
-
-            if (document.getElementById("myStoryPhoto"))
-                document.getElementById("myStoryPhoto").src = data.profile;
-
+        // Cover
+        if (data.cover) {
+            document.getElementById("coverPhoto").src = data.cover;
         }
 
-        /* Cover Photo */
+        // Profile
+        if (data.profile) {
+            document.getElementById("profilePhoto").src = data.profile;
 
-        if (data.cover && data.cover !== "") {
-
-            if (document.getElementById("coverPhoto"))
-                document.getElementById("coverPhoto").src = data.cover;
-
+            const drawer = document.getElementById("drawerProfilePhoto");
+            if (drawer) drawer.src = data.profile;
         }
 
-        console.log("Profile Loaded Successfully");
+        // Stats
+        document.getElementById("totalFollowers").textContent = data.followers || 0;
+        document.getElementById("totalFollowing").textContent = data.following || 0;
 
-    } catch (err) {
-
-        console.error(err);
-
+    } catch (e) {
+        console.log(e);
     }
-
 }
