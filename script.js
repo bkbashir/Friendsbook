@@ -2465,3 +2465,10 @@ End Friendsbook 2026
 ==================================*/
 
 console.log("Friendsbook 2026 Ready");
+
+const menuBtn = document.getElementById("menuBtn");
+const drawer = document.getElementById("drawer");
+
+menuBtn.addEventListener("click", function () {
+    drawer.classList.toggle("active");
+});
