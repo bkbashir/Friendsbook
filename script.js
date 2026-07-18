@@ -217,3 +217,96 @@ signupForm.addEventListener("submit", async (e) => {
     }
 
 });
+/*==================================
+Drawer + Navigation
+==================================*/
+
+const drawer = document.getElementById("drawer");
+
+menuBtn.onclick = () => {
+
+    drawer.classList.toggle("open");
+
+};
+
+document.addEventListener("click",(e)=>{
+
+    if(
+        !drawer.contains(e.target) &&
+        !menuBtn.contains(e.target)
+    ){
+
+        drawer.classList.remove("open");
+
+    }
+
+});
+
+
+/*==================================
+Bottom Navigation
+==================================*/
+
+function openPage(page){
+
+    document.querySelectorAll("section").forEach(s=>{
+
+        if(s.id.endsWith("Page")){
+
+            s.style.display="none";
+
+        }
+
+    });
+
+    page.style.display="block";
+
+}
+
+
+navHome.onclick=()=>{
+
+    openPage(homePage);
+
+};
+
+navFriends.onclick=()=>{
+
+    openPage(friendsPage);
+
+};
+
+navReels.onclick=()=>{
+
+    openPage(reelsPage);
+
+};
+
+navMarketplace.onclick=()=>{
+
+    openPage(marketplacePage);
+
+};
+
+navProfile.onclick=()=>{
+
+    openPage(profilePage);
+
+};
+
+
+/*==================================
+Header Buttons
+==================================*/
+
+messengerBtn.onclick=()=>{
+
+    openPage(messagePage);
+
+};
+
+notificationBtn.onclick=()=>{
+
+    openPage(notificationPage);
+
+};
