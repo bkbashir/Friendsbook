@@ -1,3 +1,41 @@
+const loginPage=document.getElementById("loginPage");
+const signupPage=document.getElementById("signupPage");
+const forgotPage=document.getElementById("forgotPage");
+const mainPage=document.getElementById("mainPage");
+
+const loginForm=document.getElementById("loginForm");
+const signupForm=document.getElementById("signupForm");
+const forgotForm=document.getElementById("forgotForm");
+
+const loginEmail=document.getElementById("loginEmail");
+const loginPassword=document.getElementById("loginPassword");
+
+const signupEmail=document.getElementById("signupEmail");
+const signupPassword=document.getElementById("signupPassword");
+const confirmPassword=document.getElementById("confirmPassword");
+
+const fullName=document.getElementById("fullName");
+const birthDate=document.getElementById("birthDate");
+const gender=document.getElementById("gender");
+const signupPhone=document.getElementById("signupPhone");
+
+const forgotEmail=document.getElementById("forgotEmail");
+
+const menuBtn=document.getElementById("menuBtn");
+
+const navHome=document.getElementById("navHome");
+const navFriends=document.getElementById("navFriends");
+const navReels=document.getElementById("navReels");
+const navMarketplace=document.getElementById("navMarketplace");
+const navProfile=document.getElementById("navProfile");
+
+const homePage=document.getElementById("homePage");
+const friendsPage=document.getElementById("friendsPage");
+const reelsPage=document.getElementById("reelsPage");
+const marketplacePage=document.getElementById("marketplacePage");
+const profilePage=document.getElementById("profilePage");
+const messagePage=document.getElementById("messagePage");
+const notificationPage=document.getElementById("notificationPage");
 /*==================================
 Friendsbook 2026
 Part 1
