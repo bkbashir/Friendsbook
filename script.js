@@ -305,3 +305,76 @@ notificationBtn.onclick=()=>{
     openPage(notificationPage);
 
 };
+/*==================================
+Profile System
+==================================*/
+
+async function loadMyProfile(){
+
+    if(!currentUser) return;
+
+    try{
+
+        const doc = await db.collection("users")
+        .doc(currentUser.uid)
+        .get();
+
+        if(!doc.exists) return;
+
+        const data = doc.data();
+
+        /* Name */
+
+        if(document.getElementById("profileName"))
+        document.getElementById("profileName").textContent =
+        data.name || "";
+
+        if(document.getElementById("drawerProfileName"))
+        document.getElementById("drawerProfileName").textContent =
+        data.name || "";
+
+        /* Bio */
+
+        if(document.getElementById("profileBio"))
+        document.getElementById("profileBio").textContent =
+        data.bio || "No Bio Yet";
+
+        /* Profile Photo */
+
+        if(data.profilePhoto){
+
+            if(document.getElementById("profilePhoto"))
+            document.getElementById("profilePhoto").src =
+            data.profilePhoto;
+
+            if(document.getElementById("drawerProfilePhoto"))
+            document.getElementById("drawerProfilePhoto").src =
+            data.profilePhoto;
+
+            if(document.getElementById("myProfilePhoto"))
+            document.getElementById("myProfilePhoto").src =
+            data.profilePhoto;
+
+            if(document.getElementById("myStoryPhoto"))
+            document.getElementById("myStoryPhoto").src =
+            data.profilePhoto;
+
+        }
+
+        /* Cover */
+
+        if(data.coverPhoto){
+
+            if(document.getElementById("coverPhoto"))
+            document.getElementById("coverPhoto").src =
+            data.coverPhoto;
+
+        }
+
+    }catch(err){
+
+        console.log(err);
+
+    }
+
+              }
