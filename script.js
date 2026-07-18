@@ -309,72 +309,66 @@ notificationBtn.onclick=()=>{
 Profile System
 ==================================*/
 
-async function loadMyProfile(){
+async function loadMyProfile() {
 
-    if(!currentUser) return;
+    if (!currentUser) return;
 
-    try{
+    try {
 
         const doc = await db.collection("users")
-        .doc(currentUser.uid)
-        .get();
+            .doc(currentUser.uid)
+            .get();
 
-        if(!doc.exists) return;
+        if (!doc.exists) return;
 
         const data = doc.data();
 
         /* Name */
 
-        if(document.getElementById("profileName"))
-        document.getElementById("profileName").textContent =
-        data.name || "";
+        if (document.getElementById("profileName"))
+            document.getElementById("profileName").textContent = data.name || "";
 
-        if(document.getElementById("drawerProfileName"))
-        document.getElementById("drawerProfileName").textContent =
-        data.name || "";
+        if (document.getElementById("drawerProfileName"))
+            document.getElementById("drawerProfileName").textContent = data.name || "";
 
         /* Bio */
 
-        if(document.getElementById("profileBio"))
-        document.getElementById("profileBio").textContent =
-        data.bio || "No Bio Yet";
+        if (document.getElementById("profileBio"))
+            document.getElementById("profileBio").textContent = data.bio || "";
 
         /* Profile Photo */
 
-        if(data.profilePhoto){
+        if (data.profile && data.profile !== "") {
 
-            if(document.getElementById("profilePhoto"))
-            document.getElementById("profilePhoto").src =
-            data.profilePhoto;
+            if (document.getElementById("profilePhoto"))
+                document.getElementById("profilePhoto").src = data.profile;
 
-            if(document.getElementById("drawerProfilePhoto"))
-            document.getElementById("drawerProfilePhoto").src =
-            data.profilePhoto;
+            if (document.getElementById("drawerProfilePhoto"))
+                document.getElementById("drawerProfilePhoto").src = data.profile;
 
-            if(document.getElementById("myProfilePhoto"))
-            document.getElementById("myProfilePhoto").src =
-            data.profilePhoto;
+            if (document.getElementById("myProfilePhoto"))
+                document.getElementById("myProfilePhoto").src = data.profile;
 
-            if(document.getElementById("myStoryPhoto"))
-            document.getElementById("myStoryPhoto").src =
-            data.profilePhoto;
+            if (document.getElementById("myStoryPhoto"))
+                document.getElementById("myStoryPhoto").src = data.profile;
 
         }
 
-        /* Cover */
+        /* Cover Photo */
 
-        if(data.coverPhoto){
+        if (data.cover && data.cover !== "") {
 
-            if(document.getElementById("coverPhoto"))
-            document.getElementById("coverPhoto").src =
-            data.coverPhoto;
+            if (document.getElementById("coverPhoto"))
+                document.getElementById("coverPhoto").src = data.cover;
 
         }
 
-    }catch(err){
+        console.log("Profile Loaded Successfully");
 
-        console.log(err);
+    } catch (err) {
+
+        console.error(err);
 
     }
 
-              }
+}
