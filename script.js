@@ -223,26 +223,21 @@ Drawer + Navigation
 
 const drawer = document.getElementById("drawer");
 
-menuBtn.onclick = () => {
+menuBtn.onclick=()=>{
 
-    drawer.classList.toggle("open");
+    drawer.classList.toggle("active");
 
 };
 
 document.addEventListener("click",(e)=>{
 
-    if(
-        !drawer.contains(e.target) &&
-        !menuBtn.contains(e.target)
-    ){
+    if(!drawer.contains(e.target) && !menuBtn.contains(e.target)){
 
-        drawer.classList.remove("open");
+        drawer.classList.remove("active");
 
     }
 
 });
-
-
 /*==================================
 Bottom Navigation
 ==================================*/
