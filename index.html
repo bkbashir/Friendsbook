@@ -464,6 +464,21 @@ Post
 
 <div id="chatBox"></div>
 
+<div id="messageArea">
+
+<input
+type="text"
+id="messageInput"
+placeholder="Type a message...">
+
+<button id="sendMessageBtn">
+
+Send
+
+</button>
+
+</div>
+
 </section>
 
 <!-- ========================= -->
@@ -784,7 +799,13 @@ About
 
 </nav>
 </section>
+<!-- Hidden Inputs -->
 
+<input type="file" id="profileImageInput" accept="image/*" hidden>
+<input type="file" id="coverImageInput" accept="image/*" hidden>
+<input type="file" id="postImageInput" accept="image/*" hidden>
+<input type="file" id="storyImageInput" accept="image/*" hidden>
+<input type="file" id="reelVideoInput" accept="video/*" hidden>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
