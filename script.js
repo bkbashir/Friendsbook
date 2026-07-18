@@ -47,7 +47,7 @@ auth.onAuthStateChanged(async(user)=>{
     }
 
     currentUser=user;
-
+await loadMyProfile();
     loginPage.style.display="none";
     signupPage.style.display="none";
     forgotPage.style.display="none";
