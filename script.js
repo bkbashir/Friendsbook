@@ -366,42 +366,26 @@ Profile System
 
 async function loadMyProfile(){
 
-    if(!currentUser) return;
-
-    try{
-
-        const snap = await db.collection("users").doc(currentUser.uid).get();
-
-        if(!snap.exists){
-
-            alert("User Data Not Found");
-            return;
-
-        }
-
-        const data = snap.data();
-
-        profileName.textContent = data.name || "";
-        profileBio.textContent = data.bio || "";
-
-        totalPosts.textContent = data.posts || 0;
-        totalFollowers.textContent = data.followers || 0;
-        totalFollowing.textContent = data.following || 0;
-
-        if(data.profile){
-            profilePhoto.src = data.profile;
-        }
-
-        if(data.cover){
-            coverPhoto.src = data.cover;
-        }
-
-    }catch(err){
-
-        alert(err.message);
-
+    if(!currentUser){
+        alert("currentUser NULL");
+        return;
     }
 
+    const doc = await db.collection("users").doc(currentUser.uid).get();
+
+    if(!doc.exists){
+        alert("User document not found");
+        return;
+    }
+
+    const data = doc.data();
+
+    profileName.textContent = data.name || "";
+    profileBio.textContent = data.bio || "";
+
+    totalFollowers.textContent = data.followers || 0;
+    totalFollowing.textContent = data.following || 0;
+    totalPosts.textContent = data.posts || 0;
 }
 /*==================================
 Edit Profile
