@@ -445,3 +445,16 @@ editProfileBtn.onclick = async () => {
     }
 
 };
+window.onload = function () {
+
+    setTimeout(() => {
+
+        const loading = document.getElementById("loadingScreen");
+
+        if (loading) {
+            loading.style.display = "none";
+        }
+
+    }, 2000);
+
+};
