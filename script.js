@@ -347,7 +347,7 @@ notificationBtn.onclick=()=>{
 Profile System
 ==================================*/
 
-async function loadMyProfile() {
+// async function loadMyProfile() {
 alert("loadMyProfile Started");
     if (!currentUser) return;
 console.log(currentUser.uid);
