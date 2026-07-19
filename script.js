@@ -1,3 +1,4 @@
+const loadingScreen = document.getElementById("loadingScreen");
 const openSignupBtn = document.getElementById("openSignupBtn");
 const backLoginBtn = document.getElementById("backLoginBtn");
 const backLoginBtn2 = document.getElementById("backLoginBtn2");
@@ -74,25 +75,31 @@ Auth State
 ==============================*/
 
 auth.onAuthStateChanged(async(user)=>{
+auth.onAuthStateChanged(async(user)=>{
 
-    if(!user){
-        loginPage.style.display="flex";
-        signupPage.style.display="none";
-        forgotPage.style.display="none";
-        mainPage.style.display="none";
-        return;
+    if(user){
+
+        currentUser = user;
+
+        loadingScreen.style.display = "none"; // আগে Hide করো
+
+        loginPage.style.display = "none";
+        signupPage.style.display = "none";
+        forgotPage.style.display = "none";
+        mainPage.style.display = "block";
+
+        await loadMyProfile();
+
+    }else{
+
+        loadingScreen.style.display = "none";
+
+        loginPage.style.display = "flex";
+        signupPage.style.display = "none";
+        forgotPage.style.display = "none";
+        mainPage.style.display = "none";
+
     }
-
-    currentUser = user;
-
-document.getElementById("loadingScreen").style.display = "none";
-
-await loadMyProfile();
-
-loginPage.style.display = "none";
-signupPage.style.display = "none";
-forgotPage.style.display = "none";
-mainPage.style.display = "block";
 
 });
 /*==============================
