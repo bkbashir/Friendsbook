@@ -216,3 +216,58 @@ messagePage.style.display="none";
 page.style.display="block";
 
             }
+
+/*==================================
+Part 3
+Signup + Firestore
+==================================*/
+
+signupForm.addEventListener("submit", async(e)=>{
+
+    e.preventDefault();
+
+    try{
+
+        const result = await auth.createUserWithEmailAndPassword(
+            signupEmail.value.trim(),
+            signupPassword.value
+        );
+
+        await result.user.sendEmailVerification();
+
+        await db.collection("users").doc(result.user.uid).set({
+
+            uid: result.user.uid,
+            name: fullName.value.trim(),
+            email: signupEmail.value.trim(),
+            phone: signupPhone.value.trim(),
+            birth: birthDate.value,
+            gender: gender.value,
+
+            bio: "Hello Friendsbook 👋",
+
+            profile: "",
+            cover: "",
+
+            followers: 0,
+            following: 0,
+            posts: 0,
+
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+
+        });
+
+        alert("Verification email sent.");
+
+        await auth.signOut();
+
+        signupPage.style.display="none";
+        loginPage.style.display="flex";
+
+    }catch(err){
+
+        alert(err.message);
+
+    }
+
+});
