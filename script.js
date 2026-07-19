@@ -348,7 +348,7 @@ Profile System
 ==================================*/
 
 async function loadMyProfile() {
-
+alert("loadMyProfile Started");
     if (!currentUser) return;
 console.log(currentUser.uid);
     try {
@@ -387,3 +387,45 @@ console.log(doc.data());
         console.log(e);
     }
 }
+/*==================================
+Edit Profile
+==================================*/
+
+editProfileBtn.onclick = async () => {
+
+    const newName = prompt(
+        "Enter your name",
+        document.getElementById("profileName").textContent
+    );
+
+    if (newName == null) return;
+
+    const newBio = prompt(
+        "Enter your bio",
+        document.getElementById("profileBio").textContent
+    );
+
+    if (newBio == null) return;
+
+    try {
+
+        await db.collection("users")
+        .doc(currentUser.uid)
+        .update({
+
+            name: newName,
+            bio: newBio
+
+        });
+
+        await loadMyProfile();
+
+        alert("Profile Updated Successfully.");
+
+    } catch (err) {
+
+        alert(err.message);
+
+    }
+
+};
