@@ -64,3 +64,119 @@ const db=firebase.firestore();
 const storage=firebase.storage();
 
 let currentUser=null;
+/*==================================
+Part 2
+Auth System
+==================================*/
+
+auth.onAuthStateChanged(async(user)=>{
+
+    loadingScreen.style.display="none";
+
+    if(user){
+
+        currentUser=user;
+
+        loginPage.style.display="none";
+        signupPage.style.display="none";
+        forgotPage.style.display="none";
+        mainPage.style.display="block";
+
+    }else{
+
+        currentUser=null;
+
+        loginPage.style.display="flex";
+        signupPage.style.display="none";
+        forgotPage.style.display="none";
+        mainPage.style.display="none";
+
+    }
+
+});
+
+/*=========================
+Login
+=========================*/
+
+loginForm.addEventListener("submit",async(e)=>{
+
+    e.preventDefault();
+
+    try{
+
+        await auth.signInWithEmailAndPassword(
+            loginEmail.value.trim(),
+            loginPassword.value
+        );
+
+    }catch(err){
+
+        alert(err.message);
+
+    }
+
+});
+
+/*=========================
+Open Signup
+=========================*/
+
+openSignupBtn.onclick=()=>{
+
+    loginPage.style.display="none";
+    signupPage.style.display="flex";
+
+};
+
+/*=========================
+Back Login
+=========================*/
+
+backLoginBtn.onclick=()=>{
+
+    signupPage.style.display="none";
+    loginPage.style.display="flex";
+
+};
+
+backLoginBtn2.onclick=()=>{
+
+    forgotPage.style.display="none";
+    loginPage.style.display="flex";
+
+};
+
+/*=========================
+Forgot Password
+=========================*/
+
+forgotPasswordBtn.onclick=()=>{
+
+    loginPage.style.display="none";
+    forgotPage.style.display="flex";
+
+};
+
+forgotForm.addEventListener("submit",async(e)=>{
+
+    e.preventDefault();
+
+    try{
+
+        await auth.sendPasswordResetEmail(
+            forgotEmail.value.trim()
+        );
+
+        alert("Password reset email sent.");
+
+        forgotPage.style.display="none";
+        loginPage.style.display="flex";
+
+    }catch(err){
+
+        alert(err.message);
+
+    }
+
+});
