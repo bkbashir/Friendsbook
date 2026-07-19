@@ -271,9 +271,3 @@ signupForm.addEventListener("submit", async(e)=>{
     }
 
 });
-const logoutBtn = document.getElementById("logoutBtn");
-
-logoutBtn.onclick = async () => {
-    await auth.signOut();
-    location.reload();
-};
