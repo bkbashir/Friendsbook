@@ -1,3 +1,11 @@
+const profileName = document.getElementById("profileName");
+const profileBio = document.getElementById("profileBio");
+const profilePhoto = document.getElementById("profilePhoto");
+const coverPhoto = document.getElementById("coverPhoto");
+
+const totalPosts = document.getElementById("totalPosts");
+const totalFollowers = document.getElementById("totalFollowers");
+const totalFollowing = document.getElementById("totalFollowing");
 const loadingScreen = document.getElementById("loadingScreen");
 const openSignupBtn = document.getElementById("openSignupBtn");
 const backLoginBtn = document.getElementById("backLoginBtn");
@@ -356,45 +364,44 @@ notificationBtn.onclick=()=>{
 Profile System
 ==================================*/
 
-async function loadMyProfile() {
-  
-    if (!currentUser) return;
-console.log(currentUser.uid);
-    
-try {
-        const doc = await db.collection("users").doc(currentUser.uid).get();
-console.log(doc.exists);
-console.log(doc.data());
-        if (!doc.exists) return;
+async function loadMyProfile(){
 
-        const data = doc.data();
+    if(!currentUser) return;
 
-        // Name
-        document.getElementById("profileName").textContent = data.name || "";
+    try{
 
-        // Bio
-        document.getElementById("profileBio").textContent = data.bio || "";
+        const snap = await db.collection("users").doc(currentUser.uid).get();
 
-        // Cover
-        if (data.cover) {
-            document.getElementById("coverPhoto").src = data.cover;
+        if(!snap.exists){
+
+            alert("User Data Not Found");
+            return;
+
         }
 
-        // Profile
-        if (data.profile) {
-            document.getElementById("profilePhoto").src = data.profile;
+        const data = snap.data();
 
-            const drawer = document.getElementById("drawerProfilePhoto");
-            if (drawer) drawer.src = data.profile;
+        profileName.textContent = data.name || "";
+        profileBio.textContent = data.bio || "";
+
+        totalPosts.textContent = data.posts || 0;
+        totalFollowers.textContent = data.followers || 0;
+        totalFollowing.textContent = data.following || 0;
+
+        if(data.profile){
+            profilePhoto.src = data.profile;
         }
 
-        // Stats
-        document.getElementById("totalFollowers").textContent = data.followers || 0;
-        document.getElementById("totalFollowing").textContent = data.following || 0;
+        if(data.cover){
+            coverPhoto.src = data.cover;
+        }
 
-    } catch (e) {
-        console.log(e);
+    }catch(err){
+
+        alert(err.message);
+
     }
+
 }
 /*==================================
 Edit Profile
