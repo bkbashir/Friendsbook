@@ -293,7 +293,12 @@ const totalFollowing=document.getElementById("totalFollowing");
 /*==================================
 Load Profile
 ==================================*/
+console.log("Current UID:", currentUser.uid);
 
+const doc = await db.collection("users").doc(currentUser.uid).get();
+
+console.log(doc.exists);
+console.log(doc.data());
 async function loadMyProfile(){
 
     if(!currentUser) return;
