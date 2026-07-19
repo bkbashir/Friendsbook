@@ -64,6 +64,30 @@ const db=firebase.firestore();
 const storage=firebase.storage();
 
 let currentUser=null;
+
+/* ========= Main Buttons ========= */
+
+const menuBtn=document.getElementById("menuBtn");
+const messageBtn=document.getElementById("messageBtn");
+
+const navHome=document.getElementById("navHome");
+const navFriends=document.getElementById("navFriends");
+const navReels=document.getElementById("navReels");
+const navMarketplace=document.getElementById("navMarketplace");
+const navProfile=document.getElementById("navProfile");
+
+/* ========= Pages ========= */
+
+const homePage=document.getElementById("homePage");
+const friendsPage=document.getElementById("friendsPage");
+const reelsPage=document.getElementById("reelsPage");
+const marketplacePage=document.getElementById("marketplacePage");
+const profilePage=document.getElementById("profilePage");
+const messagePage=document.getElementById("messagePage");
+
+/* ========= Drawer ========= */
+
+const drawer=document.getElementById("drawer");
 /*==================================
 Part 2
 Auth System
@@ -180,3 +204,15 @@ forgotForm.addEventListener("submit",async(e)=>{
     }
 
 });
+function openPage(page){
+
+homePage.style.display="none";
+friendsPage.style.display="none";
+reelsPage.style.display="none";
+marketplacePage.style.display="none";
+profilePage.style.display="none";
+messagePage.style.display="none";
+
+page.style.display="block";
+
+            }
