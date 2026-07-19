@@ -1,11 +1,4 @@
-window.onerror = function(message, source, line){
 
-    alert(
-        "Error : " + message +
-        "\nLine : " + line
-    );
-
-};
 const profileName = document.getElementById("profileName");
 const profileBio = document.getElementById("profileBio");
 const profilePhoto = document.getElementById("profilePhoto");
@@ -90,7 +83,6 @@ let currentUser = null;
 Auth State
 ==============================*/
 
-auth.onAuthStateChanged(async(user)=>{
 auth.onAuthStateChanged(async(user)=>{
 
     if(user){
