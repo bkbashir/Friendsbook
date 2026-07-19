@@ -1,3 +1,11 @@
+window.onerror = function(message, source, line){
+
+    alert(
+        "Error : " + message +
+        "\nLine : " + line
+    );
+
+};
 const profileName = document.getElementById("profileName");
 const profileBio = document.getElementById("profileBio");
 const profilePhoto = document.getElementById("profilePhoto");
