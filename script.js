@@ -271,3 +271,78 @@ signupForm.addEventListener("submit", async(e)=>{
     }
 
 });
+/*==================================
+Part 4
+Profile System
+==================================*/
+
+/* ========= Profile ========= */
+
+const profileName=document.getElementById("profileName");
+const profileBio=document.getElementById("profileBio");
+const profilePhoto=document.getElementById("profilePhoto");
+const coverPhoto=document.getElementById("coverPhoto");
+
+const drawerProfilePhoto=document.getElementById("drawerProfilePhoto");
+const drawerProfileName=document.getElementById("drawerProfileName");
+
+const totalPosts=document.getElementById("totalPosts");
+const totalFollowers=document.getElementById("totalFollowers");
+const totalFollowing=document.getElementById("totalFollowing");
+
+/*==================================
+Load Profile
+==================================*/
+
+async function loadMyProfile(){
+
+    if(!currentUser) return;
+
+    try{
+
+        const doc=await db.collection("users").doc(currentUser.uid).get();
+
+        if(!doc.exists) return;
+
+        const data=doc.data();
+
+        profileName.textContent=data.name || "";
+        profileBio.textContent=data.bio || "";
+
+        drawerProfileName.textContent=data.name || "";
+
+        totalPosts.textContent=data.posts || 0;
+        totalFollowers.textContent=data.followers || 0;
+        totalFollowing.textContent=data.following || 0;
+
+        if(data.profile && profilePhoto){
+            profilePhoto.src=data.profile;
+        }
+
+        if(data.profile && drawerProfilePhoto){
+            drawerProfilePhoto.src=data.profile;
+        }
+
+        if(data.cover && coverPhoto){
+            coverPhoto.src=data.cover;
+        }
+
+    }catch(err){
+
+        console.log(err);
+
+    }
+
+}
+
+/*==================================
+Open Profile
+==================================*/
+
+navProfile.onclick=()=>{
+
+    openPage(profilePage);
+
+    loadMyProfile();
+
+};
