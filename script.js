@@ -347,11 +347,11 @@ notificationBtn.onclick=()=>{
 Profile System
 ==================================*/
 
-// async function loadMyProfile() {
-alert("loadMyProfile Started");
+async function loadMyProfile() {
+  
     if (!currentUser) return;
 console.log(currentUser.uid);
-    try {
+    
 
         const doc = await db.collection("users").doc(currentUser.uid).get();
 console.log(doc.exists);
