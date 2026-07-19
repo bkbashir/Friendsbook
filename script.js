@@ -352,7 +352,7 @@ async function loadMyProfile() {
     if (!currentUser) return;
 console.log(currentUser.uid);
     
-
+try {
         const doc = await db.collection("users").doc(currentUser.uid).get();
 console.log(doc.exists);
 console.log(doc.data());
