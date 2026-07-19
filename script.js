@@ -85,12 +85,14 @@ auth.onAuthStateChanged(async(user)=>{
 
     currentUser = user;
 
-    loginPage.style.display="none";
-    signupPage.style.display="none";
-    forgotPage.style.display="none";
-    mainPage.style.display="block";
+document.getElementById("loadingScreen").style.display = "none";
 
-    await loadMyProfile();
+await loadMyProfile();
+
+loginPage.style.display = "none";
+signupPage.style.display = "none";
+forgotPage.style.display = "none";
+mainPage.style.display = "block";
 
 });
 /*==============================
