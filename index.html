@@ -314,28 +314,36 @@ Logout
 
 <div id="createPostBox">
 
-<img
-src="myphoto.png"
-id="homeProfilePhoto">
+<img src="myphoto.png" id="homeProfilePhoto">
 
 <input
 type="text"
 id="postInput"
 placeholder="What's on your mind?">
 
-<button id="postBtn">
-Post
-</button>
+<input
+type="file"
+id="imageInput"
+accept="image/*"
+hidden>
+
+<input
+type="file"
+id="videoInput"
+accept="video/*"
+hidden>
+
+<button id="imageBtn">📷</button>
+
+<button id="videoBtn">🎥</button>
+
+<button id="postBtn">Post</button>
 
 </div>
 
-<div id="storyContainer">
+<div id="storyContainer"></div>
 
-</div>
-
-<div id="feedContainer">
-
-</div>
+<div id="feedContainer"></div>
 
 </section>
 <!-- ========================= -->
