@@ -265,7 +265,7 @@ coverPhoto.src=data.coverPhoto;
 
 }
 
-                           }
+}
 //=====================================
 // Profile Photo & Cover Photo Upload
 //=====================================
