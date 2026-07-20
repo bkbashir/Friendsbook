@@ -428,3 +428,104 @@ profilePage.style.display="block";
 localStorage.setItem("lastPage","profile");
 
 };
+//==============================
+// Create Post (Firestore)
+//==============================
+
+const postBtn = document.getElementById("postBtn");
+const imageBtn = document.getElementById("imageBtn");
+const videoBtn = document.getElementById("videoBtn");
+
+const imageInput = document.getElementById("imageInput");
+const videoInput = document.getElementById("videoInput");
+
+let selectedImage = null;
+let selectedVideo = null;
+
+imageBtn.onclick = () => imageInput.click();
+videoBtn.onclick = () => videoInput.click();
+
+imageInput.onchange = (e)=>{
+    selectedImage = e.target.files[0];
+}
+
+videoInput.onchange = (e)=>{
+    selectedVideo = e.target.files[0];
+}
+
+postBtn.onclick = async ()=>{
+
+const user = auth.currentUser;
+
+if(!user){
+alert("Login Required");
+return;
+}
+
+const text = postInput.value.trim();
+
+if(text==="" && !selectedImage && !selectedVideo){
+alert("Write something");
+return;
+}
+
+let imageUrl="";
+let videoUrl="";
+
+// Image Upload
+if(selectedImage){
+
+const ref = storage.ref("posts/images/"+Date.now());
+
+await ref.put(selectedImage);
+
+imageUrl = await ref.getDownloadURL();
+
+}
+
+// Video Upload
+if(selectedVideo){
+
+const ref = storage.ref("posts/videos/"+Date.now());
+
+await ref.put(selectedVideo);
+
+videoUrl = await ref.getDownloadURL();
+
+}
+
+const userDoc = await db.collection("users").doc(user.uid).get();
+
+await db.collection("posts").add({
+
+uid:user.uid,
+
+name:userDoc.data().name,
+
+profile:userDoc.data().profilePhoto,
+
+text:text,
+
+image:imageUrl,
+
+video:videoUrl,
+
+time:firebase.firestore.FieldValue.serverTimestamp(),
+
+like:0,
+
+comment:0,
+
+share:0
+
+});
+
+postInput.value="";
+selectedImage=null;
+selectedVideo=null;
+
+alert("Post Successful");
+
+loadPosts();
+
+  }
