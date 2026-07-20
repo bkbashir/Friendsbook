@@ -365,3 +365,66 @@ profileBio.textContent=bioInput.value.trim();
 alert("Profile Updated Successfully");
 
 });
+// Navigation Buttons
+
+const navHome = document.getElementById("navHome");
+const navFriends = document.getElementById("navFriends");
+const navReels = document.getElementById("navReels");
+const navMarketplace = document.getElementById("navMarketplace");
+const navProfile = document.getElementById("navProfile");
+
+const homePage = document.getElementById("homePage");
+const friendsPage = document.getElementById("friendsPage");
+const reelsPage = document.getElementById("reelsPage");
+const marketplacePage = document.getElementById("marketplacePage");
+const profilePage = document.getElementById("profilePage");
+
+function hidePages(){
+
+homePage.style.display="none";
+friendsPage.style.display="none";
+reelsPage.style.display="none";
+marketplacePage.style.display="none";
+profilePage.style.display="none";
+
+}
+
+navHome.onclick=()=>{
+
+hidePages();
+homePage.style.display="block";
+localStorage.setItem("lastPage","home");
+
+};
+
+navFriends.onclick=()=>{
+
+hidePages();
+friendsPage.style.display="block";
+localStorage.setItem("lastPage","friends");
+
+};
+
+navReels.onclick=()=>{
+
+hidePages();
+reelsPage.style.display="block";
+localStorage.setItem("lastPage","reels");
+
+};
+
+navMarketplace.onclick=()=>{
+
+hidePages();
+marketplacePage.style.display="block";
+localStorage.setItem("lastPage","marketplace");
+
+};
+
+navProfile.onclick=()=>{
+
+hidePages();
+profilePage.style.display="block";
+localStorage.setItem("lastPage","profile");
+
+};
