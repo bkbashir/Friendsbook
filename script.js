@@ -529,3 +529,77 @@ alert("Post Successful");
 loadPosts();
 
   }
+//=====================================
+// Load Posts
+//=====================================
+
+async function loadPosts(){
+
+feedContainer.innerHTML="";
+
+const snapshot = await db.collection("posts")
+.orderBy("time","desc")
+.get();
+
+snapshot.forEach((doc)=>{
+
+const post = doc.data();
+
+feedContainer.innerHTML += `
+
+<div class="postCard">
+
+<div class="postTop">
+
+<img src="${post.profile || 'myphoto.png'}" class="postProfile">
+
+<div>
+
+<h4>${post.name}</h4>
+
+<small>${post.time?.toDate().toLocaleString() || ""}</small>
+
+</div>
+
+</div>
+
+<p>${post.text || ""}</p>
+
+${post.image ? `<img src="${post.image}" class="postImage">` : ""}
+
+${post.video ? `
+<video class="postVideo" controls>
+<source src="${post.video}">
+</video>` : ""}
+
+<div class="postActions">
+
+<button>👍 ${post.like}</button>
+
+<button>💬 ${post.comment}</button>
+
+<button>↗️ ${post.share}</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+//=====================================
+// Auto Load Feed
+//=====================================
+
+auth.onAuthStateChanged((user)=>{
+
+if(user){
+
+loadPosts();
+
+}
+
+});
