@@ -34,7 +34,16 @@ const signupForm = document.getElementById("signupForm");
 const forgotForm = document.getElementById("forgotForm");
 
 const logoutBtn = document.getElementById("logoutBtn");
+const profileName = document.getElementById("profileName");
+const drawerProfileName = document.getElementById("drawerProfileName");
 
+const profileBio = document.getElementById("profileBio");
+
+const profilePhoto = document.getElementById("profilePhoto");
+const drawerProfilePhoto = document.getElementById("drawerProfilePhoto");
+const homeProfilePhoto = document.getElementById("homeProfilePhoto");
+
+const coverPhoto = document.getElementById("coverPhoto");
 //=====================================
 // Loading Screen
 //=====================================
