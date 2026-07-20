@@ -1,3 +1,4 @@
+alert("Script Started");
 /*==================================
 Friendsbook 2026
 Script Part 1
@@ -70,7 +71,7 @@ const db=firebase.firestore();
 const storage=firebase.storage();
 
 let currentUser=null;
-
+alert("Firebase OK");
 /*==============================
 Loading
 ==============================*/
@@ -90,7 +91,7 @@ Firebase Auth
 ==================================*/
 
 auth.onAuthStateChanged(async(user)=>{
-
+alert("Auth State");
 currentUser=user;
 
 if(user){
