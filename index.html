@@ -1,627 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-<title>Friendsbook 2026</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Friendsbook</title>
 <link rel="stylesheet" href="style.css">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
-
 <body>
 
 <!-- Loading -->
-
 <div id="loadingScreen">
-
 <img src="myphoto.png" id="loadingLogo">
-
-<h2 id="loadingTitle">
-
-Friendsbook 2026
-
-</h2>
-
-<p id="loadingText">
-
-Loading...
-
-</p>
-
+<h2>Friendsbook 2026</h2>
 </div>
 
-<div id="app">
-
 <!-- Login -->
-
 <section id="loginPage">
 
-<div class="authBox">
-
-<h1>Friendsbook</h1>
-
-<p>Connect with the world</p>
+<h2>Friendsbook</h2>
 
 <form id="loginForm">
 
-<input
-type="email"
-id="loginEmail"
-placeholder="Email">
+<input id="loginEmail" type="email" placeholder="Email">
 
-<input
-type="password"
-id="loginPassword"
-placeholder="Password">
+<input id="loginPassword" type="password" placeholder="Password">
 
-<button type="submit">
-
-Login
-
-</button>
+<button type="submit">Login</button>
 
 </form>
 
-<div class="authLinks">
-
-<button id="forgotPasswordBtn">
-
-Forgot Password?
-
-</button>
-
-<button id="openSignupBtn">
-
-Create New Account
-
-</button>
-
-</div>
-
-</div>
+<button id="openSignupBtn">Create Account</button>
 
 </section>
 
 <!-- Signup -->
-
-<section id="signupPage">
-
-<div class="authBox">
-
-<h2>Create Account</h2>
+<section id="signupPage" style="display:none">
 
 <form id="signupForm">
 
-<input
-type="text"
-id="fullName"
-placeholder="Full Name">
+<input id="fullName" placeholder="Full Name">
 
-<input
-type="email"
-id="signupEmail"
-placeholder="Email">
+<input id="signupEmail" type="email" placeholder="Email">
 
-<input
-type="tel"
-id="signupPhone"
-placeholder="Phone">
+<input id="signupPassword" type="password" placeholder="Password">
 
-<input
-type="date"
-id="birthDate">
-
-<select id="gender">
-
-<option value="">Gender</option>
-
-<option>Male</option>
-
-<option>Female</option>
-
-<option>Custom</option>
-
-</select>
-
-<input
-type="password"
-id="signupPassword"
-placeholder="Password">
-
-<input
-type="password"
-id="confirmPassword"
-placeholder="Confirm Password">
-
-<button type="submit">
-
-Create Account
-
-</button>
+<button>Create</button>
 
 </form>
 
-<button id="backLoginBtn">
-
-Already have an account?
-
-</button>
-
-</div>
-
-</section>
-
-<!-- Forgot -->
-
-<section id="forgotPage">
-
-<div class="authBox">
-
-<h2>Reset Password</h2>
-
-<form id="forgotForm">
-
-<input
-type="email"
-id="forgotEmail"
-placeholder="Enter Email">
-
-<button type="submit">
-
-Send Reset Link
-
-</button>
-
-</form>
-
-<button id="backLoginBtn2">
-
-Back To Login
-
-</button>
-
-</div>
+<button id="backLoginBtn">Back</button>
 
 </section>
 
 <!-- Main -->
+<section id="mainPage" style="display:none">
 
-<section id="mainPage" style="display:none;">
-    <!-- ========================= -->
-<!-- Header -->
-<!-- ========================= -->
-
-<header id="header">
-
-<div class="headerLeft">
+<header>
 
 <button id="menuBtn">
-<i class="fa-solid fa-bars"></i>
+☰
 </button>
 
-<h2 class="logo">Friendsbook</h2>
-
-</div>
-
-<div class="headerCenter">
-
-<input
-type="search"
-id="searchInput"
-placeholder="Search Friendsbook">
-
-</div>
-
-<div class="headerRight">
-
-<button id="createPostBtn">
-<i class="fa-solid fa-plus"></i>
-</button>
-
-<button id="messageBtn">
-<i class="fa-brands fa-facebook-messenger"></i>
-</button>
-
-</div>
+<h2>Friendsbook</h2>
 
 </header>
 
-<!-- ========================= -->
-<!-- Drawer -->
-<!-- ========================= -->
-
 <aside id="drawer">
 
-<div id="drawerHeader">
+<img id="drawerProfilePhoto">
 
-<div id="drawerProfile">
+<h3 id="drawerProfileName"></h3>
 
-<img id="drawerProfilePhoto" src="">
-
-<div>
-
-<h3 id="drawerProfileName">Friendsbook User</h3>
-
-<p>See your profile</p>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="drawerMenu">
-
-<button id="friendsMenuBtn">
-<i class="fa-solid fa-user-group"></i>
-<span>Friends</span>
-</button>
-
-<button id="savedMenuBtn">
-<i class="fa-solid fa-bookmark"></i>
-<span>Saved</span>
-</button>
-
-<button id="memoryMenuBtn">
-<i class="fa-solid fa-clock-rotate-left"></i>
-<span>Memories</span>
-</button>
-
-<button id="groupsMenuBtn">
-<i class="fa-solid fa-users"></i>
-<span>Groups</span>
-</button>
-
-<button id="marketMenuBtn">
-<i class="fa-solid fa-shop"></i>
-<span>Marketplace</span>
-</button>
-
-<button id="reelsMenuBtn">
-<i class="fa-solid fa-circle-play"></i>
-<span>Reels</span>
-</button>
-
-<button id="settingsMenuBtn">
-<i class="fa-solid fa-gear"></i>
-<span>Settings</span>
-</button>
-
-<button id="logoutBtn">
-<i class="fa-solid fa-right-from-bracket"></i>
-<span>Logout</span>
-</button>
-
-<div id="adminPanelButton">
-
-<button id="adminMenuBtn">
-
-<i class="fa-solid fa-shield-halved"></i>
-
-<span>Admin Panel</span>
-
-</button>
-
-</div>
-
-</div>
+<button id="logoutBtn">Logout</button>
 
 </aside>
 
-<!-- ========================= -->
-<!-- Home -->
-<!-- ========================= -->
-
 <section id="homePage">
 
-<div id="createPostCard">
-
-<div id="createPostTop">
-
-<img id="myProfilePhoto" src="">
-
-<input
-type="text"
-id="postText"
-placeholder="What's on your mind?">
-
-<button id="publishPostBtn">
-
-Post
-
-</button>
-
-</div>
-
-</div>
-
-<section id="storySection">
-
-<div id="storyContainer"></div>
+<h2>Home</h2>
 
 </section>
 
-<section id="feedSection">
+<section id="profilePage" style="display:none">
 
-<div id="feedContainer"></div>
+<img id="coverPhoto">
+
+<img id="profilePhoto">
+
+<h2 id="profileName"></h2>
+
+<p id="profileBio"></p>
+
+<button id="editProfileBtn">
+
+Edit Profile
+
+</button>
 
 </section>
 
-    </section>
-    <!-- ========================= -->
-<!-- Friends -->
-<!-- ========================= -->
+<nav>
 
-<section id="friendsPage" style="display:none;">
+<button id="navHome">Home</button>
 
-<h2 class="pageTitle">Friends</h2>
+<button id="navProfile">Profile</button>
 
-<div id="friendRequestContainer"></div>
-
-<div id="friendsContainer"></div>
+</nav>
 
 </section>
 
-<!-- ========================= -->
-<!-- Messenger -->
-<!-- ========================= -->
-
-<section id="messagePage" style="display:none;">
-
-<h2 class="pageTitle">Messenger</h2>
-
-<div id="chatList"></div>
-
-<div id="chatBox"></div>
-
-<div id="messageArea">
-
-<input
-type="text"
-id="messageInput"
-placeholder="Type message...">
-
-<button id="sendMessageBtn">
-
-Send
-
-</button>
-
-</div>
-
-</section>
-
-<!-- ========================= -->
-<!-- Notification -->
-<!-- ========================= -->
-
-<section id="notificationPage" style="display:none;">
-
-<h2 class="pageTitle">Notifications</h2>
-
-<div id="notificationContainer"></div>
-
-</section>
-
-<!-- ========================= -->
-<!-- Reels -->
-<!-- ========================= -->
-
-<section id="reelsPage" style="display:none;">
-
-<h2 class="pageTitle">Reels</h2>
-
-<button id="uploadReelBtn">
-
-Upload Reel
-
-</button>
-
-<div id="reelsContainer"></div>
-
-</section>
-
-<!-- ========================= -->
-<!-- Marketplace -->
-<!-- ========================= -->
-
-<section id="marketplacePage" style="display:none;">
-
-<h2 class="pageTitle">
-
-Marketplace
-
-</h2>
-
-<button id="sellItemBtn">
-
-Sell Item
-
-</button>
-
-<div id="marketplaceContainer"></div>
-
-</section>
-
-<!-- ========================= -->
-<!-- Search -->
-<!-- ========================= -->
-
-<section id="searchPage" style="display:none;">
-
-<input
-type="search"
-id="globalSearchInput"
-placeholder="Search people...">
-
-<div id="searchResultContainer"></div>
-
-                                     </section>
-                                     <!-- ========================= -->
-<!-- Header -->
-<!-- ========================= -->
-
-<header id="header">
-
-<div class="headerLeft">
-
-<button id="menuBtn">
-<i class="fa-solid fa-bars"></i>
-</button>
-
-<h2 class="logo">Friendsbook</h2>
-
-</div>
-
-<div class="headerCenter">
-
-<input
-type="search"
-id="searchInput"
-placeholder="Search Friendsbook">
-
-</div>
-
-<div class="headerRight">
-
-<button id="createPostBtn">
-<i class="fa-solid fa-plus"></i>
-</button>
-
-<button id="messageBtn">
-<i class="fa-brands fa-facebook-messenger"></i>
-</button>
-
-</div>
-
-</header>
-
-<!-- ========================= -->
-<!-- Drawer -->
-<!-- ========================= -->
-
-<aside id="drawer">
-
-<div id="drawerHeader">
-
-<div id="drawerProfile">
-
-<img id="drawerProfilePhoto" src="">
-
-<div>
-
-<h3 id="drawerProfileName">Friendsbook User</h3>
-
-<p>See your profile</p>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="drawerMenu">
-
-<button id="friendsMenuBtn">
-<i class="fa-solid fa-user-group"></i>
-<span>Friends</span>
-</button>
-
-<button id="savedMenuBtn">
-<i class="fa-solid fa-bookmark"></i>
-<span>Saved</span>
-</button>
-
-<button id="memoryMenuBtn">
-<i class="fa-solid fa-clock-rotate-left"></i>
-<span>Memories</span>
-</button>
-
-<button id="groupsMenuBtn">
-<i class="fa-solid fa-users"></i>
-<span>Groups</span>
-</button>
-
-<button id="marketMenuBtn">
-<i class="fa-solid fa-shop"></i>
-<span>Marketplace</span>
-</button>
-
-<button id="reelsMenuBtn">
-<i class="fa-solid fa-circle-play"></i>
-<span>Reels</span>
-</button>
-
-<button id="settingsMenuBtn">
-<i class="fa-solid fa-gear"></i>
-<span>Settings</span>
-</button>
-
-<button id="logoutBtn">
-<i class="fa-solid fa-right-from-bracket"></i>
-<span>Logout</span>
-</button>
-
-<div id="adminPanelButton">
-
-<button id="adminMenuBtn">
-
-<i class="fa-solid fa-shield-halved"></i>
-
-<span>Admin Panel</span>
-
-</button>
-
-</div>
-
-</div>
-
-</aside>
-
-<!-- ========================= -->
-<!-- Home -->
-<!-- ========================= -->
-
-<section id="homePage">
-
-<div id="createPostCard">
-
-<div id="createPostTop">
-
-<img id="myProfilePhoto" src="">
-
-<input
-type="text"
-id="postText"
-placeholder="What's on your mind?">
-
-<button id="publishPostBtn">
-
-Post
-
-</button>
-
-</div>
-
-</div>
-
-<section id="storySection">
-
-<div id="storyContainer"></div>
-
-</section>
-
-<section id="feedSection">
-
-<div id="feedContainer"></div>
-
-</section>
-
-</section>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-storage-compat.js"></script>
+
+<script src="script.js"></script>
+
+</body>
+    </html>
