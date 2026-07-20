@@ -1,9 +1,11 @@
 /*==================================
 Friendsbook 2026
-Part 1
+Script Part 1
 ==================================*/
 
-/* ========= Pages ========= */
+/*==============================
+Pages
+==============================*/
 
 const loadingScreen=document.getElementById("loadingScreen");
 
@@ -12,39 +14,43 @@ const signupPage=document.getElementById("signupPage");
 const forgotPage=document.getElementById("forgotPage");
 const mainPage=document.getElementById("mainPage");
 
-/* ========= Forms ========= */
+const homePage=document.getElementById("homePage");
+const friendsPage=document.getElementById("friendsPage");
+const reelsPage=document.getElementById("reelsPage");
+const marketplacePage=document.getElementById("marketplacePage");
+const profilePage=document.getElementById("profilePage");
+const messagePage=document.getElementById("messagePage");
+const notificationPage=document.getElementById("notificationPage");
+const settingsPage=document.getElementById("settingsPage");
+const adminPage=document.getElementById("adminPage");
+
+/*==============================
+Buttons
+==============================*/
+
+const menuBtn=document.getElementById("menuBtn");
+
+const navHome=document.getElementById("navHome");
+const navFriends=document.getElementById("navFriends");
+const navReels=document.getElementById("navReels");
+const navMarketplace=document.getElementById("navMarketplace");
+const navProfile=document.getElementById("navProfile");
+
+const messageBtn=document.getElementById("messageBtn");
+
+const logoutBtn=document.getElementById("logoutBtn");
+
+/*==============================
+Forms
+==============================*/
 
 const loginForm=document.getElementById("loginForm");
 const signupForm=document.getElementById("signupForm");
 const forgotForm=document.getElementById("forgotForm");
 
-/* ========= Login ========= */
-
-const loginEmail=document.getElementById("loginEmail");
-const loginPassword=document.getElementById("loginPassword");
-
-/* ========= Signup ========= */
-
-const fullName=document.getElementById("fullName");
-const signupEmail=document.getElementById("signupEmail");
-const signupPhone=document.getElementById("signupPhone");
-const birthDate=document.getElementById("birthDate");
-const gender=document.getElementById("gender");
-const signupPassword=document.getElementById("signupPassword");
-const confirmPassword=document.getElementById("confirmPassword");
-
-/* ========= Forgot ========= */
-
-const forgotEmail=document.getElementById("forgotEmail");
-
-/* ========= Buttons ========= */
-
-const openSignupBtn=document.getElementById("openSignupBtn");
-const backLoginBtn=document.getElementById("backLoginBtn");
-const backLoginBtn2=document.getElementById("backLoginBtn2");
-const forgotPasswordBtn=document.getElementById("forgotPasswordBtn");
-
-/* ========= Firebase ========= */
+/*==============================
+Firebase
+==============================*/
 
 const firebaseConfig={
 
@@ -65,146 +71,187 @@ const storage=firebase.storage();
 
 let currentUser=null;
 
-/* ========= Main Buttons ========= */
+/*==============================
+Loading
+==============================*/
 
-const menuBtn=document.getElementById("menuBtn");
-const messageBtn=document.getElementById("messageBtn");
+window.onload=()=>{
 
-const navHome=document.getElementById("navHome");
-const navFriends=document.getElementById("navFriends");
-const navReels=document.getElementById("navReels");
-const navMarketplace=document.getElementById("navMarketplace");
-const navProfile=document.getElementById("navProfile");
+setTimeout(()=>{
 
-/* ========= Pages ========= */
+loadingScreen.style.display="none";
 
-const homePage=document.getElementById("homePage");
-const friendsPage=document.getElementById("friendsPage");
-const reelsPage=document.getElementById("reelsPage");
-const marketplacePage=document.getElementById("marketplacePage");
-const profilePage=document.getElementById("profilePage");
-const messagePage=document.getElementById("messagePage");
+},1200);
 
-/* ========= Drawer ========= */
-
-const drawer=document.getElementById("drawer");
+};
 /*==================================
-Part 2
-Auth System
+Script Part 2
+Firebase Auth
 ==================================*/
 
 auth.onAuthStateChanged(async(user)=>{
 
-    loadingScreen.style.display="none";
+currentUser=user;
 
-    if(user){
+if(user){
 
-        currentUser=user;
+loginPage.style.display="none";
+signupPage.style.display="none";
+forgotPage.style.display="none";
 
-        loginPage.style.display="none";
-        signupPage.style.display="none";
-        forgotPage.style.display="none";
-        mainPage.style.display="block";
+mainPage.style.display="block";
 
-    }else{
+if(typeof loadMyProfile==="function"){
 
-        currentUser=null;
+await loadMyProfile();
 
-        loginPage.style.display="flex";
-        signupPage.style.display="none";
-        forgotPage.style.display="none";
-        mainPage.style.display="none";
+}
 
-    }
+}else{
+
+loginPage.style.display="flex";
+signupPage.style.display="none";
+forgotPage.style.display="none";
+
+mainPage.style.display="none";
+
+}
 
 });
 
-/*=========================
+/*==============================
 Login
-=========================*/
+==============================*/
 
 loginForm.addEventListener("submit",async(e)=>{
 
-    e.preventDefault();
+e.preventDefault();
 
-    try{
+try{
 
-        await auth.signInWithEmailAndPassword(
-            loginEmail.value.trim(),
-            loginPassword.value
-        );
+await auth.signInWithEmailAndPassword(
 
-    }catch(err){
+document.getElementById("loginEmail").value.trim(),
 
-        alert(err.message);
+document.getElementById("loginPassword").value
 
-    }
+);
+
+}catch(err){
+
+alert(err.message);
+
+}
+
+});
+
+/*==============================
+Signup
+==============================*/
+
+signupForm.addEventListener("submit",async(e)=>{
+
+e.preventDefault();
+
+try{
+
+const result=await auth.createUserWithEmailAndPassword(
+
+document.getElementById("signupEmail").value.trim(),
+
+document.getElementById("signupPassword").value
+
+);
+
+await db.collection("users").doc(result.user.uid).set({
+
+uid:result.user.uid,
+
+name:document.getElementById("fullName").value,
+
+email:document.getElementById("signupEmail").value,
+
+phone:document.getElementById("signupPhone").value,
+
+birth:document.getElementById("birthDate").value,
+
+gender:document.getElementById("gender").value,
+
+bio:"",
+
+profile:"",
+
+cover:"",
+
+posts:0,
+
+followers:0,
+
+following:0
 
 });
 
-/*=========================
-Open Signup
-=========================*/
+alert("Account Created Successfully");
 
-openSignupBtn.onclick=()=>{
+}catch(err){
 
-    loginPage.style.display="none";
-    signupPage.style.display="flex";
+alert(err.message);
 
-};
-
-/*=========================
-Back Login
-=========================*/
-
-backLoginBtn.onclick=()=>{
-
-    signupPage.style.display="none";
-    loginPage.style.display="flex";
-
-};
-
-backLoginBtn2.onclick=()=>{
-
-    forgotPage.style.display="none";
-    loginPage.style.display="flex";
-
-};
-
-/*=========================
-Forgot Password
-=========================*/
-
-forgotPasswordBtn.onclick=()=>{
-
-    loginPage.style.display="none";
-    forgotPage.style.display="flex";
-
-};
-
-forgotForm.addEventListener("submit",async(e)=>{
-
-    e.preventDefault();
-
-    try{
-
-        await auth.sendPasswordResetEmail(
-            forgotEmail.value.trim()
-        );
-
-        alert("Password reset email sent.");
-
-        forgotPage.style.display="none";
-        loginPage.style.display="flex";
-
-    }catch(err){
-
-        alert(err.message);
-
-    }
+}
 
 });
-function openPage(page){
+
+/*==============================
+Logout
+==============================*/
+
+logoutBtn.onclick=async()=>{
+
+await auth.signOut();
+
+location.reload();
+
+};
+/*==================================
+Script Part 3
+Navigation + Drawer
+==================================*/
+
+const drawer=document.getElementById("drawer");
+
+/*==============================
+Drawer
+==============================*/
+
+menuBtn.onclick=()=>{
+
+drawer.classList.toggle("active");
+
+};
+
+document.addEventListener("click",(e)=>{
+
+if(
+
+drawer &&
+
+!drawer.contains(e.target) &&
+
+!menuBtn.contains(e.target)
+
+){
+
+drawer.classList.remove("active");
+
+}
+
+});
+
+/*==============================
+Open Page
+==============================*/
+
+function hideAllPages(){
 
 homePage.style.display="none";
 friendsPage.style.display="none";
@@ -212,142 +259,191 @@ reelsPage.style.display="none";
 marketplacePage.style.display="none";
 profilePage.style.display="none";
 messagePage.style.display="none";
+notificationPage.style.display="none";
+settingsPage.style.display="none";
+adminPage.style.display="none";
+
+}
+
+function openPage(page){
+
+hideAllPages();
 
 page.style.display="block";
 
-            }
+drawer.classList.remove("active");
 
+}
+
+/*==============================
+Bottom Navigation
+==============================*/
+
+navHome.onclick=()=>{
+
+openPage(homePage);
+
+};
+
+navFriends.onclick=()=>{
+
+openPage(friendsPage);
+
+};
+
+navReels.onclick=()=>{
+
+openPage(reelsPage);
+
+};
+
+navMarketplace.onclick=()=>{
+
+openPage(marketplacePage);
+
+};
+
+navProfile.onclick=()=>{
+
+openPage(profilePage);
+
+if(typeof loadMyProfile==="function"){
+
+loadMyProfile();
+
+}
+
+};
+
+/*==============================
+Header
+==============================*/
+
+messageBtn.onclick=()=>{
+
+openPage(messagePage);
+
+};
+
+/*==============================
+First Page
+==============================*/
+
+hideAllPages();
+
+homePage.style.display="block";
 /*==================================
-Part 3
-Signup + Firestore
-==================================*/
-
-signupForm.addEventListener("submit", async(e)=>{
-
-    e.preventDefault();
-
-    try{
-
-        const result = await auth.createUserWithEmailAndPassword(
-            signupEmail.value.trim(),
-            signupPassword.value
-        );
-
-        await result.user.sendEmailVerification();
-
-        await db.collection("users").doc(result.user.uid).set({
-
-            uid: result.user.uid,
-            name: fullName.value.trim(),
-            email: signupEmail.value.trim(),
-            phone: signupPhone.value.trim(),
-            birth: birthDate.value,
-            gender: gender.value,
-
-            bio: "Hello Friendsbook 👋",
-
-            profile: "",
-            cover: "",
-
-            followers: 0,
-            following: 0,
-            posts: 0,
-
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-
-        });
-
-        alert("Verification email sent.");
-
-        await auth.signOut();
-
-        signupPage.style.display="none";
-        loginPage.style.display="flex";
-
-    }catch(err){
-
-        alert(err.message);
-
-    }
-
-});
-/*==================================
-Part 4
+Script Part 4
 Profile System
 ==================================*/
 
-/* ========= Profile ========= */
-
 const profileName=document.getElementById("profileName");
 const profileBio=document.getElementById("profileBio");
+
 const profilePhoto=document.getElementById("profilePhoto");
 const coverPhoto=document.getElementById("coverPhoto");
 
-const drawerProfilePhoto=document.getElementById("drawerProfilePhoto");
 const drawerProfileName=document.getElementById("drawerProfileName");
+const drawerProfilePhoto=document.getElementById("drawerProfilePhoto");
 
 const totalPosts=document.getElementById("totalPosts");
 const totalFollowers=document.getElementById("totalFollowers");
 const totalFollowing=document.getElementById("totalFollowing");
 
-/*==================================
+/*==============================
 Load Profile
-==================================*/
-console.log("Current UID:", currentUser.uid);
+==============================*/
 
-const doc = await db.collection("users").doc(currentUser.uid).get();
-
-console.log(doc.exists);
-console.log(doc.data());
 async function loadMyProfile(){
 
-    if(!currentUser) return;
+if(!currentUser) return;
 
-    try{
+try{
 
-        const doc=await db.collection("users").doc(currentUser.uid).get();
+const doc=await db.collection("users").doc(currentUser.uid).get();
 
-        if(!doc.exists) return;
+if(!doc.exists){
 
-        const data=doc.data();
+console.log("User document not found");
 
-        profileName.textContent=data.name || "";
-        profileBio.textContent=data.bio || "";
-
-        drawerProfileName.textContent=data.name || "";
-
-        totalPosts.textContent=data.posts || 0;
-        totalFollowers.textContent=data.followers || 0;
-        totalFollowing.textContent=data.following || 0;
-
-        if(data.profile && profilePhoto){
-            profilePhoto.src=data.profile;
-        }
-
-        if(data.profile && drawerProfilePhoto){
-            drawerProfilePhoto.src=data.profile;
-        }
-
-        if(data.cover && coverPhoto){
-            coverPhoto.src=data.cover;
-        }
-
-    }catch(err){
-
-        console.log(err);
-
-    }
+return;
 
 }
 
-/*==================================
+const data=doc.data();
+
+profileName.textContent=data.name || "No Name";
+
+profileBio.textContent=data.bio || "";
+
+drawerProfileName.textContent=data.name || "Friendsbook User";
+
+totalPosts.textContent=data.posts || 0;
+totalFollowers.textContent=data.followers || 0;
+totalFollowing.textContent=data.following || 0;
+
+if(data.profile!=""){
+
+profilePhoto.src=data.profile;
+drawerProfilePhoto.src=data.profile;
+
+}else{
+
+profilePhoto.src="myphoto.png";
+drawerProfilePhoto.src="myphoto.png";
+
+}
+
+if(data.cover!=""){
+
+coverPhoto.src=data.cover;
+
+}
+
+console.log("Profile Loaded");
+
+}catch(err){
+
+console.log(err);
+
+}
+
+}
+
+/*==============================
+Edit Profile
+==============================*/
+
+document.getElementById("editProfileBtn").onclick=async()=>{
+
+const newName=prompt("Enter Name",profileName.textContent);
+
+if(newName==null) return;
+
+const newBio=prompt("Enter Bio",profileBio.textContent);
+
+if(newBio==null) return;
+
+await db.collection("users").doc(currentUser.uid).update({
+
+name:newName,
+
+bio:newBio
+
+});
+
+loadMyProfile();
+
+};
+
+/*==============================
 Open Profile
-==================================*/
+==============================*/
 
 navProfile.onclick=()=>{
 
-    openPage(profilePage);
+openPage(profilePage);
 
-    loadMyProfile();
+loadMyProfile();
 
 };
