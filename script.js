@@ -1,4 +1,4 @@
-alert("Script Started");
+
 /*==================================
 Friendsbook 2026
 Script Part 1
@@ -71,27 +71,21 @@ const db=firebase.firestore();
 const storage=firebase.storage();
 
 let currentUser=null;
-alert("Firebase OK");
+
 /*==============================
 Loading
 ==============================*/
 
-window.onload=()=>{
 
-setTimeout(()=>{
-
-loadingScreen.style.display="none";
-
-},1200);
-
-};
 /*==================================
 Script Part 2
 Firebase Auth
 ==================================*/
 
 auth.onAuthStateChanged(async(user)=>{
-alert("Auth State");
+
+loadingScreen.style.display="none";
+
 currentUser=user;
 
 if(user){
@@ -99,13 +93,10 @@ if(user){
 loginPage.style.display="none";
 signupPage.style.display="none";
 forgotPage.style.display="none";
-
 mainPage.style.display="block";
 
 if(typeof loadMyProfile==="function"){
-
 await loadMyProfile();
-
 }
 
 }else{
@@ -113,7 +104,6 @@ await loadMyProfile();
 loginPage.style.display="flex";
 signupPage.style.display="none";
 forgotPage.style.display="none";
-
 mainPage.style.display="none";
 
 }
