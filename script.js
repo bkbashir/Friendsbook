@@ -1,440 +1,358 @@
+//=====================================
+// Friendsbook 2026
+// Firebase Config
+//=====================================
 
-/*==================================
-Friendsbook 2026
-Script Part 1
-==================================*/
-
-/*==============================
-Pages
-==============================*/
-
-const loadingScreen=document.getElementById("loadingScreen");
-
-const loginPage=document.getElementById("loginPage");
-const signupPage=document.getElementById("signupPage");
-const forgotPage=document.getElementById("forgotPage");
-const mainPage=document.getElementById("mainPage");
-
-const homePage=document.getElementById("homePage");
-const friendsPage=document.getElementById("friendsPage");
-const reelsPage=document.getElementById("reelsPage");
-const marketplacePage=document.getElementById("marketplacePage");
-const profilePage=document.getElementById("profilePage");
-const messagePage=document.getElementById("messagePage");
-const notificationPage=document.getElementById("notificationPage");
-const settingsPage=document.getElementById("settingsPage");
-const adminPage=document.getElementById("adminPage");
-
-/*==============================
-Buttons
-==============================*/
-
-const menuBtn=document.getElementById("menuBtn");
-
-const navHome=document.getElementById("navHome");
-const navFriends=document.getElementById("navFriends");
-const navReels=document.getElementById("navReels");
-const navMarketplace=document.getElementById("navMarketplace");
-const navProfile=document.getElementById("navProfile");
-
-const messageBtn=document.getElementById("messageBtn");
-
-const logoutBtn=document.getElementById("logoutBtn");
-
-/*==============================
-Forms
-==============================*/
-
-const loginForm=document.getElementById("loginForm");
-const signupForm=document.getElementById("signupForm");
-const forgotForm=document.getElementById("forgotForm");
-
-/*==============================
-Firebase
-==============================*/
-
-const firebaseConfig={
-
-apiKey:"AIzaSyBRad-Z7zxRRnvy17nRXEh7ZG4hu6fluZ4",
-authDomain:"friendsbook-4a40c.firebaseapp.com",
-projectId:"friendsbook-4a40c",
-storageBucket:"friendsbook-4a40c.firebasestorage.app",
-messagingSenderId:"1000346329473",
-appId:"1:1000346329473:web:9bd69019e2b09f971e8880"
-
+const firebaseConfig = {
+  apiKey: "AIzaSyBRad-Z7zxRRnvy17nRXEh7ZG4hu6fluZ4",
+  authDomain: "friendsbook-4a40c.firebaseapp.com",
+  projectId: "friendsbook-4a40c",
+  storageBucket: "friendsbook-4a40c.firebasestorage.app",
+  messagingSenderId: "1000346329473",
+  appId: "1:1000346329473:web:9bd69019e2b09f971e8880"
 };
 
 firebase.initializeApp(firebaseConfig);
 
-const auth=firebase.auth();
-const db=firebase.firestore();
-const storage=firebase.storage();
+const auth = firebase.auth();
+const db = firebase.firestore();
+const storage = firebase.storage();
 
-let currentUser=null;
+//=====================================
+// Elements
+//=====================================
 
-/*==============================
-Loading
-==============================*/
+const loadingScreen = document.getElementById("loadingScreen");
 
+const loginPage = document.getElementById("loginPage");
+const signupPage = document.getElementById("signupPage");
+const forgotPage = document.getElementById("forgotPage");
+const mainPage = document.getElementById("mainPage");
 
-/*==================================
-Script Part 2
-Firebase Auth
-==================================*/
+const loginForm = document.getElementById("loginForm");
+const signupForm = document.getElementById("signupForm");
+const forgotForm = document.getElementById("forgotForm");
 
-auth.onAuthStateChanged(async(user)=>{
+const logoutBtn = document.getElementById("logoutBtn");
 
-loadingScreen.style.display="none";
+//=====================================
+// Loading Screen
+//=====================================
 
-currentUser=user;
+window.addEventListener("load", () => {
 
-if(user){
+setTimeout(() => {
 
-loginPage.style.display="none";
-signupPage.style.display="none";
-forgotPage.style.display="none";
-mainPage.style.display="block";
+loadingScreen.style.display = "none";
 
-if(typeof loadMyProfile==="function"){
-await loadMyProfile();
-}
-
-}else{
-
-loginPage.style.display="flex";
-signupPage.style.display="none";
-forgotPage.style.display="none";
-mainPage.style.display="none";
-
-}
+}, 1800);
 
 });
+//=====================================
+// Signup
+//=====================================
 
-/*==============================
-Login
-==============================*/
-
-loginForm.addEventListener("submit",async(e)=>{
+signupForm.addEventListener("submit", async (e) => {
 
 e.preventDefault();
 
-try{
+const name = document.getElementById("fullName").value.trim();
+const email = document.getElementById("signupEmail").value.trim();
+const password = document.getElementById("signupPassword").value;
 
-await auth.signInWithEmailAndPassword(
+try {
 
-document.getElementById("loginEmail").value.trim(),
-
-document.getElementById("loginPassword").value
-
-);
-
-}catch(err){
-
-alert(err.message);
-
-}
-
-});
-
-/*==============================
-Signup
-==============================*/
-
-signupForm.addEventListener("submit",async(e)=>{
-
-e.preventDefault();
-
-try{
-
-const result=await auth.createUserWithEmailAndPassword(
-
-document.getElementById("signupEmail").value.trim(),
-
-document.getElementById("signupPassword").value
-
-);
+const result = await auth.createUserWithEmailAndPassword(email, password);
 
 await db.collection("users").doc(result.user.uid).set({
 
-uid:result.user.uid,
-
-name:document.getElementById("fullName").value,
-
-email:document.getElementById("signupEmail").value,
-
-phone:document.getElementById("signupPhone").value,
-
-birth:document.getElementById("birthDate").value,
-
-gender:document.getElementById("gender").value,
-
-bio:"",
-
-profile:"",
-
-cover:"",
-
-posts:0,
-
-followers:0,
-
-following:0
+uid: result.user.uid,
+name: name,
+email: email,
+bio: "",
+profilePhoto: "",
+coverPhoto: "",
+followers: 0,
+following: 0,
+friends: 0,
+createdAt: firebase.firestore.FieldValue.serverTimestamp()
 
 });
 
 alert("Account Created Successfully");
 
-}catch(err){
+signupPage.style.display = "none";
+loginPage.style.display = "flex";
 
-alert(err.message);
+} catch (error) {
+
+alert(error.message);
 
 }
 
 });
 
-/*==============================
-Logout
-==============================*/
+//=====================================
+// Login
+//=====================================
 
-logoutBtn.onclick=async()=>{
+loginForm.addEventListener("submit", async (e) => {
+
+e.preventDefault();
+
+const email = document.getElementById("loginEmail").value.trim();
+const password = document.getElementById("loginPassword").value;
+
+try {
+
+await auth.signInWithEmailAndPassword(email, password);
+
+} catch (error) {
+
+alert(error.message);
+
+}
+
+});
+
+//=====================================
+// Forgot Password
+//=====================================
+
+forgotForm.addEventListener("submit", async (e) => {
+
+e.preventDefault();
+
+const email = document.getElementById("forgotEmail").value.trim();
+
+try {
+
+await auth.sendPasswordResetEmail(email);
+
+alert("Password Reset Link Sent");
+
+forgotPage.style.display = "none";
+loginPage.style.display = "flex";
+
+} catch (error) {
+
+alert(error.message);
+
+}
+
+});
+//=====================================
+// Auto Login + Logout
+//=====================================
+
+auth.onAuthStateChanged(async (user) => {
+
+if (user) {
+
+loginPage.style.display = "none";
+signupPage.style.display = "none";
+forgotPage.style.display = "none";
+mainPage.style.display = "block";
+
+loadUserProfile(user.uid);
+
+const lastPage = localStorage.getItem("lastPage") || "home";
+
+showPage(lastPage);
+
+} else {
+
+loginPage.style.display = "flex";
+signupPage.style.display = "none";
+forgotPage.style.display = "none";
+mainPage.style.display = "none";
+
+}
+
+});
+
+//=====================================
+// Logout
+//=====================================
+
+logoutBtn.addEventListener("click", async () => {
 
 await auth.signOut();
 
-location.reload();
-
-};
-/*==================================
-Script Part 3
-Navigation + Drawer
-==================================*/
-
-const drawer=document.getElementById("drawer");
-
-/*==============================
-Drawer
-==============================*/
-
-menuBtn.onclick=()=>{
-
-drawer.classList.toggle("active");
-
-};
-
-document.addEventListener("click",(e)=>{
-
-if(
-
-drawer &&
-
-!drawer.contains(e.target) &&
-
-!menuBtn.contains(e.target)
-
-){
-
-drawer.classList.remove("active");
-
-}
+localStorage.removeItem("lastPage");
 
 });
 
-/*==============================
-Open Page
-==============================*/
+//=====================================
+// Page Remember
+//=====================================
 
-function hideAllPages(){
+function showPage(page){
 
-homePage.style.display="none";
-friendsPage.style.display="none";
-reelsPage.style.display="none";
-marketplacePage.style.display="none";
-profilePage.style.display="none";
-messagePage.style.display="none";
-notificationPage.style.display="none";
-settingsPage.style.display="none";
-adminPage.style.display="none";
+document.querySelectorAll("#mainPage section").forEach(sec=>{
 
-}
+sec.style.display="none";
 
-function openPage(page){
+});
 
-hideAllPages();
+switch(page){
 
-page.style.display="block";
+case "profile":
+profilePage.style.display="block";
+break;
 
-drawer.classList.remove("active");
+case "friends":
+friendsPage.style.display="block";
+break;
 
-}
+case "message":
+messagePage.style.display="block";
+break;
 
-/*==============================
-Bottom Navigation
-==============================*/
+case "reels":
+reelsPage.style.display="block";
+break;
 
-navHome.onclick=()=>{
+case "marketplace":
+marketplacePage.style.display="block";
+break;
 
-openPage(homePage);
+case "notification":
+notificationPage.style.display="block";
+break;
 
-};
+case "settings":
+settingsPage.style.display="block";
+break;
 
-navFriends.onclick=()=>{
-
-openPage(friendsPage);
-
-};
-
-navReels.onclick=()=>{
-
-openPage(reelsPage);
-
-};
-
-navMarketplace.onclick=()=>{
-
-openPage(marketplacePage);
-
-};
-
-navProfile.onclick=()=>{
-
-openPage(profilePage);
-
-if(typeof loadMyProfile==="function"){
-
-loadMyProfile();
-
-}
-
-};
-
-/*==============================
-Header
-==============================*/
-
-messageBtn.onclick=()=>{
-
-openPage(messagePage);
-
-};
-
-/*==============================
-First Page
-==============================*/
-
-hideAllPages();
-
+default:
 homePage.style.display="block";
-/*==================================
-Script Part 4
-Profile System
-==================================*/
-
-const profileName=document.getElementById("profileName");
-const profileBio=document.getElementById("profileBio");
-
-const profilePhoto=document.getElementById("profilePhoto");
-const coverPhoto=document.getElementById("coverPhoto");
-
-const drawerProfileName=document.getElementById("drawerProfileName");
-const drawerProfilePhoto=document.getElementById("drawerProfilePhoto");
-
-const totalPosts=document.getElementById("totalPosts");
-const totalFollowers=document.getElementById("totalFollowers");
-const totalFollowing=document.getElementById("totalFollowing");
-
-/*==============================
-Load Profile
-==============================*/
-
-async function loadMyProfile(){
-
-if(!currentUser) return;
-
-try{
-
-const doc=await db.collection("users").doc(currentUser.uid).get();
-
-if(!doc.exists){
-
-console.log("User document not found");
-
-return;
 
 }
+
+localStorage.setItem("lastPage",page);
+
+}
+
+//=====================================
+// Load User Profile
+//=====================================
+
+async function loadUserProfile(uid){
+
+const doc=await db.collection("users").doc(uid).get();
+
+if(!doc.exists) return;
 
 const data=doc.data();
 
-profileName.textContent=data.name || "No Name";
+profileName.textContent=data.name||"";
+drawerProfileName.textContent=data.name||"";
 
-profileBio.textContent=data.bio || "";
+profileBio.textContent=data.bio||"";
 
-drawerProfileName.textContent=data.name || "Friendsbook User";
+if(data.profilePhoto){
 
-totalPosts.textContent=data.posts || 0;
-totalFollowers.textContent=data.followers || 0;
-totalFollowing.textContent=data.following || 0;
-
-if(data.profile!=""){
-
-profilePhoto.src=data.profile;
-drawerProfilePhoto.src=data.profile;
-
-}else{
-
-profilePhoto.src="myphoto.png";
-drawerProfilePhoto.src="myphoto.png";
+profilePhoto.src=data.profilePhoto;
+drawerProfilePhoto.src=data.profilePhoto;
+homeProfilePhoto.src=data.profilePhoto;
 
 }
 
-if(data.cover!=""){
+if(data.coverPhoto){
 
-coverPhoto.src=data.cover;
-
-}
-
-console.log("Profile Loaded");
-
-}catch(err){
-
-console.log(err);
+coverPhoto.src=data.coverPhoto;
 
 }
 
-}
+                           }
+//=====================================
+// Profile Photo & Cover Photo Upload
+//=====================================
 
-/*==============================
-Edit Profile
-==============================*/
+const profilePhotoInput = document.getElementById("profilePhotoInput");
+const coverPhotoInput = document.getElementById("coverPhotoInput");
+const bioInput = document.getElementById("bioInput");
+const saveProfileBtn = document.getElementById("saveProfileBtn");
 
-document.getElementById("editProfileBtn").onclick=async()=>{
+let currentUser = null;
 
-const newName=prompt("Enter Name",profileName.textContent);
+auth.onAuthStateChanged(user => {
+    if(user){
+        currentUser = user;
+    }
+});
 
-if(newName==null) return;
+//=====================================
+// Upload Profile Photo
+//=====================================
 
-const newBio=prompt("Enter Bio",profileBio.textContent);
+profilePhotoInput.addEventListener("change", async(e)=>{
 
-if(newBio==null) return;
+const file=e.target.files[0];
+
+if(!file || !currentUser) return;
+
+const ref=storage.ref("profilePhotos/"+currentUser.uid);
+
+await ref.put(file);
+
+const url=await ref.getDownloadURL();
 
 await db.collection("users").doc(currentUser.uid).update({
 
-name:newName,
-
-bio:newBio
+profilePhoto:url
 
 });
 
-loadMyProfile();
+profilePhoto.src=url;
+drawerProfilePhoto.src=url;
+homeProfilePhoto.src=url;
 
-};
+});
 
-/*==============================
-Open Profile
-==============================*/
+//=====================================
+// Upload Cover Photo
+//=====================================
 
-navProfile.onclick=()=>{
+coverPhotoInput.addEventListener("change",async(e)=>{
 
-openPage(profilePage);
+const file=e.target.files[0];
 
-loadMyProfile();
+if(!file || !currentUser) return;
 
-};
+const ref=storage.ref("coverPhotos/"+currentUser.uid);
+
+await ref.put(file);
+
+const url=await ref.getDownloadURL();
+
+await db.collection("users").doc(currentUser.uid).update({
+
+coverPhoto:url
+
+});
+
+coverPhoto.src=url;
+
+});
+
+//=====================================
+// Save Bio
+//=====================================
+
+saveProfileBtn.addEventListener("click",async()=>{
+
+if(!currentUser) return;
+
+await db.collection("users").doc(currentUser.uid).update({
+
+bio:bioInput.value.trim()
+
+});
+
+profileBio.textContent=bioInput.value.trim();
+
+alert("Profile Updated Successfully");
+
+});
