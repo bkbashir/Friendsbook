@@ -107,15 +107,111 @@ type="text"
 id="fullName"
 placeholder="Full Name">
 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Friendsbook 2026</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- Loading Screen -->
+
+<div id="loadingScreen">
+
+<img src="myphoto.png" id="loadingLogo">
+
+<h2 id="loadingTitle">Friendsbook 2026</h2>
+
+<p id="loadingText">Loading...</p>
+
+</div>
+
+<div id="app">
+
+<!-- Login -->
+
+<section id="loginPage">
+
+<div class="authBox">
+
+<h1>Friendsbook</h1>
+
+<p>Connect with the world</p>
+
+<form id="loginForm">
+
+<input type="email"
+id="loginEmail"
+placeholder="Email">
+
+<input type="password"
+id="loginPassword"
+placeholder="Password">
+
+<button type="submit">
+
+Log In
+
+</button>
+
+</form>
+
+<div class="authLinks">
+
+<button id="forgotPasswordBtn">
+
+Forgot Password?
+
+</button>
+
+<button id="openSignupBtn">
+
+Create New Account
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Signup -->
+
+<section id="signupPage">
+
+<div class="authBox">
+
+<h2>Create Account</h2>
+
+<form id="signupForm">
+
+<input
+type="text"
+id="fullName"
+placeholder="Full Name">
+
 <input
 type="email"
 id="signupEmail"
-placeholder="Email Address">
+placeholder="Email">
 
 <input
 type="tel"
 id="signupPhone"
-placeholder="Phone Number">
+placeholder="Phone">
 
 <input
 type="date"
@@ -143,8 +239,7 @@ type="password"
 id="confirmPassword"
 placeholder="Confirm Password">
 
-<button
-type="submit">
+<button type="submit">
 
 Create Account
 
@@ -162,6 +257,38 @@ Already have an account?
 
 </section>
 
+<!-- Forgot -->
+
+<section id="forgotPage">
+
+<div class="authBox">
+
+<h2>Reset Password</h2>
+
+<form id="forgotForm">
+
+<input
+type="email"
+id="forgotEmail"
+placeholder="Enter Email">
+
+<button type="submit">
+
+Send Reset Link
+
+</button>
+
+</form>
+
+<button id="backLoginBtn2">
+
+Back To Login
+
+</button>
+
+</div>
+
+</section>
 <!-- ========================= -->
 <!-- Forgot Password -->
 <!-- ========================= -->
