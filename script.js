@@ -1798,3 +1798,293 @@ alert(e.message);
 
 };
 }
+//=====================================
+// PART 14 FINAL
+// Friendsbook Final Features
+//=====================================
+
+//======================
+// Admin Only
+//======================
+
+auth.onAuthStateChanged(async(user)=>{
+
+if(!user) return;
+
+if(user.email==="bashirahmed0052@gmail.com"){
+
+const adminBtn=document.getElementById("drawerAdmin");
+
+if(adminBtn){
+
+adminBtn.style.display="block";
+
+}
+
+loadAdminDashboard();
+
+}
+
+});
+
+//======================
+// Drawer Admin
+//======================
+
+const drawerAdmin=document.getElementById("drawerAdmin");
+
+if(drawerAdmin){
+
+drawerAdmin.onclick=()=>{
+
+showPage("adminPage");
+
+};
+
+}
+
+//======================
+// Privacy
+//======================
+
+let accountPrivacy="public";
+
+function changePrivacy(type){
+
+accountPrivacy=type;
+
+localStorage.setItem("privacy",type);
+
+alert("Privacy Changed To : "+type);
+
+}
+
+accountPrivacy=
+
+localStorage.getItem("privacy")||"public";
+
+//======================
+// Notification
+//======================
+
+let notificationEnabled=true;
+
+function toggleNotification(){
+
+notificationEnabled=!notificationEnabled;
+
+localStorage.setItem(
+
+"notification",
+
+notificationEnabled
+
+);
+
+alert(
+
+notificationEnabled
+
+?
+
+"Notification ON"
+
+:
+
+"Notification OFF"
+
+);
+
+}
+
+//======================
+// Logout All Devices
+//======================
+
+async function logoutEverywhere(){
+
+await auth.signOut();
+
+alert("Logged Out");
+
+location.reload();
+
+}
+
+//======================
+// Block User
+//======================
+
+async function blockUser(uid){
+
+await db.collection("users")
+
+.doc(currentUser.uid)
+
+.collection("blocked")
+
+.doc(uid)
+
+.set({
+
+blocked:true
+
+});
+
+alert("User Blocked");
+
+}
+
+//======================
+// Unblock User
+//======================
+
+async function unblockUser(uid){
+
+await db.collection("users")
+
+.doc(currentUser.uid)
+
+.collection("blocked")
+
+.doc(uid)
+
+.delete();
+
+alert("User Unblocked");
+
+}
+
+//======================
+// Admin Ban
+//======================
+
+async function adminBan(uid){
+
+await db.collection("users")
+
+.doc(uid)
+
+.update({
+
+banned:true
+
+});
+
+alert("User Banned");
+
+}
+
+//======================
+// Admin Unban
+//======================
+
+async function adminUnban(uid){
+
+await db.collection("users")
+
+.doc(uid)
+
+.update({
+
+banned:false
+
+});
+
+alert("User Unbanned");
+
+}
+
+//======================
+// Delete Any Post
+//======================
+
+async function adminDeletePost(postId){
+
+await db.collection("posts")
+
+.doc(postId)
+
+.delete();
+
+alert("Post Deleted");
+
+}
+
+//======================
+// Delete Any Comment
+//======================
+
+async function adminDeleteComment(commentId){
+
+await db.collection("comments")
+
+.doc(commentId)
+
+.delete();
+
+alert("Comment Deleted");
+
+}
+
+//======================
+// Theme
+//======================
+
+const savedTheme=
+
+localStorage.getItem("themeColor");
+
+if(savedTheme){
+
+document.body.setAttribute(
+
+"data-theme",
+
+savedTheme
+
+);
+
+}
+
+function changeTheme(color){
+
+document.body.setAttribute(
+
+"data-theme",
+
+color
+
+);
+
+localStorage.setItem(
+
+"themeColor",
+
+color
+
+);
+
+}
+
+//======================
+// Language
+//======================
+
+function setLanguage(lang){
+
+localStorage.setItem(
+
+"language",
+
+lang
+
+);
+
+alert(
+
+"Language : "+lang
+
+);
+
+}
