@@ -2094,4 +2094,3 @@ alert(
 );
 
 }
-console.log("Friendsbook Loaded");
