@@ -55,15 +55,21 @@ const profileBio = document.getElementById("profileBio");
 // Loading
 //=====================================
 
-window.onload = () => {
+window.addEventListener("load",()=>{
 
-setTimeout(() => {
+let loading = document.getElementById("loadingScreen");
 
-loadingScreen.style.display = "none";
+if(loading){
+
+setTimeout(()=>{
+
+loading.style.display="none";
 
 },1800);
 
-};
+}
+
+});
 
 //=====================================
 // Auth State
