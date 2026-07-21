@@ -1440,3 +1440,361 @@ console.log("New Message");
 });
 
 });
+//=====================================
+// Messenger Button
+//=====================================
+
+document.getElementById("chatImageBtn").onclick = () => {
+
+document.getElementById("imageMessageInput").click();
+
+};
+
+document.getElementById("voiceBtn").onclick = () => {
+
+document.getElementById("voiceMessageInput").click();
+
+};
+
+//=====================================
+// Voice Call
+//=====================================
+
+const voiceCallBtn = document.getElementById("voiceCallBtn");
+
+if(voiceCallBtn){
+
+voiceCallBtn.onclick = ()=>{
+
+alert("Voice Call Coming Soon");
+
+};
+
+}
+
+//=====================================
+// Video Call
+//=====================================
+
+const videoCallBtn = document.getElementById("videoCallBtn");
+
+if(videoCallBtn){
+
+videoCallBtn.onclick = ()=>{
+
+alert("Video Call Coming Soon");
+
+};
+
+}
+
+//=====================================
+// Online Status
+//=====================================
+
+db.collection("users").onSnapshot((snap)=>{
+
+snap.forEach((doc)=>{
+
+const u = doc.data();
+
+if(currentChatUser && u.uid===currentChatUser){
+
+document.getElementById("onlineStatus").innerHTML =
+u.online ? "🟢 Online" : "⚫ Offline";
+
+}
+
+});
+
+});
+
+//=====================================
+// Seen Status
+//=====================================
+
+async function markSeen(){
+
+const snap = await db.collection("messages")
+
+.where("from","==",currentChatUser)
+
+.where("to","==",currentUser.uid)
+
+.get();
+
+snap.forEach(async(d)=>{
+
+await d.ref.update({
+
+seen:true
+
+});
+
+});
+
+}
+
+chatMessages.addEventListener("click",()=>{
+
+markSeen();
+
+});
+
+//=====================================
+// Admin Dashboard
+//=====================================
+
+async function loadAdminDashboard(){
+
+if(!currentUser) return;
+
+if(currentUser.email!=="bashirahmed0052@gmail.com") return;
+
+const users = await db.collection("users").get();
+
+const posts = await db.collection("posts").get();
+
+document.getElementById("adminDashboard").innerHTML = `
+
+<div class="adminCard">
+
+<h3>Total Users</h3>
+
+<h1>${users.size}</h1>
+
+</div>
+
+<div class="adminCard">
+
+<h3>Total Posts</h3>
+
+<h1>${posts.size}</h1>
+
+</div>
+
+`;
+
+}
+
+auth.onAuthStateChanged((user)=>{
+
+if(user && user.email==="bashirahmed0052@gmail.com"){
+
+loadAdminDashboard();
+
+}
+
+});
+//=====================================
+// Settings
+//=====================================
+
+const changeNameBtn=document.getElementById("changeNameBtn");
+const changeBioBtn=document.getElementById("changeBioBtn");
+const changeEmailBtn=document.getElementById("changeEmailBtn");
+const changePasswordBtn=document.getElementById("changePasswordBtn");
+const deleteAccountBtn=document.getElementById("deleteAccountBtn");
+const darkModeBtn=document.getElementById("darkModeBtn");
+const languageBtn=document.getElementById("languageBtn");
+
+//=====================================
+// Change Name
+//=====================================
+
+if(changeNameBtn){
+
+changeNameBtn.onclick=async()=>{
+
+const name=prompt("Enter New Name");
+
+if(!name) return;
+
+await db.collection("users")
+
+.doc(currentUser.uid)
+
+.update({
+
+name:name
+
+});
+
+profileName.innerText=name;
+
+drawerProfileName.innerText=name;
+
+alert("Name Updated");
+
+};
+
+}
+
+//=====================================
+// Change Bio
+//=====================================
+
+if(changeBioBtn){
+
+changeBioBtn.onclick=async()=>{
+
+const bio=prompt("Enter New Bio");
+
+if(bio==null) return;
+
+await db.collection("users")
+
+.doc(currentUser.uid)
+
+.update({
+
+bio:bio
+
+});
+
+profileBio.innerText=bio;
+
+alert("Bio Updated");
+
+};
+
+}
+
+//=====================================
+// Change Email
+//=====================================
+
+if(changeEmailBtn){
+
+changeEmailBtn.onclick=async()=>{
+
+const email=prompt("Enter New Email");
+
+if(!email) return;
+
+try{
+
+await currentUser.updateEmail(email);
+
+await db.collection("users")
+
+.doc(currentUser.uid)
+
+.update({
+
+email:email
+
+});
+
+alert("Email Updated");
+
+}catch(e){
+
+alert(e.message);
+
+}
+
+};
+
+}
+
+//=====================================
+// Change Password
+//=====================================
+
+if(changePasswordBtn){
+
+changePasswordBtn.onclick=async()=>{
+
+const pass=prompt("Enter New Password");
+
+if(!pass) return;
+
+try{
+
+await currentUser.updatePassword(pass);
+
+alert("Password Updated");
+
+}catch(e){
+
+alert(e.message);
+
+}
+
+};
+
+}
+
+//=====================================
+// Dark Mode
+//=====================================
+
+if(darkModeBtn){
+
+darkModeBtn.onclick=()=>{
+
+document.body.classList.toggle("dark");
+
+localStorage.setItem(
+
+"theme",
+
+document.body.classList.contains("dark")
+
+);
+
+};
+
+}
+
+if(localStorage.getItem("theme")=="true"){
+
+document.body.classList.add("dark");
+
+}
+
+//=====================================
+// Language
+//=====================================
+
+if(languageBtn){
+
+languageBtn.onclick=()=>{
+
+alert("বাংলা / English Feature Coming");
+
+};
+
+}
+
+//=====================================
+// Delete Account
+//=====================================
+
+if(deleteAccountBtn){
+
+deleteAccountBtn.onclick=async()=>{
+
+if(!confirm("Delete Account?")) return;
+
+try{
+
+await db.collection("users")
+
+.doc(currentUser.uid)
+
+.delete();
+
+await currentUser.delete();
+
+alert("Account Deleted");
+
+}catch(e){
+
+alert(e.message);
+
+}
+
+};
+}
