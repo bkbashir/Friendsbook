@@ -471,16 +471,13 @@ Edit Profile
 
 <div id="editProfileBox" style="display:none;">
 
-<input
-type="text"
-id="bioInput"
-placeholder="Write your bio">
 
-<button id="saveProfileBtn">
+  <input type="text" id="nameInput" placeholder="Your Name">
 
-Save Profile
+<textarea id="bioInput" placeholder="Write your bio"></textarea>
 
-</button>
+<button id="saveProfileBtn">Save Profile</button>
+  
 
 </div>
 
@@ -618,11 +615,37 @@ Send
 
 </section>
 
-<section id="searchPage" style="display:none;"></section>
+<!-- ========================= -->
+<!-- Search -->
+<section id="searchPage" style="display:none;">
 
-<section id="friendRequestPage" style="display:none;"></section>
+<h2>Search</h2>
 
-<section id="savedPage" style="display:none;"></section>
+<input type="text" id="searchInput" placeholder="Search Friendsbook...">
+
+<div id="searchResult"></div>
+
+</section>
+
+<!-- ========================= -->
+<!-- Friend Request -->
+<section id="friendRequestPage" style="display:none;">
+
+<h2>Friend Requests</h2>
+
+<div id="friendRequestContainer"></div>
+
+</section>
+
+<!-- ========================= -->
+<!-- Saved -->
+<section id="savedPage" style="display:none;">
+
+<h2>Saved Posts</h2>
+
+<div id="savedContainer"></div>
+
+</section>
 <!-- ========================= -->
 <!-- Admin Panel -->
 <!-- ========================= -->
@@ -708,39 +731,8 @@ Send
 </div>
 
 </section>
-<!-- ========================= -->
-<!-- Search -->
-<section id="searchPage" style="display:none;">
 
-<h2>Search</h2>
-
-<input type="text" id="searchInput" placeholder="Search Friendsbook...">
-
-<div id="searchResult"></div>
-
-</section>
-
-<!-- ========================= -->
-<!-- Friend Request -->
-<section id="friendRequestPage" style="display:none;">
-
-<h2>Friend Requests</h2>
-
-<div id="friendRequestContainer"></div>
-
-</section>
-
-<!-- ========================= -->
-<!-- Saved -->
-<section id="savedPage" style="display:none;">
-
-<h2>Saved Posts</h2>
-
-<div id="savedContainer"></div>
-
-</section>
 </div>
-</section>
 
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
