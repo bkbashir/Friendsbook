@@ -51,6 +51,11 @@ const coverPhoto = document.getElementById("coverPhoto");
 
 const profileBio = document.getElementById("profileBio");
 
+const profileInput = document.getElementById("profileInput");
+const coverInput = document.getElementById("coverInput");
+const storyInput = document.getElementById("storyInput");
+const photoInput = document.getElementById("photoInput");
+
 //=====================================
 // Loading
 //=====================================
