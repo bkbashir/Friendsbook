@@ -1,71 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Friendsbook</title>
-
-<link rel="icon" href="myphoto.png">
+<title>Friendsbook 2026</title>
 
 <link rel="stylesheet" href="style.css">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-rel="stylesheet">
-
 <link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 </head>
 
 <body>
-    <!-- ========================= -->
+
+<!-- ========================= -->
 <!-- Loading Screen -->
 <!-- ========================= -->
 
 <div id="loadingScreen">
 
-<div class="loadingBox">
-
 <img src="myphoto.png" id="loadingPhoto">
 
-<h1 id="loadingLogo">
+<h1>Friendsbook</h1>
 
-FRIENDSBOOK
+<p>Loading...</p>
 
-</h1>
-
-<p id="loadingText">
-
-Loading...
-
-</p>
-
+<div class="loadingBar">
+<div class="loadingFill"></div>
 </div>
 
 </div>
 
 <!-- ========================= -->
-<!-- Login Page -->
+<!-- Login -->
 <!-- ========================= -->
 
 <section id="loginPage">
 
-<div class="loginBox">
+<div class="authCard">
 
-<h1>Friendsbook</h1>
-
-<p>Connect with friends.</p>
+<h2>Friendsbook</h2>
 
 <form id="loginForm">
 
@@ -82,36 +59,30 @@ placeholder="Password"
 required>
 
 <button type="submit">
-
 Login
-
 </button>
 
 </form>
 
-<button id="forgotBtn">
-
+<p id="goForgot">
 Forgot Password?
+</p>
 
-</button>
-
-<button id="signupBtn">
-
+<p id="goSignup">
 Create New Account
-
-</button>
+</p>
 
 </div>
 
 </section>
 
 <!-- ========================= -->
-<!-- Signup Page -->
+<!-- Signup -->
 <!-- ========================= -->
 
 <section id="signupPage" style="display:none;">
 
-<div class="loginBox">
+<div class="authCard">
 
 <h2>Create Account</h2>
 
@@ -137,17 +108,17 @@ required>
 
 <button type="submit">
 
-Create Account
+Signup
 
 </button>
 
 </form>
 
-<button id="backLoginBtn">
+<p id="backLogin">
 
-Back To Login
+Already have an account?
 
-</button>
+</p>
 
 </div>
 
@@ -159,9 +130,9 @@ Back To Login
 
 <section id="forgotPage" style="display:none;">
 
-<div class="loginBox">
+<div class="authCard">
 
-<h2>Reset Password</h2>
+<h2>Forgot Password</h2>
 
 <form id="forgotForm">
 
@@ -179,57 +150,49 @@ Send Reset Link
 
 </form>
 
-<button id="backLoginBtn2">
+<p id="backLogin2">
 
 Back To Login
 
-</button>
+</p>
 
 </div>
 
 </section>
 
 <!-- ========================= -->
-<!-- Main App -->
+<!-- Main Page -->
 <!-- ========================= -->
 
 <section id="mainPage" style="display:none;">
-    <!-- ========================= -->
+
+<!-- Part 2 থেকে Header, Drawer, Home, Profile, Messenger, Settings শুরু হবে -->
+<!-- ========================= -->
 <!-- Header -->
 <!-- ========================= -->
 
 <header id="header">
 
 <button id="menuBtn">
-
 <i class="fa-solid fa-bars"></i>
-
 </button>
 
-<h2 id="appTitle">
-
+<h2 id="appLogo">
 Friendsbook
-
 </h2>
 
 <div class="headerRight">
 
 <button id="searchBtn">
-
 <i class="fa-solid fa-magnifying-glass"></i>
-
 </button>
 
 <button id="messageBtn">
-
-<i class="fa-solid fa-facebook-messenger"></i>
-
+<i class="fa-solid fa-comments"></i>
 </button>
 
 <button id="notificationBtn">
-
 <i class="fa-solid fa-bell"></i>
-
 </button>
 
 </div>
@@ -244,77 +207,75 @@ Friendsbook
 
 <div class="drawerTop">
 
-<img
-src="myphoto.png"
-id="drawerProfilePhoto">
+<img src="myphoto.png" id="drawerProfilePhoto">
 
 <h3 id="drawerProfileName">
-
 Friendsbook User
-
 </h3>
 
 </div>
 
+<div class="drawerMenu">
+
+<button id="drawerHome">
+🏠 Home
+</button>
+
 <button id="drawerProfile">
-
-<i class="fa-solid fa-user"></i>
-
-Profile
-
+👤 Profile
 </button>
 
 <button id="drawerFriends">
-
-<i class="fa-solid fa-user-group"></i>
-
-Friends
-
+👥 Friends
 </button>
 
-<button id="drawerMarketplace">
-
-<i class="fa-solid fa-store"></i>
-
-Marketplace
-
+<button id="drawerMessenger">
+💬 Messenger
 </button>
 
 <button id="drawerReels">
+🎬 Reels
+</button>
 
-<i class="fa-solid fa-film"></i>
+<button id="drawerSaved">
+🔖 Saved
+</button>
 
-Reels
-
+<button id="drawerNotification">
+🔔 Notifications
 </button>
 
 <button id="drawerSettings">
+⚙️ Settings
+</button>
 
-<i class="fa-solid fa-gear"></i>
-
-Settings
-
+<button id="drawerAdmin" style="display:none;">
+👑 Admin Panel
 </button>
 
 <button id="logoutBtn">
-
-<i class="fa-solid fa-right-from-bracket"></i>
-
-Logout
-
+🚪 Logout
 </button>
+
+</div>
 
 </aside>
 
 <!-- ========================= -->
-<!-- Home -->
+<!-- Page Container -->
 <!-- ========================= -->
+
+<div id="pageContainer">
 
 <section id="homePage">
 
+<!-- Create Post -->
+
 <div id="createPostBox">
 
-<img src="myphoto.png" id="homeProfilePhoto">
+<img
+src="myphoto.png"
+id="homeProfilePhoto">
 
 <input
 type="text"
@@ -333,22 +294,46 @@ id="videoInput"
 accept="video/*"
 hidden>
 
-<button id="imageBtn">📷</button>
+<button id="imageBtn">
+<i class="fa-solid fa-image"></i>
+</button>
 
-<button id="videoBtn">🎥</button>
+<button id="videoBtn">
+<i class="fa-solid fa-video"></i>
+</button>
 
-<button id="postBtn">Post</button>
+<button id="postBtn">
+
+Post
+
+</button>
 
 </div>
 
-<div id="storyContainer"></div>
+<!-- Story -->
 
-<div id="feedContainer"></div>
+<div id="storyContainer">
+
+<div class="story addStory">
+
+<img
+src="myphoto.png">
+
+<p>Create Story</p>
+
+</div>
+
+</div>
+
+<!-- Feed -->
+
+<div id="feedContainer">
+
+</div>
 
 </section>
-<!-- ========================= -->
+
 <!-- Bottom Navigation -->
-<!-- ========================= -->
 
 <nav id="bottomNav">
 
@@ -356,17 +341,23 @@ hidden>
 
 <i class="fa-solid fa-house"></i>
 
+<p>Home</p>
+
 </button>
 
 <button id="navFriends">
 
 <i class="fa-solid fa-user-group"></i>
 
+<p>Friends</p>
+
 </button>
 
 <button id="navReels">
 
-<i class="fa-solid fa-film"></i>
+<i class="fa-solid fa-circle-play"></i>
+
+<p>Reels</p>
 
 </button>
 
@@ -374,60 +365,104 @@ hidden>
 
 <i class="fa-solid fa-store"></i>
 
+<p>Market</p>
+
 </button>
 
 <button id="navProfile">
 
 <i class="fa-solid fa-user"></i>
 
+<p>Profile</p>
+
 </button>
 
-    </nav>
-
-
-<!-- ========================= -->
-<!-- Profile Page -->
-<!-- ========================= -->
+</nav>
 
 <section id="profilePage" style="display:none;">
 
-<img src="myphoto.png" id="coverPhoto">
+<div id="coverContainer">
 
-<img src="myphoto.png" id="profilePhoto">
+<img
+src="cover.jpg"
+id="coverPhoto">
 
-<h2 id="profileName"></h2>
+<label for="coverPhotoInput" id="coverEditBtn">
+<i class="fa-solid fa-camera"></i>
+</label>
 
-<p id="profileBio"></p>
+<input
+type="file"
+id="coverPhotoInput"
+accept="image/*"
+hidden>
+
+</div>
+
+<div id="profileContainer">
+
+<img
+src="myphoto.png"
+id="profilePhoto">
+
+<label for="profilePhotoInput" id="profileEditBtn">
+<i class="fa-solid fa-camera"></i>
+</label>
+
+<input
+type="file"
+id="profilePhotoInput"
+accept="image/*"
+hidden>
+
+<h2 id="profileName">
+Friendsbook User
+</h2>
+
+<p id="profileBio">
+No bio yet.
+</p>
+
+<div id="profileStats">
+
+<div>
+
+<h3 id="friendsCount">0</h3>
+
+<p>Friends</p>
+
+</div>
+
+<div>
+
+<h3 id="followersCount">0</h3>
+
+<p>Followers</p>
+
+</div>
+
+<div>
+
+<h3 id="followingCount">0</h3>
+
+<p>Following</p>
+
+</div>
+
+</div>
 
 <button id="editProfileBtn">
 
 Edit Profile
 
 </button>
-<!-- ========================= -->
-<!-- Edit Profile -->
-<!-- ========================= -->
 
 <div id="editProfileBox" style="display:none;">
 
 <input
-type="file"
-id="profilePhotoInput"
-accept="image/*">
-
-<input
-type="file"
-id="coverPhotoInput"
-accept="image/*">
-
-<input
 type="text"
-id="editNameInput"
-placeholder="Your Name">
-
-<textarea
 id="bioInput"
-placeholder="Write your bio..."></textarea>
+placeholder="Write your bio">
 
 <button id="saveProfileBtn">
 
@@ -436,29 +471,8 @@ Save Profile
 </button>
 
 </div>
-<div class="profileCount">
 
-<div>
-
-<h3 id="totalPosts">0</h3>
-
-<p>Posts</p>
-
-</div>
-
-<div>
-
-<h3 id="totalFollowers">0</h3>
-
-<p>Followers</p>
-
-</div>
-
-<div>
-
-<h3 id="totalFollowing">0</h3>
-
-<p>Following</p>
+<div id="profilePosts">
 
 </div>
 
@@ -466,17 +480,7 @@ Save Profile
 
 </section>
 
-<!-- ========================= -->
-<!-- Friends -->
-<!-- ========================= -->
-
-<section id="friendsPage" style="display:none;">
-
-<h2>Friends</h2>
-
-<div id="friendContainer"></div>
-
-</section>
+<section id="friendsPage" style="display:none;"></section>
 
 <!-- ========================= -->
 <!-- Messenger -->
@@ -486,7 +490,50 @@ Save Profile
 
 <h2>Messenger</h2>
 
-<div id="chatContainer"></div>
+<div id="chatList"></div>
+
+<div id="chatBox" style="display:none;">
+
+<div id="chatHeader">
+
+<img src="myphoto.png" id="chatProfile">
+
+<h3 id="chatName">User</h3>
+
+<p id="onlineStatus">Offline</p>
+
+</div>
+
+<div id="chatMessages"></div>
+
+<div id="chatInputBox">
+
+<input
+type="text"
+id="messageInput"
+placeholder="Write a message...">
+
+<input
+type="file"
+id="chatImageInput"
+accept="image/*"
+hidden>
+
+<button id="chatImageBtn">
+📷
+</button>
+
+<button id="voiceBtn">
+🎤
+</button>
+
+<button id="sendMessageBtn">
+Send
+</button>
+
+</div>
+
+</div>
 
 </section>
 
@@ -498,33 +545,18 @@ Save Profile
 
 <h2>Notifications</h2>
 
-<div id="notificationContainer"></div>
+<div id="notificationContainer">
+
+<p>No notifications yet.</p>
+
+</div>
 
 </section>
 
-<!-- ========================= -->
-<!-- Reels -->
-<!-- ========================= -->
 
-<section id="reelsPage" style="display:none;">
+<section id="reelsPage" style="display:none;"></section>
 
-<h2>Reels</h2>
-
-<div id="reelsContainer"></div>
-
-</section>
-
-<!-- ========================= -->
-<!-- Marketplace -->
-<!-- ========================= -->
-
-<section id="marketplacePage" style="display:none;">
-
-<h2>Marketplace</h2>
-
-<div id="marketContainer"></div>
-
-</section>
+<section id="marketplacePage" style="display:none;"></section>
 
 <!-- ========================= -->
 <!-- Settings -->
@@ -534,7 +566,36 @@ Save Profile
 
 <h2>Settings</h2>
 
+<button id="darkModeBtn">
+🌙 Dark Mode
+</button>
+
+<button id="changePasswordBtn">
+🔒 Change Password
+</button>
+
+<button id="privacyBtn">
+🔐 Privacy
+</button>
+
+<button id="languageBtn">
+🌍 Language
+</button>
+
+<button id="blockUserBtn">
+🚫 Block Users
+</button>
+
+<button id="deleteAccountBtn">
+🗑 Delete Account
+</button>
+
+<button id="logoutBtn2">
+🚪 Logout
+</button>
+
 </section>
+
 
 <!-- ========================= -->
 <!-- Admin Panel -->
@@ -542,21 +603,85 @@ Save Profile
 
 <section id="adminPage" style="display:none;">
 
-<h2>Admin Panel</h2>
+<div id="adminHeader">
 
-<div id="adminDashboard"></div>
+<h2>👑 Friendsbook Admin</h2>
+
+<p>Only Admin Can Access</p>
+
+</div>
+
+<div id="adminDashboard">
+
+<div class="adminCard">
+
+<h3>Total Users</h3>
+
+<h1 id="totalUsers">0</h1>
+
+</div>
+
+<div class="adminCard">
+
+<h3>Total Posts</h3>
+
+<h1 id="totalPosts">0</h1>
+
+</div>
+
+<div class="adminCard">
+
+<h3>Reports</h3>
+
+<h1 id="totalReports">0</h1>
+
+</div>
+
+</div>
+
+<div class="adminSection">
+
+<h3>User Management</h3>
+
+<div id="adminUserList">
+
+</div>
+
+</div>
+
+<div class="adminSection">
+
+<h3>Reported Posts</h3>
+
+<div id="reportList">
+
+</div>
+
+</div>
+
+<div class="adminSection">
+
+<h3>Admin Actions</h3>
+
+<button id="banUserBtn">
+🚫 Ban User
+</button>
+
+<button id="unbanUserBtn">
+✅ Unban User
+</button>
+
+<button id="deletePostBtn">
+🗑 Delete Post
+</button>
+
+<button id="deleteCommentBtn">
+❌ Delete Comment
+</button>
+
+</div>
 
 </section>
 
-<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-storage-compat.js"></script>
-
-<script src="script.js"></script>
-
-</body>
-    </html>
+    </div>
+</section>
