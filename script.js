@@ -537,9 +537,6 @@ const saveProfileBtn=document.getElementById("saveProfileBtn");
 const nameInput=document.getElementById("nameInput");
 const bioInput=document.getElementById("bioInput");
 
-const profileInput=document.getElementById("profileInput");
-const coverInput=document.getElementById("coverInput");
-
 editProfileBtn.onclick=()=>{
 
 editProfileBox.style.display="block";
