@@ -1,4 +1,4 @@
-alert("script loaded");
+alert("SCRIPT RUNNING");
 //=====================================
 // Friendsbook 2026
 // Part 1
