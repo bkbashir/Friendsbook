@@ -1,34 +1,14 @@
 //=====================================
-// Friendsbook 2026
-// Part 1
-// Firebase
+// Friendsbook 2026 v2
+// script.js Part 1
 //=====================================
 
-const firebaseConfig = {
- apiKey: "AIzaSyBRad-Z7zxRRnvy17nRXEh7ZG4hu6fluZ4",
- authDomain: "friendsbook-4a40c.firebaseapp.com",
- projectId: "friendsbook-4a40c",
- storageBucket: "friendsbook-4a40c.firebasestorage.app",
- messagingSenderId: "1000346329473",
- appId: "1:1000346329473:web:9bd69019e2b09f971e8880"
-};
-
-firebase.initializeApp(firebaseConfig);
-
-const auth = firebase.auth();
-const db = firebase.firestore();
-const storage = firebase.storage();
-
-//=====================================
-// Global User
-//=====================================
+//========== Global ==========
 
 let currentUser = null;
+let currentUserData = null;
 
-//=====================================
-// Elements
-//=====================================
-
+//========== Elements ==========
 const loadingScreen = document.getElementById("loadingScreen");
 
 const loginPage = document.getElementById("loginPage");
@@ -40,798 +20,489 @@ const loginForm = document.getElementById("loginForm");
 const signupForm = document.getElementById("signupForm");
 const forgotForm = document.getElementById("forgotForm");
 
-const profileName = document.getElementById("profileName");
-const drawerProfileName = document.getElementById("drawerProfileName");
+const goSignup = document.getElementById("goSignup");
+const backLogin = document.getElementById("backLogin");
 
-const profilePhoto = document.getElementById("profilePhoto");
-const drawerProfilePhoto = document.getElementById("drawerProfilePhoto");
-const homeProfilePhoto = document.getElementById("homeProfilePhoto");
+const goForgot = document.getElementById("goForgot");
+const forgotBack = document.getElementById("forgotBack");
 
-const coverPhoto = document.getElementById("coverPhoto");
+//========== Loading ==========
+window.onload = () => {
 
-const profileBio = document.getElementById("profileBio");
+setTimeout(() => {
 
-const profileInput = document.getElementById("profileInput");
-const coverInput = document.getElementById("coverInput");
-const storyInput = document.getElementById("storyInput");
-const photoInput = document.getElementById("photoInput");
+loadingScreen.style.display = "none";
 
-//=====================================
-// Loading
-//=====================================
+},2500);
 
-window.addEventListener("load",()=>{
+};
 
-let loading = document.getElementById("loadingScreen");
-
-if(loading){
-
-setTimeout(()=>{
-
-loading.style.display="none";
-
-},1800);
-
-}
-
-});
-
-//=====================================
-// Auth State
-//=====================================
-
-auth.onAuthStateChanged(async(user)=>{
-
-if(user){
-
-currentUser=user;
-
-loginPage.style.display="none";
-signupPage.style.display="none";
-forgotPage.style.display="none";
-
-mainPage.style.display="block";
-
-await loadUserProfile(user.uid);
-
-showPage(
-localStorage.getItem("lastPage") || "home"
-);
-
-}else{
-
-currentUser=null;
+//========== Pages ==========
+function showLogin(){
 
 loginPage.style.display="flex";
-
 signupPage.style.display="none";
-
 forgotPage.style.display="none";
-
 mainPage.style.display="none";
 
 }
 
-});
+function showSignup(){
 
-//=====================================
-// Signup
-//=====================================
-
-signupForm.addEventListener("submit", async (e) => {
-
-e.preventDefault();
-
-const name = document.getElementById("fullName").value.trim();
-const email = document.getElementById("signupEmail").value.trim();
-const password = document.getElementById("signupPassword").value;
-
-try{
-
-const result = await auth.createUserWithEmailAndPassword(email,password);
-
-await db.collection("users").doc(result.user.uid).set({
-
-uid:result.user.uid,
-name:name,
-email:email,
-
-bio:"",
-profilePhoto:"",
-coverPhoto:"",
-
-friends:0,
-followers:0,
-following:0,
-
-createdAt:firebase.firestore.FieldValue.serverTimestamp()
-
-});
-
-alert("Account Created Successfully");
-
-signupPage.style.display="none";
-loginPage.style.display="flex";
-
-}catch(err){
-
-alert(err.message);
-
-}
-
-});
-
-//=====================================
-// Login
-//=====================================
-
-loginForm.addEventListener("submit", async(e)=>{
-
-e.preventDefault();
-
-const email=document.getElementById("loginEmail").value.trim();
-
-const password=document.getElementById("loginPassword").value;
-
-try{
-
-await auth.signInWithEmailAndPassword(email,password);
-
-}catch(err){
-
-alert(err.message);
-
-}
-
-});
-
-//=====================================
-// Forgot Password
-//=====================================
-
-forgotForm.addEventListener("submit",async(e)=>{
-
-e.preventDefault();
-
-const email=document.getElementById("forgotEmail").value.trim();
-
-try{
-
-await auth.sendPasswordResetEmail(email);
-
-alert("Password Reset Link Sent");
-
+loginPage.style.display="none";
+signupPage.style.display="flex";
 forgotPage.style.display="none";
-loginPage.style.display="flex";
+mainPage.style.display="none";
 
-}catch(err){
+}
 
-alert(err.message);
+function showForgot(){
+
+loginPage.style.display="none";
+signupPage.style.display="none";
+forgotPage.style.display="flex";
+mainPage.style.display="none";
+
+}
+
+function showMain(){
+
+loginPage.style.display="none";
+signupPage.style.display="none";
+forgotPage.style.display="none";
+mainPage.style.display="block";
+
+}
+
+//========== Navigation ==========
+goSignup.onclick = showSignup;
+
+backLogin.onclick = showLogin;
+
+goForgot.onclick = showForgot;
+
+forgotBack.onclick = showLogin;
+
+//========== Login ==========
+loginForm.onsubmit = async(e)=>{
+
+e.preventDefault();
+
+const email =
+document.getElementById("loginEmail").value.trim();
+
+const password =
+document.getElementById("loginPassword").value;
+
+await login(email,password);
+
+};
+
+//========== Signup ==========
+signupForm.onsubmit = async(e)=>{
+
+e.preventDefault();
+
+const name =
+document.getElementById("signupName").value.trim();
+
+const email =
+document.getElementById("signupEmail").value.trim();
+
+const password =
+document.getElementById("signupPassword").value;
+
+const confirm =
+document.getElementById("signupConfirm").value;
+
+if(password!==confirm){
+
+alert("Password Not Match");
+
+return;
+
+}
+
+await signup(name,email,password);
+
+showLogin();
+
+};
+
+//========== Forgot ==========
+forgotForm.onsubmit = async(e)=>{
+
+e.preventDefault();
+
+const email =
+document.getElementById("forgotEmail").value.trim();
+
+await forgotPassword(email);
+
+showLogin();
+
+};
+
+//========== Auth ==========
+auth.onAuthStateChanged(async(user)=>{
+
+if(user){
+
+if(!user.emailVerified){
+
+alert("Verify Your Email");
+
+auth.signOut();
+
+return;
+
+}
+
+currentUser = user;
+
+const doc =
+await usersRef.doc(user.uid).get();
+
+currentUserData = doc.data();
+
+showMain();
+
+const lastPage =
+localStorage.getItem("lastPage") || "homePage";
+
+showPage(lastPage);
+
+if(user.email===ADMIN_EMAIL){
+
+document.getElementById("adminPage").style.display="block";
+
+}else{
+
+document.getElementById("adminPage").style.display="none";
+
+}
+
+}else{
+
+showLogin();
 
 }
 
 });
 
-//=====================================
-// Logout
-//=====================================
-
-const logoutBtn=document.getElementById("logoutBtn");
-const logoutBtn2=document.getElementById("logoutBtn2");
-
-if(logoutBtn){
-
-logoutBtn.onclick=async()=>{
-
-localStorage.removeItem("lastPage");
-
-await auth.signOut();
-
-};
-
-}
-
-if(logoutBtn2){
-
-logoutBtn2.onclick=async()=>{
-
-localStorage.removeItem("lastPage");
-
-await auth.signOut();
-
-};
-
-}
-
-//=====================================
-// Load User Profile
-//=====================================
-
-async function loadUserProfile(uid){
-
-const doc=await db.collection("users").doc(uid).get();
-
-if(!doc.exists) return;
-
-const data=doc.data();
-
-profileName.textContent=data.name || "Friendsbook User";
-
-drawerProfileName.textContent=data.name || "Friendsbook User";
-
-profileBio.textContent=data.bio || "";
-
-if(data.profilePhoto){
-
-profilePhoto.src=data.profilePhoto;
-
-drawerProfilePhoto.src=data.profilePhoto;
-
-homeProfilePhoto.src=data.profilePhoto;
-
-}
-
-if(data.coverPhoto){
-
-coverPhoto.src=data.coverPhoto;
-
-}
-
-  }
-//=====================================
-// Pages
-//=====================================
-
-const homePage=document.getElementById("homePage");
-const profilePage=document.getElementById("profilePage");
-const friendsPage=document.getElementById("friendsPage");
-const messagePage=document.getElementById("messagePage");
-const reelsPage=document.getElementById("reelsPage");
-const marketplacePage=document.getElementById("marketplacePage");
-const notificationPage=document.getElementById("notificationPage");
-const settingsPage=document.getElementById("settingsPage");
-const adminPage=document.getElementById("adminPage");
-const searchPage=document.getElementById("searchPage");
-const friendRequestPage=document.getElementById("friendRequestPage");
-const savedPage=document.getElementById("savedPage");
-
-//=====================================
-// Hide All Pages
-//=====================================
-
-function hidePages(){
-
-[
-homePage,
-profilePage,
-friendsPage,
-messagePage,
-reelsPage,
-marketplacePage,
-notificationPage,
-settingsPage,
-adminPage,
-searchPage,
-friendRequestPage,
-savedPage
-
-].forEach(page=>{
-
-if(page) page.style.display="none";
-
-});
-
-}
-
-//=====================================
-// Show Page
-//=====================================
-
-function showPage(page){
-
-hidePages();
-
-switch(page){
-
-case "profile":
-profilePage.style.display="block";
-break;
-
-case "friends":
-friendsPage.style.display="block";
-break;
-
-case "message":
-messagePage.style.display="block";
-break;
-
-case "reels":
-reelsPage.style.display="block";
-break;
-
-case "marketplace":
-marketplacePage.style.display="block";
-break;
-
-case "notification":
-notificationPage.style.display="block";
-break;
-
-case "settings":
-settingsPage.style.display="block";
-break;
-
-case "search":
-searchPage.style.display="block";
-break;
-
-case "saved":
-savedPage.style.display="block";
-break;
-
-case "friendRequest":
-friendRequestPage.style.display="block";
-break;
-
-case "admin":
-adminPage.style.display="block";
-break;
-
-default:
-homePage.style.display="block";
-
-}
+//========== Last Page ==========
+function saveLastPage(page){
 
 localStorage.setItem("lastPage",page);
 
 }
 
+function getLastPage(){
+
+return localStorage.getItem("lastPage") || "homePage";
+
+}
 //=====================================
-// Bottom Navigation
+// Friendsbook 2026 v2
+// script.js Part 2
+// Drawer + Navigation + Profile
 //=====================================
 
-document.getElementById("navHome").onclick=()=>showPage("home");
-document.getElementById("navFriends").onclick=()=>showPage("friends");
-document.getElementById("navReels").onclick=()=>showPage("reels");
-document.getElementById("navMarketplace").onclick=()=>showPage("marketplace");
-document.getElementById("navProfile").onclick=()=>showPage("profile");
-
-//=====================================
-// Drawer
-//=====================================
-
+//========== Elements ==========
 const drawer=document.getElementById("drawer");
+
 const menuBtn=document.getElementById("menuBtn");
 
-menuBtn.onclick=()=>{
+const pages=document.querySelectorAll(".page");
+
+//========== Drawer ==========
+menuBtn.onclick=(e)=>{
+
+e.stopPropagation();
 
 drawer.classList.toggle("active");
 
 };
 
-document.onclick=(e)=>{
+document.addEventListener("click",(e)=>{
 
-if(
-drawer &&
-menuBtn &&
-!drawer.contains(e.target) &&
-!menuBtn.contains(e.target)
-){
+if(!drawer.contains(e.target)&&
+e.target!==menuBtn){
 
 drawer.classList.remove("active");
 
 }
 
+});
+
+//========== Show Page ==========
+function showPage(id){
+
+pages.forEach(page=>{
+
+page.style.display="none";
+
+});
+
+const page=document.getElementById(id);
+
+if(page){
+
+page.style.display="block";
+
+saveLastPage(id);
+
+}
+
+drawer.classList.remove("active");
+
+}
+
+//========== Drawer Menu ==========
+document.getElementById("homeMenu").onclick=()=>showPage("homePage");
+
+document.getElementById("profileMenu").onclick=()=>showPage("profilePage");
+
+document.getElementById("friendsMenu").onclick=()=>showPage("friendsPage");
+
+document.getElementById("savedMenu").onclick=()=>showPage("savedPage");
+
+document.getElementById("settingMenu").onclick=()=>showPage("settingsPage");
+
+//========== Bottom Navigation ==========
+document.getElementById("navHome").onclick=()=>showPage("homePage");
+
+document.getElementById("navFriends").onclick=()=>showPage("friendsPage");
+
+document.getElementById("navReels").onclick=()=>showPage("reelsPage");
+
+document.getElementById("navMarket").onclick=()=>showPage("marketplacePage");
+
+document.getElementById("navProfile").onclick=()=>showPage("profilePage");
+
+//========== Header ==========
+document.getElementById("searchBtn").onclick=()=>{
+
+showPage("searchPage");
+
 };
-//=====================================
-// Drawer Buttons
-//=====================================
 
-document.getElementById("drawerHome").onclick = () => showPage("home");
+document.getElementById("messengerBtn").onclick=()=>{
 
-document.getElementById("drawerProfile").onclick = () => showPage("profile");
+showPage("messagePage");
 
-document.getElementById("drawerFriends").onclick = () => showPage("friends");
+};
 
-document.getElementById("drawerMessage").onclick = () => showPage("message");
+document.getElementById("notificationBtn").onclick=()=>{
 
-document.getElementById("drawerReels").onclick = () => showPage("reels");
+showPage("notificationPage");
 
-document.getElementById("drawerMarketplace").onclick = () => showPage("marketplace");
+};
 
-document.getElementById("drawerNotification").onclick = () => showPage("notification");
+//========== Load Profile ==========
+async function loadProfile(){
 
-document.getElementById("drawerSettings").onclick = () => showPage("settings");
+if(!currentUser)return;
 
-document.getElementById("drawerSaved").onclick = () => showPage("saved");
+const doc=await usersRef.doc(currentUser.uid).get();
 
-document.getElementById("drawerSearch").onclick = () => showPage("search");
+if(!doc.exists)return;
 
-document.getElementById("drawerFriendRequest").onclick = () => showPage("friendRequest");
+currentUserData=doc.data();
 
-//=====================================
-// Admin Panel
-//=====================================
+document.getElementById("drawerName").textContent=currentUserData.name||"User";
 
-const ADMIN_EMAIL = "bashirahmed0052@gmail.com";
+document.getElementById("profileName").textContent=currentUserData.name||"User";
 
-const drawerAdmin = document.getElementById("drawerAdmin");
+document.getElementById("profileBio").textContent=currentUserData.bio||"No Bio";
 
+document.getElementById("friendsCount").textContent=currentUserData.friends||0;
+
+document.getElementById("followersCount").textContent=currentUserData.followers||0;
+
+document.getElementById("followingCount").textContent=currentUserData.following||0;
+
+const photo=currentUserData.profilePhoto||"myphoto.png";
+
+document.getElementById("drawerPhoto").src=photo;
+
+document.getElementById("headerProfile").src=photo;
+
+document.getElementById("profilePhoto").src=photo;
+
+document.getElementById("homeProfilePhoto").src=photo;
+
+if(currentUserData.coverPhoto){
+
+document.getElementById("coverPhoto").src=currentUserData.coverPhoto;
+
+}
+
+}
+
+//========== Refresh ==========
 auth.onAuthStateChanged((user)=>{
 
-if(!user) return;
+if(user){
 
-if(user.email === ADMIN_EMAIL){
+loadProfile();
 
-drawerAdmin.style.display="block";
+//========== Buttons ==========
 
-}else{
+document.getElementById("logoutBtn").onclick = () => {
+    logout();
+};
 
-drawerAdmin.style.display="none";
+document.getElementById("editProfileBtn").onclick = () => {
+    showPage("editProfilePage");
+};
 
+document.getElementById("shareProfileBtn").onclick = async () => {
+
+    const url = location.origin + "/?uid=" + currentUser.uid;
+
+    try{
+
+        await navigator.share({
+
+            title: currentUserData.name,
+
+            text: "Follow me on Friendsbook",
+
+            url: url
+
+        });
+
+    }catch(e){
+
+        navigator.clipboard.writeText(url);
+
+        alert("Profile Link Copied");
+
+    }
+
+};
+ 
 }
 
 });
+//=====================================
+// Friendsbook 2026 v2
+// script.js Part 3
+// Profile + Cover + Story + Create Post
+//=====================================
 
-drawerAdmin.onclick = ()=>{
+//========== Profile Photo ==========
+document.getElementById("changeProfileBtn").onclick=()=>{
 
-showPage("admin");
+document.getElementById("profileInput").click();
 
 };
 
-//=====================================
-// Header Buttons
-//=====================================
-
-document.getElementById("searchBtn").onclick = ()=>{
-
-showPage("search");
-
-};
-
-document.getElementById("messageBtn").onclick = ()=>{
-
-showPage("message");
-
-};
-
-document.getElementById("notificationBtn").onclick = ()=>{
-
-showPage("notification");
-
-};
-
-//=====================================
-// Dark Mode
-//=====================================
-
-const darkModeBtn = document.getElementById("darkModeBtn");
-
-darkModeBtn.onclick = ()=>{
-
-document.body.classList.toggle("dark");
-
-localStorage.setItem(
-"theme",
-document.body.classList.contains("dark")
-? "dark"
-: "light"
-);
-
-};
-
-if(localStorage.getItem("theme")==="dark"){
-
-document.body.classList.add("dark");
-
-}
-//=====================================
-// Profile Edit
-//=====================================
-
-const editProfileBtn=document.getElementById("editProfileBtn");
-const editProfileBox=document.getElementById("editProfileBox");
-
-const saveProfileBtn=document.getElementById("saveProfileBtn");
-
-const nameInput=document.getElementById("nameInput");
-const bioInput=document.getElementById("bioInput");
-
-editProfileBtn.onclick=()=>{
-
-editProfileBox.style.display="block";
-
-nameInput.value=profileName.textContent;
-
-bioInput.value=profileBio.textContent;
-
-};
-
-//=====================================
-// Save Name + Bio
-//=====================================
-
-saveProfileBtn.onclick=async()=>{
-
-if(!currentUser) return;
-
-await db.collection("users").doc(currentUser.uid).update({
-
-name:nameInput.value,
-
-bio:bioInput.value
-
-});
-
-profileName.textContent=nameInput.value;
-
-drawerProfileName.textContent=nameInput.value;
-
-profileBio.textContent=bioInput.value;
-
-alert("Profile Updated");
-
-};
-
-//=====================================
-// Profile Photo Upload
-//=====================================
-
-profileInput.onchange=async(e)=>{
+document.getElementById("profileInput").onchange=async(e)=>{
 
 const file=e.target.files[0];
 
-if(!file) return;
+if(!file)return;
 
-const ref=storage.ref("profilePhotos/"+currentUser.uid);
+const ref=profileFolder.child(currentUser.uid);
 
 await ref.put(file);
 
 const url=await ref.getDownloadURL();
 
-await db.collection("users").doc(currentUser.uid).update({
+await usersRef.doc(currentUser.uid).update({
 
 profilePhoto:url
 
 });
 
-profilePhoto.src=url;
+currentUserData.profilePhoto=url;
 
-drawerProfilePhoto.src=url;
-
-homeProfilePhoto.src=url;
+loadProfile();
 
 };
 
-//=====================================
-// Cover Photo Upload
-//=====================================
+//========== Cover Photo ==========
+document.getElementById("changeCoverBtn").onclick=()=>{
 
-coverInput.onchange=async(e)=>{
+document.getElementById("coverInput").click();
+
+};
+
+document.getElementById("coverInput").onchange=async(e)=>{
 
 const file=e.target.files[0];
 
-if(!file) return;
+if(!file)return;
 
-const ref=storage.ref("coverPhotos/"+currentUser.uid);
+const ref=coverFolder.child(currentUser.uid);
 
 await ref.put(file);
 
 const url=await ref.getDownloadURL();
 
-await db.collection("users").doc(currentUser.uid).update({
+await usersRef.doc(currentUser.uid).update({
 
 coverPhoto:url
 
 });
 
-coverPhoto.src=url;
-
-};
-//=====================================
-// Create Post
-//=====================================
-
-const postBtn = document.getElementById("postBtn");
-const postInput = document.getElementById("postInput");
-const feedContainer = document.getElementById("feedContainer");
-
-postBtn.onclick = async () => {
-
-if(!currentUser) return;
-
-const text = postInput.value.trim();
-
-if(text==""){
-
-alert("Write something first");
-return;
-
-}
-
-await db.collection("posts").add({
-
-uid: currentUser.uid,
-
-name: profileName.textContent,
-
-profilePhoto: profilePhoto.src,
-
-text: text,
-
-image: "",
-
-video: "",
-
-likes: 0,
-
-comments: 0,
-
-shares: 0,
-
-time: firebase.firestore.FieldValue.serverTimestamp()
-
-});
-
-postInput.value="";
-
-loadPosts();
+document.getElementById("coverPhoto").src=url;
 
 };
 
-//=====================================
-// Load Posts
-//=====================================
+//========== Story ==========
+document.querySelector(".addStory").onclick=()=>{
 
-async function loadPosts(){
+document.getElementById("storyInput").click();
 
-feedContainer.innerHTML="";
+};
 
-const snap = await db.collection("posts")
-
-.orderBy("time","desc")
-
-.get();
-
-snap.forEach(doc=>{
-
-const p = doc.data();
-
-feedContainer.innerHTML += `
-
-<div class="feedCard">
-
-<div class="feedTop">
-
-<img src="${p.profilePhoto}" class="feedProfile">
-
-<div>
-
-<h4>${p.name}</h4>
-
-<small>Just now</small>
-
-</div>
-
-</div>
-
-<p>${p.text}</p>
-
-${p.image ? `<img src="${p.image}" class="feedImage">` : ""}
-
-${p.video ? `<video src="${p.video}" controls class="feedVideo"></video>` : ""}
-
-<div class="feedActions">
-
-<button onclick="likePost('${doc.id}')">👍 ${p.likes}</button>
-
-<button>💬 ${p.comments}</button>
-
-<button>↗ ${p.shares}</button>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-}
-
-//=====================================
-// Like Post
-//=====================================
-
-async function likePost(id){
-
-const ref = db.collection("posts").doc(id);
-
-const doc = await ref.get();
-
-await ref.update({
-
-likes:(doc.data().likes||0)+1
-
-});
-
-loadPosts();
-
-}
-
-//=====================================
-// Auto Load
-//=====================================
-
-db.collection("posts")
-
-.orderBy("time","desc")
-
-.onSnapshot(()=>{
-
-loadPosts();
-
-});
-//=====================================
-// Story Upload
-//=====================================
-
-const storyInput=document.getElementById("storyInput");
-const storyContainer=document.getElementById("storyContainer");
-
-storyInput.onchange=async(e)=>{
+document.getElementById("storyInput").onchange=async(e)=>{
 
 const file=e.target.files[0];
 
-if(!file) return;
+if(!file)return;
 
-const ref=storage.ref("stories/"+currentUser.uid+"_"+Date.now());
+const ref=storyFolder.child(
+
+randomId()
+
+);
 
 await ref.put(file);
 
 const url=await ref.getDownloadURL();
 
-await db.collection("stories").add({
+await createStory(url);
 
-uid:currentUser.uid,
-
-name:profileName.textContent,
-
-profilePhoto:profilePhoto.src,
-
-image:url,
-
-time:firebase.firestore.FieldValue.serverTimestamp()
-
-});
+loadStories();
 
 };
 
-//=====================================
-// Load Stories
-//=====================================
+//========== Load Stories ==========
+async function loadStories(){
 
-function loadStories(){
+const box=document.getElementById("stories");
 
-db.collection("stories")
+box.innerHTML="";
 
-.orderBy("time","desc")
+const snap=await storiesRef
 
-.onSnapshot(snapshot=>{
+.orderBy("createdAt","desc")
 
-storyContainer.innerHTML="";
+.get();
 
-snapshot.forEach(doc=>{
+snap.forEach(doc=>{
 
 const s=doc.data();
 
-storyContainer.innerHTML+=`
+box.innerHTML+=`
 
 <div class="story">
 
-<img src="${s.image}"
-
-onclick="openStory('${s.image}')">
+<img src="${s.image}">
 
 <p>${s.name}</p>
 
@@ -841,246 +512,224 @@ onclick="openStory('${s.image}')">
 
 });
 
-});
-
 }
 
-//=====================================
-// Story Viewer
-//=====================================
+//========== Image Button ==========
+document.getElementById("photoBtn").onclick=()=>{
 
-function openStory(url){
-
-window.open(url,"_blank");
-
-}
-
-//=====================================
-// Photo Post Upload
-//=====================================
-
-const photoInput=document.getElementById("photoInput");
-
-photoInput.onchange=async(e)=>{
-
-const file=e.target.files[0];
-
-if(!file) return;
-
-const ref=storage.ref("posts/"+Date.now());
-
-await ref.put(file);
-
-const url=await ref.getDownloadURL();
-
-await db.collection("posts").add({
-
-uid:currentUser.uid,
-
-name:profileName.textContent,
-
-profilePhoto:profilePhoto.src,
-
-text:postInput.value,
-
-image:url,
-
-video:"",
-
-likes:0,
-
-comments:0,
-
-shares:0,
-
-time:firebase.firestore.FieldValue.serverTimestamp()
-
-});
-
-postInput.value="";
+document.getElementById("imageInput").click();
 
 };
 
-//=====================================
-// Video Post Upload
-//=====================================
+//========== Video Button ==========
+document.getElementById("videoBtn").onclick=()=>{
 
-const videoInput=document.getElementById("videoInput");
-
-videoInput.onchange=async(e)=>{
-
-const file=e.target.files[0];
-
-if(!file) return;
-
-const ref=storage.ref("videos/"+Date.now());
-
-await ref.put(file);
-
-const url=await ref.getDownloadURL();
-
-await db.collection("posts").add({
-
-uid:currentUser.uid,
-
-name:profileName.textContent,
-
-profilePhoto:profilePhoto.src,
-
-text:postInput.value,
-
-image:"",
-
-video:url,
-
-likes:0,
-
-comments:0,
-
-shares:0,
-
-time:firebase.firestore.FieldValue.serverTimestamp()
-
-});
-
-postInput.value="";
+document.getElementById("videoInput").click();
 
 };
 
-//=====================================
-// Start
-//=====================================
+//========== Create Post ==========
+document.getElementById("postBtn").onclick=async()=>{
 
-loadStories();
-//=====================================
-// Delete Post
-//=====================================
+const text=document.getElementById("postInput").value.trim();
 
-async function deletePost(postId){
+const privacy=document.getElementById("privacySelect").value;
 
-if(!confirm("Delete this post?")) return;
+let images=[];
 
-await db.collection("posts").doc(postId).delete();
+let video="";
 
-}
+// Upload Images
 
-//=====================================
-// Save Post
-//=====================================
+const imgFiles=document.getElementById("imageInput").files;
 
-async function savePost(postId){
+for(let i=0;i<imgFiles.length;i++){
 
-await db.collection("users")
+const ref=postFolder.child(
 
-.doc(currentUser.uid)
+randomId()
 
-.collection("saved")
+);
 
-.doc(postId)
+await ref.put(imgFiles[i]);
 
-.set({
+images.push(
 
-savedAt:firebase.firestore.FieldValue.serverTimestamp()
+await ref.getDownloadURL()
 
-});
-
-alert("Post Saved");
+);
 
 }
 
-//=====================================
-// Share Post
-//=====================================
+// Upload Video
 
-async function sharePost(postId){
+const videoFile=document.getElementById("videoInput").files[0];
 
-const ref=db.collection("posts").doc(postId);
+if(videoFile){
 
-const doc=await ref.get();
+const ref=postFolder.child(
 
-await ref.update({
+randomId()
 
-shares:(doc.data().shares||0)+1
+);
 
-});
+await ref.put(videoFile);
 
-alert("Post Shared");
+video=await ref.getDownloadURL();
 
 }
 
-//=====================================
-// Comment
-//=====================================
-
-async function commentPost(postId){
-
-const text=prompt("Write Comment");
-
-if(!text) return;
-
-await db.collection("posts")
-
-.doc(postId)
-
-.collection("comments")
-
-.add({
-
-uid:currentUser.uid,
-
-name:profileName.textContent,
-
-photo:profilePhoto.src,
+await createPost({
 
 text:text,
 
-time:firebase.firestore.FieldValue.serverTimestamp()
+images:images,
+
+video:video,
+
+privacy:privacy
 
 });
 
-const ref=db.collection("posts").doc(postId);
+document.getElementById("postInput").value="";
 
-const doc=await ref.get();
+document.getElementById("imageInput").value="";
 
-await ref.update({
+document.getElementById("videoInput").value="";
 
-comments:(doc.data().comments||0)+1
+loadFeed();
+
+};
+
+//========== Start ==========
+loadStories();
+//=====================================
+// Friendsbook 2026 v2
+// script.js Part 4
+// Feed + Like + 6 Reactions + Share + Save
+//=====================================
+
+//========== Feed ==========
+async function loadFeed(){
+
+const feed=document.getElementById("feedContainer");
+
+feed.innerHTML="";
+
+const snap=await postsRef
+.orderBy("createdAt","desc")
+.get();
+
+snap.forEach(doc=>{
+
+const p=doc.data();
+
+let imgs="";
+
+if(p.images){
+
+p.images.forEach(img=>{
+
+imgs+=`<img src="${img}" class="postImage">`;
 
 });
 
 }
 
-//=====================================
-// Load Comments
-//=====================================
+let video="";
 
-async function loadComments(postId){
+if(p.video){
 
-const snap=await db.collection("posts")
+video=`
+<video
+class="postVideo"
+controls
+src="${p.video}">
+</video>
+`;
 
-.doc(postId)
+}
 
-.collection("comments")
+feed.innerHTML+=`
 
-.orderBy("time")
+<div class="postCard">
 
-.get();
+<div class="postHeader">
 
-let html="";
+<img
+class="postProfile"
+src="${p.profilePhoto}">
 
-snap.forEach(c=>{
+<div class="postInfo">
 
-const d=c.data();
+<div class="postName">
 
-html+=`
+${p.name}
 
-<div class="commentBox">
+</div>
 
-<img src="${d.photo}" class="commentPhoto">
+<div class="postTime">
 
-<b>${d.name}</b>
+${timeAgo(p.createdAt)}
 
-<p>${d.text}</p>
+</div>
+
+</div>
+
+<div class="postMenu">
+
+<i class="fa-solid fa-ellipsis"></i>
+
+</div>
+
+</div>
+
+<div class="postText">
+
+${p.text}
+
+</div>
+
+${imgs}
+
+${video}
+
+<div class="postActions">
+
+<button
+class="likeBtn"
+data-id="${doc.id}"
+
+onclick="reactPost('${doc.id}','like')"
+
+oncontextmenu="event.preventDefault();showReactionBox('${doc.id}',event)">
+
+👍 Like
+
+</button>
+
+<button
+onclick="openComments('${doc.id}')">
+
+💬 Comment
+
+</button>
+
+<button
+onclick="sharePost('${doc.id}')">
+
+↗ Share
+
+</button>
+
+<button
+onclick="savePost('${doc.id}')">
+
+💾 Save
+
+</button>
+
+</div>
 
 </div>
 
@@ -1088,65 +737,323 @@ html+=`
 
 });
 
-return html;
+}
 
- }
-//=====================================
-// Facebook Style Reactions
-//=====================================
+//========== Reaction ==========
+async function reactPost(postId,type){
 
-async function reactPost(postId,reaction){
+const id=currentUser.uid+"_"+postId;
 
-const ref=db.collection("posts").doc(postId);
+const ref=reactionsRef.doc(id);
 
 const doc=await ref.get();
 
-const data=doc.data();
+if(doc.exists){
 
-let reactions=data.reactions || {
+const old=doc.data().type;
 
-like:0,
-love:0,
-haha:0,
-wow:0,
-sad:0,
-angry:0
+if(old===type)return;
 
-};
+await postsRef.doc(postId).update({
 
-reactions[reaction]++;
+[old]:
+firebase.firestore.FieldValue.increment(-1),
 
-await ref.update({
-
-reactions:reactions
+[type]:
+firebase.firestore.FieldValue.increment(1)
 
 });
 
-loadPosts();
+await ref.update({
+
+type:type
+
+});
+
+}else{
+
+await ref.set({
+
+uid:currentUser.uid,
+
+postId:postId,
+
+type:type,
+
+createdAt:serverTime()
+
+});
+
+await postsRef.doc(postId).update({
+
+[type]:
+firebase.firestore.FieldValue.increment(1)
+
+});
 
 }
 
+loadFeed();
+
+}
+
+//========== Reaction Box ==========
+function showReactionBox(postId,e){
+
+const box=document.getElementById("reactionBox");
+
+box.style.display="flex";
+
+box.style.left=e.pageX+"px";
+
+box.style.top=(e.pageY-60)+"px";
+
+box.innerHTML=`
+
+<span onclick="reactPost('${postId}','like')">👍</span>
+
+<span onclick="reactPost('${postId}','love')">❤️</span>
+
+<span onclick="reactPost('${postId}','haha')">😂</span>
+
+<span onclick="reactPost('${postId}','wow')">😮</span>
+
+<span onclick="reactPost('${postId}','sad')">😢</span>
+
+<span onclick="reactPost('${postId}','angry')">😡</span>
+
+`;
+
+}
+
+document.onclick=()=>{
+
+const box=document.getElementById("reactionBox");
+
+if(box){
+
+box.style.display="none";
+
+}
+
+};
+
+//========== Time ==========
+function timeAgo(t){
+
+if(!t)return"Just now";
+
+const sec=Math.floor((Date.now()-t.toDate())/1000);
+
+if(sec<60)return"Just now";
+
+if(sec<3600)return Math.floor(sec/60)+"m ago";
+
+if(sec<86400)return Math.floor(sec/3600)+"h ago";
+
+return Math.floor(sec/86400)+"d ago";
+
+}
+
+//========== Auto Feed ==========
+postsRef
+.orderBy("createdAt","desc")
+.onSnapshot(()=>{
+
+loadFeed();
+
+});
+
+loadFeed();
 //=====================================
-// Reaction Menu
+// Friendsbook 2026 v2
+// script.js Part 5
+// Comment + Reply + Nested Reply +
+// Comment Like + Comment Reaction
 //=====================================
 
-function reactionMenu(postId){
+//========== Open Comments ==========
+async function openComments(postId){
+
+const feed=document.getElementById("feedContainer");
+
+const card=document.querySelector(
+`button[onclick="openComments('${postId}')"]`
+).closest(".postCard");
+
+let box=card.querySelector(".commentSection");
+
+if(box){
+
+box.remove();
+
+return;
+
+}
+
+box=document.createElement("div");
+box.className="commentSection";
+
+box.innerHTML=`
+
+<div class="commentInputBox">
+
+<img
+class="commentProfile"
+src="${currentUserData.profilePhoto}">
+
+<input
+type="text"
+class="commentInput"
+id="commentInput_${postId}"
+placeholder="Write a comment...">
+
+<button
+class="commentSend"
+onclick="sendComment('${postId}')">
+
+Send
+
+</button>
+
+</div>
+
+<div
+id="comments_${postId}">
+
+</div>
+
+`;
+
+card.appendChild(box);
+
+loadComments(postId);
+
+}
+
+//========== Send Comment ==========
+async function sendComment(postId){
+
+const input=document.getElementById(
+
+"commentInput_"+postId
+
+);
+
+const text=input.value.trim();
+
+if(text==="") return;
+
+await createComment(postId,text);
+
+input.value="";
+
+loadComments(postId);
+
+}
+
+//========== Load Comments ==========
+async function loadComments(postId){
+
+const box=document.getElementById(
+
+"comments_"+postId
+
+);
+
+if(!box)return;
+
+box.innerHTML="";
+
+const snap=await commentsRef
+
+.where("postId","==",postId)
+
+.orderBy("createdAt")
+
+.get();
+
+snap.forEach(doc=>{
+
+const c=doc.data();
+
+if(c.parent===""){
+
+box.innerHTML+=commentHTML(c);
+
+}
+
+});
+
+}
+
+//========== Comment HTML ==========
+function commentHTML(c){
 
 return `
 
-<div class="reactionMenu">
+<div class="commentCard">
 
-<button onclick="reactPost('${postId}','like')">👍</button>
+<div class="commentHeader">
 
-<button onclick="reactPost('${postId}','love')">❤️</button>
+<img
+class="commentProfile"
+src="${c.profilePhoto}">
 
-<button onclick="reactPost('${postId}','haha')">😂</button>
+<div>
 
-<button onclick="reactPost('${postId}','wow')">😮</button>
+<div class="commentName">
 
-<button onclick="reactPost('${postId}','sad')">😢</button>
+${c.name}
 
-<button onclick="reactPost('${postId}','angry')">😡</button>
+</div>
+
+<div class="commentTime">
+
+${timeAgo(c.createdAt)}
+
+</div>
+
+</div>
+
+</div>
+
+<div class="commentText">
+
+${c.text}
+
+</div>
+
+<div class="commentActions">
+
+<span
+onclick="likeComment('${c.id}')">
+
+👍 Like
+
+</span>
+
+<span
+onclick="showCommentReaction('${c.id}',event)">
+
+❤️ React
+
+</span>
+
+<span
+onclick="replyBox('${c.id}')">
+
+↩ Reply
+
+</span>
+
+</div>
+
+<div
+class="replyBox"
+id="reply_${c.id}">
+
+</div>
 
 </div>
 
@@ -1154,115 +1061,277 @@ return `
 
 }
 
-//=====================================
-// Total Reaction
-//=====================================
+//========== Reply ==========
+function replyBox(commentId){
 
-function totalReaction(r){
+const box=document.getElementById(
 
-if(!r) return 0;
+"reply_"+commentId
 
-return (r.like||0)+
-(r.love||0)+
-(r.haha||0)+
-(r.wow||0)+
-(r.sad||0)+
-(r.angry||0);
+);
 
-}
-//=====================================
-// Messenger
-//=====================================
+box.innerHTML=`
 
-const chatList=document.getElementById("chatList");
-const chatMessages=document.getElementById("chatMessages");
+<div class="commentInputBox">
 
-const messageInput=document.getElementById("messageInput");
-const sendMessageBtn=document.getElementById("sendMessageBtn");
+<input
+class="commentInput"
+id="replyInput_${commentId}"
+placeholder="Reply...">
 
-let currentChatUser=null;
+<button
+class="commentSend"
+onclick="sendReply('${commentId}')">
 
-//=====================================
-// Open Chat
-//=====================================
+Reply
 
-async function openChat(uid,name,photo){
+</button>
 
-currentChatUser=uid;
+</div>
 
-document.getElementById("chatName").textContent=name;
-
-document.getElementById("chatProfile").src=photo;
-
-loadMessages();
+`;
 
 }
 
-//=====================================
-// Send Message
-//=====================================
+//========== Send Reply ==========
+async function sendReply(parent){
 
-sendMessageBtn.onclick=async()=>{
+const input=document.getElementById(
 
-if(!currentChatUser) return;
+"replyInput_"+parent
 
-const text=messageInput.value.trim();
+);
 
-if(text=="") return;
+const text=input.value.trim();
 
-await db.collection("messages").add({
+if(text==="")return;
 
-from:currentUser.uid,
+const postId=(await commentsRef.doc(parent).get())
 
-to:currentChatUser,
+.data().postId;
 
-text:text,
+await createReply(postId,parent,text);
 
-time:firebase.firestore.FieldValue.serverTimestamp(),
+loadComments(postId);
 
-seen:false
+}
+
+//========== Comment Like ==========
+async function likeComment(id){
+
+await commentsRef.doc(id).update({
+
+like:firebase.firestore.FieldValue.increment(1)
 
 });
 
-messageInput.value="";
+}
 
-};
+//========== Comment Reaction ==========
+function showCommentReaction(id,e){
 
+const box=document.getElementById("reactionBox");
+
+box.style.display="flex";
+
+box.style.left=e.pageX+"px";
+
+box.style.top=(e.pageY-60)+"px";
+
+box.innerHTML=`
+
+<span onclick="commentReaction('${id}','love')">❤️</span>
+
+<span onclick="commentReaction('${id}','haha')">😂</span>
+
+<span onclick="commentReaction('${id}','wow')">😮</span>
+
+<span onclick="commentReaction('${id}','sad')">😢</span>
+
+<span onclick="commentReaction('${id}','angry')">😡</span>
+
+`;
+
+}
+
+//========== Save Comment Reaction ==========
+async function commentReaction(id,type){
+
+await commentsRef.doc(id).update({
+
+[type]:
+firebase.firestore.FieldValue.increment(1)
+
+});
+
+document.getElementById("reactionBox").style.display="none";
+
+}
 //=====================================
-// Load Messages
+// Friendsbook 2026 v2
+// script.js Part 6
+// Friend Request + Follow +
+// Search + Notification
 //=====================================
 
-function loadMessages(){
+//========== Send Friend Request ==========
+async function addFriend(uid){
 
-db.collection("messages")
+if(uid===currentUser.uid)return;
 
-.orderBy("time")
+await friendRequestsRef.doc(
 
-.onSnapshot(snapshot=>{
+currentUser.uid+"_"+uid
 
-chatMessages.innerHTML="";
+).set({
 
-snapshot.forEach(doc=>{
+from:currentUser.uid,
 
-const m=doc.data();
+to:uid,
+
+status:"pending",
+
+createdAt:serverTime()
+
+});
+
+await createNotification(
+
+uid,
+
+"friend_request"
+
+);
+
+alert("Friend Request Sent");
+
+}
+
+//========== Accept Friend ==========
+async function acceptFriend(id){
+
+const req=await friendRequestsRef.doc(id).get();
+
+const data=req.data();
+
+await friendRequestsRef.doc(id).update({
+
+status:"accepted"
+
+});
+
+await usersRef.doc(data.from).update({
+
+friends:firebase.firestore.FieldValue.increment(1)
+
+});
+
+await usersRef.doc(data.to).update({
+
+friends:firebase.firestore.FieldValue.increment(1)
+
+});
+
+await createNotification(
+
+data.from,
+
+"friend_accept"
+
+);
+
+}
+
+//========== Follow ==========
+async function followUser(uid){
+
+if(uid===currentUser.uid)return;
+
+await usersRef.doc(uid).update({
+
+followers:firebase.firestore.FieldValue.increment(1)
+
+});
+
+await usersRef.doc(currentUser.uid).update({
+
+following:firebase.firestore.FieldValue.increment(1)
+
+});
+
+await createNotification(
+
+uid,
+
+"follow"
+
+);
+
+}
+
+//========== Unfollow ==========
+async function unfollowUser(uid){
+
+await usersRef.doc(uid).update({
+
+followers:firebase.firestore.FieldValue.increment(-1)
+
+});
+
+await usersRef.doc(currentUser.uid).update({
+
+following:firebase.firestore.FieldValue.increment(-1)
+
+});
+
+}
+
+//========== Search ==========
+document.getElementById("searchInput").onkeyup=async(e)=>{
+
+const key=e.target.value.toLowerCase();
+
+const box=document.getElementById("searchResult");
+
+box.innerHTML="";
+
+if(key==="")return;
+
+const snap=await usersRef.get();
+
+snap.forEach(doc=>{
+
+const u=doc.data();
 
 if(
 
-(m.from==currentUser.uid && m.to==currentChatUser) ||
-
-(m.from==currentChatUser && m.to==currentUser.uid)
+u.name.toLowerCase().includes(key)
 
 ){
 
-chatMessages.innerHTML+=`
+box.innerHTML+=`
 
-<div class="${
-m.from==currentUser.uid
-?"myMessage"
-:"friendMessage"
-}">
+<div class="chatCard">
 
-${m.text}
+<img src="${u.profilePhoto}">
+
+<div style="flex:1">
+
+<b>${u.name}</b>
+
+</div>
+
+<button onclick="addFriend('${u.uid}')">
+
+Add
+
+</button>
+
+<button onclick="followUser('${u.uid}')">
+
+Follow
+
+</button>
 
 </div>
 
@@ -1272,827 +1341,68 @@ ${m.text}
 
 });
 
-chatMessages.scrollTop=chatMessages.scrollHeight;
-
-});
-
-}
-
-//=====================================
-// Online Status
-//=====================================
-
-async function setOnline(status){
-
-await db.collection("users")
-
-.doc(currentUser.uid)
-
-.update({
-
-online:status,
-
-lastSeen:new Date()
-
-});
-
-}
-
-window.addEventListener("beforeunload",()=>{
-
-if(currentUser){
-
-setOnline(false);
-
-}
-
-});
-
-auth.onAuthStateChanged(user=>{
-
-if(user){
-
-setOnline(true);
-
-}
-
-});
-//=====================================
-// Messenger Advanced
-//=====================================
-
-const imageMessageInput = document.getElementById("imageMessageInput");
-const voiceMessageInput = document.getElementById("voiceMessageInput");
-
-//=====================================
-// Send Image
-//=====================================
-
-imageMessageInput.onchange = async (e)=>{
-
-const file = e.target.files[0];
-
-if(!file || !currentChatUser) return;
-
-const ref = storage.ref("chatImages/"+Date.now());
-
-await ref.put(file);
-
-const url = await ref.getDownloadURL();
-
-await db.collection("messages").add({
-
-from:currentUser.uid,
-to:currentChatUser,
-
-text:"",
-image:url,
-
-voice:"",
-
-seen:false,
-
-time:firebase.firestore.FieldValue.serverTimestamp()
-
-});
-
 };
 
-//=====================================
-// Send Voice
-//=====================================
+//========== Notifications ==========
+async function loadNotifications(){
 
-voiceMessageInput.onchange = async(e)=>{
+const box=document.getElementById(
 
-const file = e.target.files[0];
+"notificationContainer"
 
-if(!file || !currentChatUser) return;
+);
 
-const ref = storage.ref("voice/"+Date.now());
+box.innerHTML="";
 
-await ref.put(file);
+const snap=await notificationsRef
 
-const url = await ref.getDownloadURL();
+.where("uid","==",currentUser.uid)
 
-await db.collection("messages").add({
-
-from:currentUser.uid,
-to:currentChatUser,
-
-text:"",
-image:"",
-voice:url,
-
-seen:false,
-
-time:firebase.firestore.FieldValue.serverTimestamp()
-
-});
-
-};
-
-//=====================================
-// Seen
-//=====================================
-
-async function seenMessage(){
-
-const snap = await db.collection("messages")
-
-.where("from","==",currentChatUser)
-
-.where("to","==",currentUser.uid)
+.orderBy("createdAt","desc")
 
 .get();
 
-snap.forEach(async(doc)=>{
+snap.forEach(doc=>{
 
-await doc.ref.update({
+const n=doc.data();
 
-seen:true
+box.innerHTML+=`
 
-});
+<div class="notifyCard">
 
-});
+<img src="${currentUserData.profilePhoto}">
 
-}
+<div>
 
-//=====================================
-// Emoji
-//=====================================
+<b>${n.type}</b>
 
-function addEmoji(e){
+<br>
 
-messageInput.value += e;
+<small>
 
-}
+${timeAgo(n.createdAt)}
 
-//=====================================
-// New Message Notification
-//=====================================
-
-db.collection("messages")
-
-.where("to","==",currentUser.uid)
-
-.onSnapshot((snapshot)=>{
-
-snapshot.docChanges().forEach((change)=>{
-
-if(change.type==="added"){
-
-console.log("New Message");
-
-}
-
-});
-
-});
-//=====================================
-// Messenger Button
-//=====================================
-
-document.getElementById("chatImageBtn").onclick = () => {
-
-document.getElementById("imageMessageInput").click();
-
-};
-
-document.getElementById("voiceBtn").onclick = () => {
-
-document.getElementById("voiceMessageInput").click();
-
-};
-
-//=====================================
-// Voice Call
-//=====================================
-
-const voiceCallBtn = document.getElementById("voiceCallBtn");
-
-if(voiceCallBtn){
-
-voiceCallBtn.onclick = ()=>{
-
-alert("Voice Call Coming Soon");
-
-};
-
-}
-
-//=====================================
-// Video Call
-//=====================================
-
-const videoCallBtn = document.getElementById("videoCallBtn");
-
-if(videoCallBtn){
-
-videoCallBtn.onclick = ()=>{
-
-alert("Video Call Coming Soon");
-
-};
-
-}
-
-//=====================================
-// Online Status
-//=====================================
-
-db.collection("users").onSnapshot((snap)=>{
-
-snap.forEach((doc)=>{
-
-const u = doc.data();
-
-if(currentChatUser && u.uid===currentChatUser){
-
-document.getElementById("onlineStatus").innerHTML =
-u.online ? "🟢 Online" : "⚫ Offline";
-
-}
-
-});
-
-});
-
-//=====================================
-// Seen Status
-//=====================================
-
-async function markSeen(){
-
-const snap = await db.collection("messages")
-
-.where("from","==",currentChatUser)
-
-.where("to","==",currentUser.uid)
-
-.get();
-
-snap.forEach(async(d)=>{
-
-await d.ref.update({
-
-seen:true
-
-});
-
-});
-
-}
-
-chatMessages.addEventListener("click",()=>{
-
-markSeen();
-
-});
-
-//=====================================
-// Admin Dashboard
-//=====================================
-
-async function loadAdminDashboard(){
-
-if(!currentUser) return;
-
-if(currentUser.email!=="bashirahmed0052@gmail.com") return;
-
-const users = await db.collection("users").get();
-
-const posts = await db.collection("posts").get();
-
-document.getElementById("adminDashboard").innerHTML = `
-
-<div class="adminCard">
-
-<h3>Total Users</h3>
-
-<h1>${users.size}</h1>
+</small>
 
 </div>
-
-<div class="adminCard">
-
-<h3>Total Posts</h3>
-
-<h1>${posts.size}</h1>
 
 </div>
 
 `;
 
-}
-
-auth.onAuthStateChanged((user)=>{
-
-if(user && user.email==="bashirahmed0052@gmail.com"){
-
-loadAdminDashboard();
-
-}
-
 });
-//=====================================
-// Settings
-//=====================================
 
-const changeNameBtn=document.getElementById("changeNameBtn");
-const changeBioBtn=document.getElementById("changeBioBtn");
-const changeEmailBtn=document.getElementById("changeEmailBtn");
-const changePasswordBtn=document.getElementById("changePasswordBtn");
-const deleteAccountBtn=document.getElementById("deleteAccountBtn");
-const darkModeBtn=document.getElementById("darkModeBtn");
-const languageBtn=document.getElementById("languageBtn");
+}
 
-//=====================================
-// Change Name
-//=====================================
+//========== Auto Refresh ==========
+notificationsRef
 
-if(changeNameBtn){
+.where("uid","==",currentUser.uid)
 
-changeNameBtn.onclick=async()=>{
+.onSnapshot(()=>{
 
-const name=prompt("Enter New Name");
-
-if(!name) return;
-
-await db.collection("users")
-
-.doc(currentUser.uid)
-
-.update({
-
-name:name
+loadNotifications();
 
 });
 
-profileName.innerText=name;
-
-drawerProfileName.innerText=name;
-
-alert("Name Updated");
-
-};
-
-}
-
-//=====================================
-// Change Bio
-//=====================================
-
-if(changeBioBtn){
-
-changeBioBtn.onclick=async()=>{
-
-const bio=prompt("Enter New Bio");
-
-if(bio==null) return;
-
-await db.collection("users")
-
-.doc(currentUser.uid)
-
-.update({
-
-bio:bio
-
-});
-
-profileBio.innerText=bio;
-
-alert("Bio Updated");
-
-};
-
-}
-
-//=====================================
-// Change Email
-//=====================================
-
-if(changeEmailBtn){
-
-changeEmailBtn.onclick=async()=>{
-
-const email=prompt("Enter New Email");
-
-if(!email) return;
-
-try{
-
-await currentUser.updateEmail(email);
-
-await db.collection("users")
-
-.doc(currentUser.uid)
-
-.update({
-
-email:email
-
-});
-
-alert("Email Updated");
-
-}catch(e){
-
-alert(e.message);
-
-}
-
-};
-
-}
-
-//=====================================
-// Change Password
-//=====================================
-
-if(changePasswordBtn){
-
-changePasswordBtn.onclick=async()=>{
-
-const pass=prompt("Enter New Password");
-
-if(!pass) return;
-
-try{
-
-await currentUser.updatePassword(pass);
-
-alert("Password Updated");
-
-}catch(e){
-
-alert(e.message);
-
-}
-
-};
-
-}
-
-//=====================================
-// Dark Mode
-//=====================================
-
-if(darkModeBtn){
-
-darkModeBtn.onclick=()=>{
-
-document.body.classList.toggle("dark");
-
-localStorage.setItem(
-
-"theme",
-
-document.body.classList.contains("dark")
-
-);
-
-};
-
-}
-
-if(localStorage.getItem("theme")=="true"){
-
-document.body.classList.add("dark");
-
-}
-
-//=====================================
-// Language
-//=====================================
-
-if(languageBtn){
-
-languageBtn.onclick=()=>{
-
-alert("বাংলা / English Feature Coming");
-
-};
-
-}
-
-//=====================================
-// Delete Account
-//=====================================
-
-if(deleteAccountBtn){
-
-deleteAccountBtn.onclick=async()=>{
-
-if(!confirm("Delete Account?")) return;
-
-try{
-
-await db.collection("users")
-
-.doc(currentUser.uid)
-
-.delete();
-
-await currentUser.delete();
-
-alert("Account Deleted");
-
-}catch(e){
-
-alert(e.message);
-
-}
-
-};
-}
-//=====================================
-// PART 14 FINAL
-// Friendsbook Final Features
-//=====================================
-
-//======================
-// Admin Only
-//======================
-
-auth.onAuthStateChanged(async(user)=>{
-
-if(!user) return;
-
-if(user.email==="bashirahmed0052@gmail.com"){
-
-const adminBtn=document.getElementById("drawerAdmin");
-
-if(adminBtn){
-
-adminBtn.style.display="block";
-
-}
-
-loadAdminDashboard();
-
-}
-
-});
-
-//======================
-// Drawer Admin
-//======================
-
-const drawerAdmin=document.getElementById("drawerAdmin");
-
-if(drawerAdmin){
-
-drawerAdmin.onclick=()=>{
-
-showPage("adminPage");
-
-};
-
-}
-
-//======================
-// Privacy
-//======================
-
-let accountPrivacy="public";
-
-function changePrivacy(type){
-
-accountPrivacy=type;
-
-localStorage.setItem("privacy",type);
-
-alert("Privacy Changed To : "+type);
-
-}
-
-accountPrivacy=
-
-localStorage.getItem("privacy")||"public";
-
-//======================
-// Notification
-//======================
-
-let notificationEnabled=true;
-
-function toggleNotification(){
-
-notificationEnabled=!notificationEnabled;
-
-localStorage.setItem(
-
-"notification",
-
-notificationEnabled
-
-);
-
-alert(
-
-notificationEnabled
-
-?
-
-"Notification ON"
-
-:
-
-"Notification OFF"
-
-);
-
-}
-
-//======================
-// Logout All Devices
-//======================
-
-async function logoutEverywhere(){
-
-await auth.signOut();
-
-alert("Logged Out");
-
-location.reload();
-
-}
-
-//======================
-// Block User
-//======================
-
-async function blockUser(uid){
-
-await db.collection("users")
-
-.doc(currentUser.uid)
-
-.collection("blocked")
-
-.doc(uid)
-
-.set({
-
-blocked:true
-
-});
-
-alert("User Blocked");
-
-}
-
-//======================
-// Unblock User
-//======================
-
-async function unblockUser(uid){
-
-await db.collection("users")
-
-.doc(currentUser.uid)
-
-.collection("blocked")
-
-.doc(uid)
-
-.delete();
-
-alert("User Unblocked");
-
-}
-
-//======================
-// Admin Ban
-//======================
-
-async function adminBan(uid){
-
-await db.collection("users")
-
-.doc(uid)
-
-.update({
-
-banned:true
-
-});
-
-alert("User Banned");
-
-}
-
-//======================
-// Admin Unban
-//======================
-
-async function adminUnban(uid){
-
-await db.collection("users")
-
-.doc(uid)
-
-.update({
-
-banned:false
-
-});
-
-alert("User Unbanned");
-
-}
-
-//======================
-// Delete Any Post
-//======================
-
-async function adminDeletePost(postId){
-
-await db.collection("posts")
-
-.doc(postId)
-
-.delete();
-
-alert("Post Deleted");
-
-}
-
-//======================
-// Delete Any Comment
-//======================
-
-async function adminDeleteComment(commentId){
-
-await db.collection("comments")
-
-.doc(commentId)
-
-.delete();
-
-alert("Comment Deleted");
-
-}
-
-//======================
-// Theme
-//======================
-
-const savedTheme=
-
-localStorage.getItem("themeColor");
-
-if(savedTheme){
-
-document.body.setAttribute(
-
-"data-theme",
-
-savedTheme
-
-);
-
-}
-
-function changeTheme(color){
-
-document.body.setAttribute(
-
-"data-theme",
-
-color
-
-);
-
-localStorage.setItem(
-
-"themeColor",
-
-color
-
-);
-
-}
-
-//======================
-// Language
-//======================
-
-function setLanguage(lang){
-
-localStorage.setItem(
-
-"language",
-
-lang
-
-);
-
-alert(
-
-"Language : "+lang
-
-);
-
-  }
+loadNotifications();
