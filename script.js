@@ -27,16 +27,17 @@ const goForgot = document.getElementById("goForgot");
 const forgotBack = document.getElementById("forgotBack");
 
 //========== Loading ==========
-window.onload = () => {
+window.addEventListener("DOMContentLoaded", () => {
 
-setTimeout(() => {
+const loadingScreen = document.getElementById("loadingScreen");
 
-loadingScreen.style.display = "none";
+if (loadingScreen) {
+    loadingScreen.style.display = "none";
+}
 
-},2500);
+showLogin();
 
-};
-
+});
 //========== Pages ==========
 function showLogin(){
 
