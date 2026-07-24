@@ -1406,3 +1406,4 @@ loadNotifications();
 });
 
 loadNotifications();
+console.log("Friendsbook Script Loaded Successfully");
