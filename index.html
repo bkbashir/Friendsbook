@@ -1,1 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>Friendsbook 2026</title>
+
+<link rel="stylesheet"
+href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<!--========================
+Loading Screen
+=========================-->
+
+<div id="loadingScreen">
+
+<div class="loadingBox">
+
+<img
+src="myphoto.png"
+id="loadingPhoto">
+
+<h1>Friendsbook</h1>
+
+<p>Loading...</p>
+
+<div class="loadingBar">
+
+<div class="loadingFill"></div>
+
+</div>
+
+</div>
+
+</div>
+
+<!--========================
+Login Page
+=========================-->
+
+<section id="loginPage">
+
+<div class="authCard">
+
+<img src="assets/logo.png" class="authLogo">
+
+<h2>Friendsbook</h2>
+
+<form id="loginForm">
+
+<input
+type="email"
+id="loginEmail"
+placeholder="Email Address"
+required>
+
+<input
+type="password"
+id="loginPassword"
+placeholder="Password"
+required>
+
+<button type="submit">
+Login
+</button>
+
+</form>
+
+<p class="authLink">
+<span id="goForgot">
+Forgot Password?
+</span>
+</p>
+
+<p class="authLink">
+Don't have an account?
+<span id="goSignup">
+Create New Account
+</span>
+</p>
+
+</div>
+
+</section>
+
+<!--========================
+Signup Page
+=========================-->
+
+<section id="signupPage" style="display:none;">
+
+<div class="authCard">
+
+<img src="assets/logo.png" class="authLogo">
+
+<h2>Create New Account</h2>
+
+<form id="signupForm">
+
+<input
+type="text"
+id="fullName"
+placeholder="Full Name"
+required>
+
+<input
+type="email"
+id="signupEmail"
+placeholder="Email Address"
+required>
+
+<input
+type="password"
+id="signupPassword"
+placeholder="Password"
+required>
+
+<input
+type="password"
+id="confirmPassword"
+placeholder="Confirm Password"
+required>
+
+<button type="submit">
+Create Account
+</button>
+
+</form>
+
+<p class="authLink">
+Already have an account?
+<span id="backLogin">
+Login
+</span>
+</p>
+
+</div>
+
+</section>
+
+<!--========================
+Forgot Password
+=========================-->
+
+<section
+id="forgotPage"
+class="authPage"
+style="display:none;">
+
+<div class="authCard">
+
+<h2>
+
+Forgot Password
+
+</h2>
+
+<form
+id="forgotForm">
+
+<input
+type="email"
+id="forgotEmail"
+placeholder="Email"
+required>
+
+<button
+type="submit">
+
+Send Reset Link
+
+</button>
+
+</form>
+
+<p id="forgotBack">
+
+Back To Login
+
+</p>
+
+</div>
+
+</section>
+<!--========================
+Main App
+=========================-->
+
+<section
+id="mainPage"
+style="display:none;">
+
+<!-- Header -->
+
+<header
+class="topHeader">
+
+<div
+class="headerLeft">
+
+<button
+id="menuBtn">
+
+<i class="fa-solid fa-bars"></i>
+
+</button>
+
+<h2>
+
+Friendsbook
+
+</h2>
+
+</div>
+
+<div
+class="headerRight">
+
+<button
+id="searchBtn">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+</button>
+
+<button
+id="messengerBtn">
+
+<i class="fa-brands fa-facebook-messenger"></i>
+
+</button>
+
+<button
+id="notificationBtn">
+
+<i class="fa-solid fa-bell"></i>
+
+</button>
+
+<img
+src="myphoto.png"
+id="headerProfile">
+
+</div>
+
+</header>
+
+<!-- Drawer -->
+
+<aside
+id="drawer">
+
+<div
+class="drawerProfile">
+
+<img
+src="myphoto.png"
+id="drawerPhoto">
+
+<h3
+id="drawerName">
+
+User
+
+</h3>
+
+<p
+id="drawerEmail">
+
+bashirahmed@gmail.com
+
+</p>
+
+</div>
+
+<div
+class="drawerMenu">
+
+<div
+class="drawerItem"
+id="homeMenu">
+
+<i class="fa-solid fa-house"></i>
+
+<span>
+
+Home
+
+</span>
+
+</div>
+
+<div
+class="drawerItem"
+id="profileMenu">
+
+<i class="fa-solid fa-user"></i>
+
+<span>
+
+Profile
+
+</span>
+
+</div>
+
+<div
+class="drawerItem"
+id="friendsMenu">
+
+<i class="fa-solid fa-user-group"></i>
+
+<span>
+
+Friends
+
+</span>
+
+</div>
+
+<div
+class="drawerItem"
+id="savedMenu">
+
+<i class="fa-solid fa-bookmark"></i>
+
+<span>
+
+Saved
+
+</span>
+
+</div>
+
+<div
+class="drawerItem"
+id="settingMenu">
+
+<i class="fa-solid fa-gear"></i>
+
+<span>
+
+Settings
+
+</span>
+
+</div>
+
+<div
+class="drawerItem"
+id="logoutBtn">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+<span>
+
+Logout
+
+</span>
+
+</div>
+
+</div>
+
+</aside>
+<!--========================
+Home Page
+=========================-->
+
+<section
+id="homePage"
+class="page">
+
+<!-- Story -->
+
+<div
+id="storyContainer">
+
+<div
+class="story addStory">
+
+<input
+type="file"
+id="storyInput"
+accept="image/*"
+hidden>
+
+<img
+src="myphoto.png"
+id="storyProfile">
+
+<p>
+
+Create Story
+
+</p>
+
+</div>
+
+<div
+id="stories">
+
+</div>
+
+</div>
+
+<!-- Create Post -->
+
+<div
+id="createPostBox">
+
+<div
+class="postTop">
+
+<img
+src="myphoto.png"
+id="homeProfilePhoto">
+
+<input
+type="text"
+id="postInput"
+placeholder="What's on your mind?">
+
+</div>
+
+<div
+class="postBottom">
+
+<input
+type="file"
+id="imageInput"
+accept="image/*"
+multiple
+hidden>
+
+<input
+type="file"
+id="videoInput"
+accept="video/*"
+hidden>
+
+<button
+id="photoBtn">
+
+📷 Photo
+
+</button>
+
+<button
+id="videoBtn">
+
+🎥 Video
+
+</button>
+
+<select
+id="privacySelect">
+
+<option
+value="public">
+
+🌍 Public
+
+</option>
+
+<option
+value="friends">
+
+👥 Friends
+
+</option>
+
+<option
+value="private">
+
+🔒 Only Me
+
+</option>
+
+</select>
+
+<button
+id="postBtn">
+
+Post
+
+</button>
+
+</div>
+
+</div>
+
+<!-- Feed -->
+
+<div
+id="feedContainer">
+
+</div>
+
+</section>
+
+<!--========================
+Bottom Navigation
+=========================-->
+
+<nav
+id="bottomNav">
+
+<button
+id="navHome">
+
+<i class="fa-solid fa-house"></i>
+
+</button>
+
+<button
+id="navFriends">
+
+<i class="fa-solid fa-user-group"></i>
+
+</button>
+
+<button
+id="navReels">
+
+<i class="fa-solid fa-circle-play"></i>
+
+</button>
+
+<button
+id="navMarket">
+
+<i class="fa-solid fa-store"></i>
+
+</button>
+
+<button
+id="navProfile">
+
+<i class="fa-solid fa-user"></i>
+
+</button>
+
+</nav>
+<!--========================
+Profile Page
+=========================-->
+
+<section
+id="profilePage"
+class="page">
+
+<div
+id="coverContainer">
+
+<img
+src="assets/default-cover.jpg"
+id="coverPhoto">
+
+<input
+type="file"
+id="coverInput"
+accept="image/*"
+hidden>
+
+<button
+id="changeCoverBtn">
+
+<i class="fa-solid fa-camera"></i>
+
+</button>
+
+</div>
+
+<div
+id="profileContainer">
+
+<div
+id="profilePhotoBox">
+
+<img
+src="myphoto.png"
+id="profilePhoto">
+
+<input
+type="file"
+id="profileInput"
+accept="image/*"
+hidden>
+
+<button
+id="changeProfileBtn">
+
+<i class="fa-solid fa-camera"></i>
+
+</button>
+
+</div>
+
+<h2
+id="profileName">
+
+Friendsbook User
+
+</h2>
+
+<p
+id="profileBio">
+
+No bio yet...
+
+</p>
+
+<div
+id="profileCounter">
+
+<div>
+
+<h3
+id="friendsCount">
+
+0
+
+</h3>
+
+<p>
+
+Friends
+
+</p>
+
+</div>
+
+<div>
+
+<h3
+id="followersCount">
+
+0
+
+</h3>
+
+<p>
+
+Followers
+
+</p>
+
+</div>
+
+<div>
+
+<h3
+id="followingCount">
+
+0
+
+</h3>
+
+<p>
+
+Following
+
+</p>
+
+</div>
+
+</div>
+
+<div
+id="profileButtons">
+
+<button
+id="editProfileBtn">
+
+Edit Profile
+
+</button>
+
+<button
+id="shareProfileBtn">
+
+Share Profile
+
+</button>
+
+</div>
+
+<div
+id="profileFeed">
+
+</div>
+
+</div>
+
+</section>
+
+<!--========================
+Friends Page
+=========================-->
+
+<section
+id="friendsPage"
+class="page">
+
+<div
+id="friendsContainer">
+
+</div>
+
+</section>
+
+<!--========================
+Search Page
+=========================-->
+
+<section
+id="searchPage"
+class="page">
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search Friendsbook">
+
+<div
+id="searchResult">
+
+</div>
+
+</section>
+<!--========================
+Messenger
+=========================-->
+
+<section id="messagePage" class="page">
+
+<div id="messageContainer">
+
+</div>
+
+</section>
+
+<!--========================
+Notification
+=========================-->
+
+<section id="notificationPage" class="page">
+
+<div id="notificationContainer">
+
+</div>
+
+</section>
+
+<!--========================
+Reels
+=========================-->
+
+<section id="reelsPage" class="page">
+
+<div id="reelsContainer">
+
+</div>
+
+</section>
+
+<!--========================
+Marketplace
+=========================-->
+
+<section id="marketplacePage" class="page">
+
+<div id="marketContainer">
+
+</div>
+
+</section>
+
+<!--========================
+Saved
+=========================-->
+
+<section id="savedPage" class="page">
+
+<div id="savedContainer">
+
+</div>
+
+</section>
+
+<!--========================
+Settings
+=========================-->
+
+<section id="settingsPage" class="page">
+
+<div id="settingsContainer">
+
+</div>
+
+</section>
+
+<!--========================
+Admin
+=========================-->
+
+<section
+id="adminPage"
+class="page"
+style="display:none;">
+
+<div id="adminContainer">
+
+<h2>
+
+Admin Panel
+
+</h2>
+
+</div>
+
+</section>
+
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-storage-compat.js"></script>
+
+<script src="firebase.js"></script>
+
+<script src="script.js"></script>
+
+</body>
+  </html>
