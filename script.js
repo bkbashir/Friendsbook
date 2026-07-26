@@ -101,7 +101,7 @@ function hideLoading(){
 
 App.loading=false;
 
-hide("globalLoading");
+hide("splashScreen");
 
 }
 // ======================================
