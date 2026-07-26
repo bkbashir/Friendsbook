@@ -525,17 +525,6 @@ $("navProfile").addEventListener(
 
 "click",
 
-()=>openPage("profile")
-
-);
-
-$("navAI").addEventListener(
-
-"click",
-
-()=>openPage("ai")
-
-);
 // ======================================
 // Navigation
 // Part 4/12
