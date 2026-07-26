@@ -1,1 +1,976 @@
+/* =====================================
+   Friendsbook 2026 V3
+   Premium Purple Theme
+===================================== */
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+-webkit-tap-highlight-color:transparent;
+}
+
+:root{
+
+--primary:#6C63FF;
+--primary-dark:#564DFF;
+--secondary:#8B5CF6;
+--background:#F5F5FF;
+--white:#FFFFFF;
+--text:#222222;
+--gray:#777777;
+--border:#E6E6F5;
+--danger:#FF4D4F;
+--success:#22C55E;
+--shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+body{
+
+background:var(--background);
+color:var(--text);
+overflow-x:hidden;
+
+}
+
+.hidden{
+
+display:none!important;
+
+}
+
+img{
+
+max-width:100%;
+display:block;
+
+}
+
+button{
+
+cursor:pointer;
+border:none;
+outline:none;
+
+}
+
+input{
+
+outline:none;
+
+}
+
+/* ===========================
+Splash Screen
+=========================== */
+
+#splashScreen{
+
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:linear-gradient(135deg,var(--primary),var(--secondary));
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:999999;
+
+}
+
+.splashContainer{
+
+width:90%;
+max-width:340px;
+text-align:center;
+
+}
+
+#myPhoto{
+
+width:120px;
+height:120px;
+border-radius:50%;
+border:4px solid white;
+object-fit:cover;
+margin:auto;
+margin-bottom:20px;
+
+}
+
+#logo{
+
+width:75px;
+margin:auto;
+margin-bottom:15px;
+
+}
+
+.splashContainer h1{
+
+font-size:32px;
+color:white;
+font-weight:700;
+
+}
+
+.splashContainer p{
+
+margin-top:10px;
+color:white;
+opacity:.9;
+
+}
+
+#loadingBar{
+
+width:100%;
+height:10px;
+background:rgba(255,255,255,.25);
+border-radius:100px;
+overflow:hidden;
+margin-top:25px;
+
+}
+
+#loadingProgress{
+
+width:0%;
+height:100%;
+background:white;
+transition:.25s;
+
+}
+/* ===========================
+Authentication
+=========================== */
+
+#authContainer{
+
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+
+}
+
+.authPage{
+
+width:100%;
+max-width:380px;
+background:var(--white);
+border-radius:22px;
+padding:25px;
+box-shadow:var(--shadow);
+
+}
+
+.authLogo{
+
+width:80px;
+margin:auto;
+margin-bottom:18px;
+
+}
+
+.authPage h2{
+
+text-align:center;
+margin-bottom:20px;
+color:var(--primary);
+
+}
+
+.authPage input{
+
+width:100%;
+height:50px;
+margin-bottom:15px;
+padding:0 15px;
+border:1px solid var(--border);
+border-radius:12px;
+font-size:15px;
+background:#fafaff;
+transition:.25s;
+
+}
+
+.authPage input:focus{
+
+border-color:var(--primary);
+
+}
+
+.authPage button{
+
+width:100%;
+height:50px;
+border-radius:12px;
+background:var(--primary);
+color:white;
+font-size:16px;
+font-weight:600;
+transition:.25s;
+
+}
+
+.authPage button:hover{
+
+background:var(--primary-dark);
+
+}
+
+.authText{
+
+margin-top:18px;
+text-align:center;
+font-size:14px;
+color:var(--gray);
+
+}
+
+.authText span{
+
+color:var(--primary);
+font-weight:600;
+cursor:pointer;
+
+}
+
+.authLink{
+
+margin-top:12px;
+text-align:center;
+color:var(--primary);
+font-size:14px;
+cursor:pointer;
+
+}
+
+.authLink:hover{
+
+text-decoration:underline;
+
+}
+
+input::placeholder{
+
+color:#999;
+
+}
+/* ===========================
+Header
+=========================== */
+
+#header{
+
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:65px;
+background:var(--white);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 12px;
+box-shadow:var(--shadow);
+z-index:1000;
+
+}
+
+#headerLeft{
+
+display:flex;
+align-items:center;
+gap:10px;
+
+}
+
+#headerLogo{
+
+width:42px;
+height:42px;
+border-radius:12px;
+
+}
+
+#headerLeft h2{
+
+font-size:22px;
+color:var(--primary);
+font-weight:700;
+
+}
+
+/* ===========================
+Search
+=========================== */
+
+#headerCenter{
+
+flex:1;
+padding:0 12px;
+
+}
+
+#searchInput{
+
+width:100%;
+height:42px;
+border:1px solid var(--border);
+border-radius:25px;
+padding:0 16px;
+background:#F7F7FF;
+font-size:14px;
+
+}
+
+#searchInput:focus{
+
+border-color:var(--primary);
+
+}
+
+/* ===========================
+Header Right
+=========================== */
+
+#headerRight{
+
+display:flex;
+align-items:center;
+gap:8px;
+
+}
+
+#headerRight button{
+
+width:42px;
+height:42px;
+border-radius:50%;
+background:#F3F3FF;
+color:var(--primary);
+font-size:18px;
+transition:.25s;
+
+}
+
+#headerRight button:hover{
+
+background:var(--primary);
+color:white;
+
+}
+
+#headerProfile{
+
+width:42px;
+height:42px;
+border-radius:50%;
+object-fit:cover;
+border:2px solid var(--primary);
+
+}
+
+/* ===========================
+Home
+=========================== */
+
+#homePage{
+
+min-height:100vh;
+background:var(--background);
+padding-top:75px;
+padding-bottom:90px;
+
+}
+
+#mainContent{
+
+width:100%;
+max-width:700px;
+margin:auto;
+padding:15px;
+
+}
+
+#feedContainer{
+
+display:flex;
+flex-direction:column;
+gap:15px;
+
+}
+/* ===========================
+Bottom Navigation
+=========================== */
+
+#bottomNav{
+
+position:fixed;
+left:0;
+bottom:0;
+width:100%;
+height:72px;
+background:var(--white);
+display:flex;
+justify-content:space-around;
+align-items:center;
+box-shadow:0 -5px 20px rgba(0,0,0,.08);
+z-index:1000;
+
+}
+
+.navItem{
+
+flex:1;
+height:72px;
+background:none;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+gap:4px;
+color:var(--gray);
+font-size:22px;
+transition:.25s;
+
+}
+
+.navItem span{
+
+font-size:11px;
+font-weight:600;
+
+}
+
+.navItem:hover{
+
+color:var(--primary);
+
+}
+
+.navItem.active{
+
+color:var(--primary);
+
+}
+
+/* ===========================
+Side Menu
+=========================== */
+
+#sideMenu{
+
+position:fixed;
+top:0;
+right:-320px;
+width:300px;
+height:100%;
+background:var(--white);
+box-shadow:-5px 0 25px rgba(0,0,0,.15);
+transition:.35s;
+z-index:2000;
+overflow-y:auto;
+
+}
+
+#sideMenu.active{
+
+right:0;
+
+}
+
+#menuHeader{
+
+padding:25px;
+text-align:center;
+border-bottom:1px solid var(--border);
+
+}
+
+#menuProfileImage{
+
+width:90px;
+height:90px;
+border-radius:50%;
+border:3px solid var(--primary);
+margin:auto;
+object-fit:cover;
+
+}
+
+#menuUserName{
+
+margin-top:12px;
+font-size:20px;
+color:var(--primary);
+
+}
+
+#sideMenu button{
+
+width:100%;
+padding:16px 20px;
+background:none;
+border:none;
+border-bottom:1px solid var(--border);
+text-align:left;
+font-size:15px;
+font-weight:500;
+color:var(--text);
+transition:.25s;
+
+}
+
+#sideMenu button:hover{
+
+background:#F5F2FF;
+color:var(--primary);
+
+}
+
+/* ===========================
+Overlay
+=========================== */
+
+#overlay{
+
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.45);
+z-index:1500;
+
+}
+/* ===========================
+Placeholder Pages
+=========================== */
+
+.page{
+
+display:none;
+width:100%;
+max-width:700px;
+margin:20px auto;
+padding:20px;
+background:var(--white);
+border-radius:20px;
+box-shadow:var(--shadow);
+
+}
+
+.page.active{
+
+display:block;
+
+}
+
+.page h2{
+
+font-size:24px;
+color:var(--primary);
+margin-bottom:10px;
+
+}
+
+.page p{
+
+font-size:15px;
+color:var(--gray);
+line-height:1.6;
+
+}
+
+/* ===========================
+Admin Panel
+=========================== */
+
+.adminGrid{
+
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+margin-top:20px;
+
+}
+
+.adminCard{
+
+background:#F8F8FF;
+border:1px solid var(--border);
+border-radius:18px;
+padding:20px;
+text-align:center;
+
+}
+
+.adminCard h3{
+
+font-size:15px;
+color:var(--gray);
+margin-bottom:10px;
+
+}
+
+.adminCard p{
+
+font-size:28px;
+font-weight:700;
+color:var(--primary);
+
+}
+
+/* ===========================
+Global Loading
+=========================== */
+
+#globalLoading{
+
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+background:rgba(255,255,255,.85);
+backdrop-filter:blur(6px);
+z-index:99999;
+
+}
+
+.loadingBox{
+
+text-align:center;
+
+}
+
+.loadingSpinner{
+
+width:55px;
+height:55px;
+border:5px solid #E8E8FF;
+border-top:5px solid var(--primary);
+border-radius:50%;
+animation:spin 1s linear infinite;
+margin:auto;
+
+}
+
+@keyframes spin{
+
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
+
+}
+
+.loadingBox p{
+
+margin-top:15px;
+color:var(--primary);
+font-weight:600;
+
+}
+
+/* ===========================
+Toast
+=========================== */
+
+#toast{
+
+position:fixed;
+left:50%;
+bottom:95px;
+transform:translateX(-50%);
+background:var(--primary);
+color:white;
+padding:14px 22px;
+border-radius:30px;
+font-size:14px;
+font-weight:600;
+box-shadow:var(--shadow);
+z-index:999999;
+opacity:0;
+pointer-events:none;
+transition:.3s;
+
+}
+
+#toast.show{
+
+opacity:1;
+
+}
+
+/* ===========================
+Image & Video Preview
+=========================== */
+
+#imageViewer,
+#videoViewer{
+
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.92);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:999999;
+
+}
+
+#previewImage{
+
+max-width:95%;
+max-height:90%;
+border-radius:15px;
+
+}
+
+#previewVideo{
+
+max-width:95%;
+max-height:90%;
+border-radius:15px;
+
+}
+
+#closeImageViewer,
+#closeVideoViewer{
+
+position:absolute;
+top:20px;
+right:20px;
+font-size:34px;
+color:white;
+cursor:pointer;
+
+}
+/* ===========================
+Responsive Design
+=========================== */
+
+@media (max-width:768px){
+
+#header{
+
+padding:0 10px;
+
+}
+
+#headerLeft h2{
+
+font-size:18px;
+
+}
+
+#searchInput{
+
+font-size:13px;
+
+}
+
+#headerRight{
+
+gap:5px;
+
+}
+
+#headerRight button{
+
+width:38px;
+height:38px;
+font-size:16px;
+
+}
+
+#headerProfile{
+
+width:38px;
+height:38px;
+
+}
+
+#mainContent{
+
+padding:12px;
+
+}
+
+.adminGrid{
+
+grid-template-columns:1fr;
+
+}
+
+#sideMenu{
+
+width:280px;
+
+}
+
+.navItem{
+
+font-size:20px;
+
+}
+
+.navItem span{
+
+font-size:10px;
+
+}
+
+}
+
+/* ===========================
+Small Mobile
+=========================== */
+
+@media (max-width:420px){
+
+#headerLeft h2{
+
+display:none;
+
+}
+
+#searchInput{
+
+height:38px;
+
+}
+
+#bottomNav{
+
+height:68px;
+
+}
+
+.navItem{
+
+font-size:18px;
+
+}
+
+.navItem span{
+
+display:none;
+
+}
+
+}
+
+/* ===========================
+Dark Mode
+=========================== */
+
+body.dark{
+
+background:#121212;
+color:#ffffff;
+
+}
+
+body.dark #header,
+body.dark #bottomNav,
+body.dark .authPage,
+body.dark .page,
+body.dark #sideMenu{
+
+background:#1E1E1E;
+
+}
+
+body.dark input{
+
+background:#2A2A2A;
+border-color:#3A3A3A;
+color:#ffffff;
+
+}
+
+body.dark input::placeholder{
+
+color:#B0B0B0;
+
+}
+
+body.dark .adminCard{
+
+background:#2A2A2A;
+border-color:#3A3A3A;
+
+}
+
+body.dark #searchInput{
+
+background:#2A2A2A;
+color:#ffffff;
+
+}
+
+body.dark #headerRight button{
+
+background:#2A2A2A;
+color:#ffffff;
+
+}
+
+body.dark .navItem{
+
+color:#B0B0B0;
+
+}
+
+body.dark .navItem.active{
+
+color:#8B5CF6;
+
+}
+
+body.dark #sideMenu button{
+
+color:#ffffff;
+border-bottom:1px solid #333333;
+
+}
+
+body.dark #sideMenu button:hover{
+
+background:#2A2A2A;
+
+}
+
+/* ===========================
+Smooth Animation
+=========================== */
+
+button,
+input,
+.page,
+.authPage,
+.adminCard,
+.navItem,
+#sideMenu{
+
+transition:.25s ease;
+
+}
+
+/* ===========================
+CSS COMPLETE
+Friendsbook 2026 V3
+=========================== */
