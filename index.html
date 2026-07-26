@@ -1,1 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Friendsbook 2026</title>
+
+<link rel="stylesheet"
+href="style.css">
+
+</head>
+
+<body>
+
+<!-- ========================= -->
+<!-- Splash Screen -->
+<!-- ========================= -->
+
+<div id="splashScreen">
+
+<div class="splashContainer">
+
+<img
+src="myphoto.png"
+id="myPhoto"
+alt="Profile">
+
+<img
+src="logo.png"
+id="logo"
+alt="Friendsbook">
+
+<h1>
+
+Friendsbook
+
+</h1>
+
+<p>
+
+Connecting People...
+
+</p>
+
+<div id="loadingBar">
+
+<div id="loadingProgress">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ========================= -->
+<!-- Authentication -->
+<!-- ========================= -->
+
+<div id="authContainer">
+<!-- ========================= -->
+<!-- Login Page -->
+<!-- ========================= -->
+
+<div id="loginPage" class="authPage">
+
+<img
+src="logo.png"
+class="authLogo"
+alt="Logo">
+
+<h2>
+
+Login
+
+</h2>
+
+<input
+type="email"
+id="loginEmail"
+placeholder="Email">
+
+<input
+type="password"
+id="loginPassword"
+placeholder="Password">
+
+<button
+id="loginBtn">
+
+Login
+
+</button>
+
+<p
+id="forgotPasswordBtn"
+class="authLink">
+
+Forgot Password?
+
+</p>
+
+<p
+class="authText">
+
+Don't have an account?
+
+<span id="openSignup">
+
+Sign Up
+
+</span>
+
+</p>
+
+</div>
+
+<!-- ========================= -->
+<!-- Signup Page -->
+<!-- ========================= -->
+
+<div
+id="signupPage"
+class="authPage hidden">
+
+<img
+src="logo.png"
+class="authLogo"
+alt="Logo">
+
+<h2>
+
+Create Account
+
+</h2>
+
+<input
+type="text"
+id="signupName"
+placeholder="Full Name">
+
+<input
+type="email"
+id="signupEmail"
+placeholder="Email">
+
+<input
+type="password"
+id="signupPassword"
+placeholder="Password">
+
+<button
+id="signupBtn">
+
+Create Account
+
+</button>
+
+<p
+class="authText">
+
+Already have an account?
+
+<span id="openLogin">
+
+Login
+
+</span>
+
+</p>
+
+</div>
+
+<!-- ========================= -->
+<!-- Forgot Password -->
+<!-- ========================= -->
+
+<div
+id="forgotPage"
+class="authPage hidden">
+
+<img
+src="logo.png"
+class="authLogo"
+alt="Logo">
+
+<h2>
+
+Reset Password
+
+</h2>
+
+<input
+type="email"
+id="forgotEmail"
+placeholder="Enter your email">
+
+<button
+id="resetPasswordBtn">
+
+Send Reset Link
+
+</button>
+
+<p
+class="authText">
+
+<span id="backLogin">
+
+Back To Login
+
+</span>
+
+</p>
+
+</div>
+
+</div>
+<!-- ========================= -->
+<!-- Home -->
+<!-- ========================= -->
+
+<div id="homePage" class="hidden">
+
+<!-- Header -->
+
+<header id="header">
+
+<div id="headerLeft">
+
+<img
+src="logo.png"
+id="headerLogo"
+alt="Friendsbook">
+
+<h2>
+
+Friendsbook
+
+</h2>
+
+</div>
+
+<div id="headerCenter">
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search Friendsbook...">
+
+</div>
+
+<div id="headerRight">
+
+<button
+id="searchBtn"
+title="Search">
+
+🔍
+
+</button>
+
+<button
+id="messengerBtn"
+title="Messenger">
+
+💬
+
+</button>
+
+<button
+id="notificationBtn"
+title="Notifications">
+
+🔔
+
+</button>
+
+<img
+src="default-profile.png"
+id="headerProfile"
+alt="Profile">
+
+</div>
+
+</header>
+
+<!-- Main Content -->
+
+<main id="mainContent">
+
+<div id="feedContainer">
+
+<!-- Posts will load here -->
+
+</div>
+
+</main>
+<!-- ========================= -->
+<!-- Bottom Navigation -->
+<!-- ========================= -->
+
+<nav id="bottomNav">
+
+<button id="navHome" class="navItem">
+
+🏠
+
+<span>Home</span>
+
+</button>
+
+<button id="navFriends" class="navItem">
+
+👥
+
+<span>Friends</span>
+
+</button>
+
+<button id="navCreate" class="navItem">
+
+➕
+
+<span>Create</span>
+
+</button>
+
+<button id="navReels" class="navItem">
+
+🎬
+
+<span>Reels</span>
+
+</button>
+
+<button id="navMessenger" class="navItem">
+
+💬
+
+<span>Chat</span>
+
+</button>
+
+<button id="navNotification" class="navItem">
+
+🔔
+
+<span>Alerts</span>
+
+</button>
+
+<button id="navProfile" class="navItem">
+
+👤
+
+<span>Profile</span>
+
+</button>
+
+<button id="navAI" class="navItem">
+
+🤖
+
+<span>AI</span>
+
+</button>
+
+<button id="navMenu" class="navItem">
+
+☰
+
+<span>Menu</span>
+
+</button>
+
+</nav>
+
+<!-- ========================= -->
+<!-- Side Menu -->
+<!-- ========================= -->
+
+<aside id="sideMenu" class="hidden">
+
+<div id="menuHeader">
+
+<img
+src="default-profile.png"
+id="menuProfileImage"
+alt="Profile">
+
+<h3 id="menuUserName">
+
+Friendsbook User
+
+</h3>
+
+</div>
+
+<button id="menuProfileBtn">👤 Profile</button>
+
+<button id="menuSavedBtn">🔖 Saved Posts</button>
+
+<button id="menuMarketplaceBtn">🛒 Marketplace</button>
+
+<button id="menuPagesBtn">📄 Pages</button>
+
+<button id="menuGroupsBtn">👥 Groups</button>
+
+<button id="menuSettingsBtn">⚙️ Settings</button>
+
+<button id="menuDarkBtn">🌙 Dark Mode</button>
+
+<button id="logoutBtn">🚪 Logout</button>
+
+</aside>
+<!-- ========================= -->
+<!-- Placeholder Pages -->
+<!-- ========================= -->
+
+<section id="profilePage" class="page hidden">
+
+<h2>Profile</h2>
+
+<p>Profile Page - Coming in Phase 3</p>
+
+</section>
+
+<section id="friendsPage" class="page hidden">
+
+<h2>Friends</h2>
+
+<p>Friends System - Coming in Phase 4</p>
+
+</section>
+
+<section id="createPage" class="page hidden">
+
+<h2>Create Post</h2>
+
+<p>Create Post - Coming in Phase 2</p>
+
+</section>
+
+<section id="reelsPage" class="page hidden">
+
+<h2>Reels</h2>
+
+<p>Reels - Coming in Phase 5</p>
+
+</section>
+
+<section id="messengerPage" class="page hidden">
+
+<h2>Messenger</h2>
+
+<p>Messenger - Coming in Phase 4</p>
+
+</section>
+
+<section id="notificationPage" class="page hidden">
+
+<h2>Notifications</h2>
+
+<p>Notifications - Coming in Phase 4</p>
+
+</section>
+
+<section id="aiPage" class="page hidden">
+
+<h2>Friendsbook AI</h2>
+
+<p>AI Assistant - Coming Soon</p>
+
+</section>
+
+<section id="settingsPage" class="page hidden">
+
+<h2>Settings</h2>
+
+<p>Settings - Coming in Phase 5</p>
+
+</section>
+
+<section id="marketplacePage" class="page hidden">
+
+<h2>Marketplace</h2>
+
+<p>Marketplace - Coming in Phase 5</p>
+
+</section>
+
+<section id="savedPage" class="page hidden">
+
+<h2>Saved Posts</h2>
+
+<p>Saved Posts - Coming in Phase 3</p>
+
+</section>
+
+<section id="groupsPage" class="page hidden">
+
+<h2>Groups</h2>
+
+<p>Groups - Future Update</p>
+
+</section>
+
+<section id="pagesPage" class="page hidden">
+
+<h2>Pages</h2>
+
+<p>Pages - Future Update</p>
+
+</section>
+<!-- ========================= -->
+<!-- Admin Panel -->
+<!-- ========================= -->
+
+<section id="adminPage" class="page hidden">
+
+<div class="pageHeader">
+
+<h2>Admin Panel</h2>
+
+</div>
+
+<div class="adminGrid">
+
+<div class="adminCard">
+
+<h3>Total Users</h3>
+
+<p id="totalUsers">0</p>
+
+</div>
+
+<div class="adminCard">
+
+<h3>Total Posts</h3>
+
+<p id="totalPosts">0</p>
+
+</div>
+
+<div class="adminCard">
+
+<h3>Reports</h3>
+
+<p id="totalReports">0</p>
+
+</div>
+
+<div class="adminCard">
+
+<h3>Premium Users</h3>
+
+<p id="premiumUsers">0</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- Global Loading -->
+<!-- ========================= -->
+
+<div id="globalLoading" class="hidden">
+
+<div class="loadingBox">
+
+<div class="loadingSpinner"></div>
+
+<p>
+
+Please Wait...
+
+</p>
+
+</div>
+
+</div>
+
+<!-- ========================= -->
+<!-- Global Message -->
+<!-- ========================= -->
+
+<div id="messageModal" class="hidden">
+
+<div class="messageBox">
+
+<h3 id="messageTitle">
+
+Friendsbook
+
+</h3>
+
+<p id="messageText">
+
+Message
+
+</p>
+
+<button id="messageOkBtn">
+
+OK
+
+</button>
+
+</div>
+
+</div>
+
+<!-- ========================= -->
+<!-- Image Preview -->
+
+<div id="imageViewer" class="hidden">
+
+<span id="closeImageViewer">
+
+✕
+
+</span>
+
+<img
+id="previewImage"
+src=""
+alt="Preview">
+
+</div>
+
+<!-- ========================= -->
+<!-- Video Preview -->
+
+<div id="videoViewer" class="hidden">
+
+<span id="closeVideoViewer">
+
+✕
+
+</span>
+
+<video
+id="previewVideo"
+controls>
+
+</video>
+
+</div>
+<!-- ========================= -->
+<!-- App End -->
+<!-- ========================= -->
+
+</div>
+<!-- End Home Page -->
+
+<!-- ========================= -->
+<!-- Overlay -->
+<!-- ========================= -->
+
+<div id="overlay" class="hidden"></div>
+
+<!-- ========================= -->
+<!-- Toast -->
+<!-- ========================= -->
+
+<div id="toast" class="hidden">
+
+<span id="toastText">
+
+Friendsbook
+
+</span>
+
+</div>
+
+<!-- ========================= -->
+<!-- Scripts -->
+<!-- ========================= -->
+
+<script type="module" src="firebase.js"></script>
+
+<script type="module" src="script.js"></script>
+
+</body>
+                 </html>
