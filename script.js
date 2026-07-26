@@ -93,10 +93,9 @@ function showLoading(){
 
 App.loading=true;
 
-show("globalLoading");
+show("splashScreen");
 
 }
-
 function hideLoading(){
 
 App.loading=false;
