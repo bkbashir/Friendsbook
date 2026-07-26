@@ -24,7 +24,8 @@ createUserObject,
 isAdmin
 
 }from "./firebase.js";
-
+console.log("STEP-1");
+alert("STEP-1");
 // ================================
 // DOM
 // ================================
