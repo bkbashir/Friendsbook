@@ -26,7 +26,11 @@ isAdmin
 
 }from "./firebase.js";
 alert("STEP 1");
+alert("STEP 2");
 
+document.addEventListener("DOMContentLoaded", () => {
+    alert("STEP 3");
+});
 window.onerror = function(message, source, line, col, error) {
     alert(
         "ERROR:\n" +
@@ -34,11 +38,7 @@ window.onerror = function(message, source, line, col, error) {
         "\nLine: " + line
     );
 };
-alert("STEP 2");
 
-document.addEventListener("DOMContentLoaded", () => {
-    alert("STEP 3");
-});
 // ==============================
 // DOM Helper
 // ==============================
