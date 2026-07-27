@@ -1,7 +1,8 @@
 // ======================================
 // Friendsbook 2026
 // Script.js
-// Part 1/12
+// Part 1/10
+// Foundation
 // ======================================
 
 import{
@@ -24,17 +25,16 @@ createUserObject,
 isAdmin
 
 }from "./firebase.js";
-console.log("STEP-1");
-alert("STEP-1");
-// ================================
-// DOM
-// ================================
 
-const $=id=>document.getElementById(id);
+// ==============================
+// DOM Helper
+// ==============================
 
-// ================================
-// APP STATE
-// ================================
+const $=(id)=>document.getElementById(id);
+
+// ==============================
+// App State
+// ==============================
 
 const App={
 
@@ -42,49 +42,57 @@ user:null,
 
 profile:null,
 
-admin:false,
-
 page:"home",
 
 dark:false,
 
-loading:false
+admin:false
 
 };
 
-// ================================
-// HELPERS
-// ================================
+// ==============================
+// Helpers
+// ==============================
 
 function show(id){
 
-$(id)?.classList.remove("hidden");
+const el=$(id);
+
+if(el){
+
+el.classList.remove("hidden");
+
+}
 
 }
 
 function hide(id){
 
-$(id)?.classList.add("hidden");
+const el=$(id);
+
+if(el){
+
+el.classList.add("hidden");
 
 }
 
-function toast(text){
+}
+
+function toast(message){
 
 const box=$("toast");
 
-const label=$("toastText");
+const text=$("toastText");
 
-if(!box||!label)return;
+if(!box||!text)return;
 
-label.textContent=text;
+text.textContent=message;
 
-box.classList.add("show");
+box.classList.remove("hidden");
 
-clearTimeout(App.toastTimer);
+setTimeout(()=>{
 
-App.toastTimer=setTimeout(()=>{
-
-box.classList.remove("show");
+box.classList.add("hidden");
 
 },2500);
 
@@ -92,21 +100,64 @@ box.classList.remove("show");
 
 function showLoading(){
 
-App.loading=true;
-
-show("splashScreen");
+show("globalLoading");
 
 }
+
 function hideLoading(){
 
-App.loading=false;
-
-hide("splashScreen");
+hide("globalLoading");
 
 }
+
+// ==============================
+// Authentication Pages
+// ==============================
+
+function openLogin(){
+
+show("loginPage");
+
+hide("signupPage");
+
+hide("forgotPage");
+
+}
+
+function openSignup(){
+
+hide("loginPage");
+
+show("signupPage");
+
+hide("forgotPage");
+
+}
+
+function openForgot(){
+
+hide("loginPage");
+
+hide("signupPage");
+
+show("forgotPage");
+
+}
+
+// ==============================
+// Page Events
+// ==============================
+
+$("openSignup").onclick=openSignup;
+
+$("openLogin").onclick=openLogin;
+
+$("forgotPasswordBtn").onclick=openForgot;
+
+$("backLogin").onclick=openLogin;
 // ======================================
 // Authentication
-// Part 2/12
+// Part 2/10
 // ======================================
 
 async function login(){
@@ -128,16 +179,10 @@ showLoading();
 try{
 
 await signInWithEmailAndPassword(
-
 auth,
-
 email,
-
 password
-
 );
-
-toast("Login successful");
 
 }catch(error){
 
@@ -171,51 +216,36 @@ showLoading();
 
 try{
 
-const result=
+const credential=
 
 await createUserWithEmailAndPassword(
-
 auth,
-
 email,
-
 password
-
 );
 
 await updateProfile(
-
-result.user,
-
+credential.user,
 {
-
 displayName:name
-
 }
-
 );
 
 await sendEmailVerification(
-
-result.user
-
+credential.user
 );
 
 await setDoc(
-
-doc(db,"users",result.user.uid),
-
+doc(db,"users",credential.user.uid),
 createUserObject(
-
-result.user,
-
+credential.user,
 name
-
 )
-
 );
 
-toast("Account created");
+toast("Verification email sent");
+
+openLogin();
 
 }catch(error){
 
@@ -246,14 +276,13 @@ showLoading();
 try{
 
 await sendPasswordResetEmail(
-
 auth,
-
 email
-
 );
 
-toast("Password reset email sent");
+toast("Reset email sent");
+
+openLogin();
 
 }catch(error){
 
@@ -267,37 +296,23 @@ hideLoading();
 
 }
 
-// Register Events (Only Once)
+// ==============================
+// Button Events
+// ==============================
 
-$("loginBtn").addEventListener(
+$("loginBtn").onclick=login;
 
-"click",
+$("signupBtn").onclick=signup;
 
-login
-
-);
-
-$("signupBtn").addEventListener(
-
-"click",
-
-signup
-
-);
-
-$("resetPasswordBtn").addEventListener(
-
-"click",
-
-forgotPassword
-
-);
+$("resetPasswordBtn").onclick=forgotPassword;
 // ======================================
 // Auth State
-// Part 3/12
+// Part 3/10
 // ======================================
 
-async function loadProfile(uid){
+async function loadUserProfile(uid){
+
+try{
 
 const snap=await getDoc(
 
@@ -339,9 +354,23 @@ App.profile.name||
 
 }
 
+}catch(error){
+
+console.error(error);
+
 }
 
-onAuthStateChanged(auth,async(user)=>{
+}
+
+// ======================================
+// Firebase Auth Listener
+// ======================================
+
+onAuthStateChanged(
+
+auth,
+
+async(user)=>{
 
 if(!user){
 
@@ -355,6 +384,8 @@ show("authContainer");
 
 hide("homePage");
 
+hideLoading();
+
 return;
 
 }
@@ -363,25 +394,17 @@ showLoading();
 
 try{
 
-await user.reload();
-
 App.user=user;
 
 App.admin=isAdmin(user);
 
-await loadProfile(user.uid);
+await loadUserProfile(user.uid);
 
 hide("authContainer");
 
 show("homePage");
 
-restorePage();
-
-if(!user.emailVerified){
-
-toast("Verify your email");
-
-}
+toast("Welcome");
 
 }catch(error){
 
@@ -393,141 +416,38 @@ hideLoading();
 
 }
 
-});
+}
+
+);
+
 // ======================================
-// Navigation System
-// Part 4/12
+// Logout
 // ======================================
 
-const Pages={
+async function logout(){
 
-home:$("mainContent"),
+showLoading();
 
-profile:$("profilePage"),
+try{
 
-friends:$("friendsPage"),
+await signOut(auth);
 
-create:$("createPage"),
+}catch(error){
 
-reels:$("reelsPage"),
+toast(error.message);
 
-messenger:$("messengerPage"),
+}finally{
 
-notification:$("notificationPage"),
-
-ai:$("aiPage"),
-
-settings:$("settingsPage"),
-
-marketplace:$("marketplacePage"),
-
-saved:$("savedPage"),
-
-groups:$("groupsPage"),
-
-pages:$("pagesPage"),
-
-admin:$("adminPage")
-
-};
-
-function hideAllPages(){
-
-Object.values(Pages).forEach(page=>{
-
-if(!page) return;
-
-page.classList.add("hidden");
-
-page.classList.remove("active");
-
-});
+hideLoading();
 
 }
 
-function openPage(name){
-
-if(!Pages[name]){
-
-name="home";
-
 }
 
-hideAllPages();
-
-Pages[name].classList.remove("hidden");
-
-Pages[name].classList.add("active");
-
-App.page=name;
-
-localStorage.setItem(
-
-"fb_page",
-
-name
-
-);
-
-}
-
-// Bottom Navigation
-
-$("navHome").addEventListener(
-
-"click",
-
-()=>openPage("home")
-
-);
-
-$("navFriends").addEventListener(
-
-"click",
-
-()=>openPage("friends")
-
-);
-
-$("navCreate").addEventListener(
-
-"click",
-
-()=>openPage("create")
-
-);
-
-$("navReels").addEventListener(
-
-"click",
-
-()=>openPage("reels")
-
-);
-
-$("navMessenger").addEventListener(
-
-"click",
-
-()=>openPage("messenger")
-
-);
-
-$("navNotification").addEventListener(
-
-"click",
-
-()=>openPage("notification")
-
-);
-
-$("navProfile").addEventListener(
-
-"click",
-
+$("logoutBtn").onclick=logout;
 // ======================================
 // Navigation
-// Part 4/12
+// Part 4/10
 // ======================================
 
 const Pages={
@@ -562,7 +482,7 @@ admin:$("adminPage")
 
 };
 
-function hidePages(){
+function closeAllPages(){
 
 Object.values(Pages).forEach(page=>{
 
@@ -570,8 +490,6 @@ if(page){
 
 page.classList.add("hidden");
 
-page.classList.remove("active");
-
 }
 
 });
@@ -580,117 +498,53 @@ page.classList.remove("active");
 
 function openPage(name){
 
-hidePages();
+closeAllPages();
 
 if(Pages[name]){
 
 Pages[name].classList.remove("hidden");
 
-Pages[name].classList.add("active");
-
 App.page=name;
 
-localStorage.setItem("fb_page",name);
+}
+
+hide("sideMenu");
+
+hide("overlay");
 
 }
 
-closeMenu();
-
-}
-
-function restorePage(){
-
-const last=
-
-localStorage.getItem("fb_page")||
-
-"home";
-
-openPage(last);
-
-}
-
+// ==============================
 // Bottom Navigation
+// ==============================
 
-$("navHome").addEventListener(
+$("navHome").onclick=()=>openPage("home");
 
-"click",
+$("navFriends").onclick=()=>openPage("friends");
 
-()=>openPage("home")
+$("navCreate").onclick=()=>openPage("create");
 
-);
+$("navReels").onclick=()=>openPage("reels");
 
-$("navFriends").addEventListener(
+$("navMessenger").onclick=()=>openPage("messenger");
 
-"click",
+$("navNotification").onclick=()=>openPage("notification");
 
-()=>openPage("friends")
+$("navProfile").onclick=()=>openPage("profile");
 
-);
+$("navAI").onclick=()=>openPage("ai");
 
-$("navCreate").addEventListener(
+// Header Profile
 
-"click",
-
-()=>openPage("create")
-
-);
-
-$("navReels").addEventListener(
-
-"click",
-
-()=>openPage("reels")
-
-);
-
-$("navMessenger").addEventListener(
-
-"click",
-
-()=>openPage("messenger")
-
-);
-
-$("navNotification").addEventListener(
-
-"click",
-
-()=>openPage("notification")
-
-);
-
-$("navProfile").addEventListener(
-
-"click",
-
-()=>openPage("profile")
-
-);
-
-$("navAI").addEventListener(
-
-"click",
-
-()=>openPage("ai")
-
-);
-
-$("headerProfile").addEventListener(
-
-"click",
-
-()=>openPage("profile")
-
-);
+$("headerProfile").onclick=()=>openPage("profile");
 // ======================================
 // Side Menu
-// Part 5/12
+// Part 5/10
 // ======================================
 
 function openMenu(){
 
-$("sideMenu").classList.add("active");
+show("sideMenu");
 
 show("overlay");
 
@@ -698,85 +552,75 @@ show("overlay");
 
 function closeMenu(){
 
-$("sideMenu").classList.remove("active");
+hide("sideMenu");
 
 hide("overlay");
 
 }
 
-// Menu Events (Only Once)
+// ==============================
+// Menu Events
+// ==============================
 
-$("navMenu").addEventListener(
+$("navMenu").onclick=openMenu;
 
-"click",
+$("overlay").onclick=closeMenu;
 
-openMenu
-
-);
-
-$("overlay").addEventListener(
-
-"click",
-
-closeMenu
-
-);
-
-// ===============================
+// ==============================
 // Menu Navigation
-// ===============================
+// ==============================
 
-$("menuProfileBtn").addEventListener(
+$("menuProfileBtn").onclick=()=>{
 
-"click",
+openPage("profile");
 
-()=>openPage("profile")
+closeMenu();
 
-);
+};
 
-$("menuSavedBtn").addEventListener(
+$("menuSavedBtn").onclick=()=>{
 
-"click",
+openPage("saved");
 
-()=>openPage("saved")
+closeMenu();
 
-);
+};
 
-$("menuMarketplaceBtn").addEventListener(
+$("menuMarketplaceBtn").onclick=()=>{
 
-"click",
+openPage("marketplace");
 
-()=>openPage("marketplace")
+closeMenu();
 
-);
+};
 
-$("menuPagesBtn").addEventListener(
+$("menuPagesBtn").onclick=()=>{
 
-"click",
+openPage("pages");
 
-()=>openPage("pages")
+closeMenu();
 
-);
+};
 
-$("menuGroupsBtn").addEventListener(
+$("menuGroupsBtn").onclick=()=>{
 
-"click",
+openPage("groups");
 
-()=>openPage("groups")
+closeMenu();
 
-);
+};
 
-$("menuSettingsBtn").addEventListener(
+$("menuSettingsBtn").onclick=()=>{
 
-"click",
+openPage("settings");
 
-()=>openPage("settings")
+closeMenu();
 
-);
+};
 
-// ===============================
+// ==============================
 // Dark Mode
-// ===============================
+// ==============================
 
 function setDarkMode(enable){
 
@@ -800,11 +644,17 @@ enable
 
 }
 
-$("menuDarkBtn").addEventListener(
+const savedDark=
 
-"click",
+localStorage.getItem("fb_dark");
 
-()=>{
+if(savedDark==="true"){
+
+setDarkMode(true);
+
+}
+
+$("menuDarkBtn").onclick=()=>{
 
 setDarkMode(!App.dark);
 
@@ -818,126 +668,41 @@ App.dark?
 
 );
 
-}
-
-);
-// ======================================
-// Logout + Initialize
-// Part 6/12
-// ======================================
-
-async function logout(){
-
-showLoading();
-
-try{
-
-await signOut(auth);
-
-localStorage.removeItem("fb_page");
-
-toast("Logged out");
-
-}catch(error){
-
-toast(error.message);
-
-}finally{
-
-hideLoading();
-
-}
-
-}
-
-$("logoutBtn").addEventListener(
-
-"click",
-
-logout
-
-);
-
-// ===============================
-// Initialize
-// ===============================
-
-function initializeApp(){
-
-const dark=
-
-localStorage.getItem("fb_dark")==="true";
-
-setDarkMode(dark);
-
-
-hideLoading();
-
-console.log(
-
-"Friendsbook Initialized"
-
-);
-
-}
-
-// ===============================
-// Single Window Load
-// ===============================
-
-window.addEventListener(
-
-"load",
-
-initializeApp
-
-);
+};
 // ======================================
 // Search + Preview
-// Part 7/12
+// Part 6/10
 // ======================================
 
-// ===============================
+// ==============================
 // Search
-// ===============================
+// ==============================
 
-function search(keyword){
+function searchPosts(keyword){
 
 keyword=keyword.trim().toLowerCase();
 
 console.log("Search:",keyword);
 
-// Phase 4
+// Future Search Logic
 
 }
 
-$("searchInput").addEventListener(
+$("searchInput").oninput=(e)=>{
 
-"input",
+searchPosts(e.target.value);
 
-e=>{
+};
 
-search(e.target.value);
-
-}
-
-);
-
-$("searchBtn").addEventListener(
-
-"click",
-
-()=>{
+$("searchBtn").onclick=()=>{
 
 $("searchInput").focus();
 
-}
+};
 
-);
-
-// ===============================
+// ==============================
 // Image Preview
-// ===============================
+// ==============================
 
 function openImage(src){
 
@@ -955,17 +720,11 @@ hide("imageViewer");
 
 }
 
-$("closeImageViewer").addEventListener(
+$("closeImageViewer").onclick=closeImage;
 
-"click",
-
-closeImage
-
-);
-
-// ===============================
+// ==============================
 // Video Preview
-// ===============================
+// ==============================
 
 function openVideo(src){
 
@@ -993,492 +752,10 @@ hide("videoViewer");
 
 }
 
-$("closeVideoViewer").addEventListener(
+$("closeVideoViewer").onclick=closeVideo;
 
-"click",
-
-closeVideo
-
-);
-
-// ===============================
 // Global Access
-// ===============================
 
 window.openImage=openImage;
 
 window.openVideo=openVideo;
-// ======================================
-// Global Message + Error Handler
-// Part 8/12
-// ======================================
-
-// ===============================
-// Global Message
-// ===============================
-
-function showMessage(title,message){
-
-$("messageTitle").textContent=title;
-
-$("messageText").textContent=message;
-
-show("messageModal");
-
-}
-
-function closeMessage(){
-
-hide("messageModal");
-
-}
-
-$("messageOkBtn").addEventListener(
-
-"click",
-
-closeMessage
-
-);
-
-window.showMessage=showMessage;
-
-// ===============================
-// Error Handler
-// ===============================
-
-window.onerror=function(
-
-message,
-
-source,
-
-line,
-
-column,
-
-error
-
-){
-
-console.error({
-
-message,
-
-source,
-
-line,
-
-column,
-
-error
-
-});
-
-toast("Something went wrong");
-
-return false;
-
-};
-
-window.addEventListener(
-
-"unhandledrejection",
-
-event=>{
-
-console.error(event.reason);
-
-toast("Unexpected error");
-
-}
-
-);
-
-// ===============================
-// Network Status
-// ===============================
-
-window.addEventListener(
-
-"online",
-
-()=>{
-
-toast("Internet Connected");
-
-}
-
-);
-
-window.addEventListener(
-
-"offline",
-
-()=>{
-
-toast("No Internet Connection");
-
-}
-
-);
-
-// ===============================
-// App Information
-// ===============================
-
-window.Friendsbook={
-
-name:"Friendsbook",
-
-version:"2026",
-
-foundation:"V1"
-
-};
-// ======================================
-// Admin + User Utilities
-// Part 9/12
-// ======================================
-
-// ===============================
-// Admin
-// ===============================
-
-function openAdmin(){
-
-if(!App.admin){
-
-toast("Access denied");
-
-return;
-
-}
-
-openPage("admin");
-
-}
-
-window.openAdmin=openAdmin;
-
-// ===============================
-// User Helpers
-// ===============================
-
-function getCurrentUser(){
-
-return App.user;
-
-}
-
-function getProfile(){
-
-return App.profile;
-
-}
-
-function isLoggedIn(){
-
-return App.user!==null;
-
-}
-
-window.getCurrentUser=getCurrentUser;
-
-window.getProfile=getProfile;
-
-window.isLoggedIn=isLoggedIn;
-
-// ===============================
-// Profile Refresh
-// ===============================
-
-async function refreshProfile(){
-
-if(!App.user) return;
-
-try{
-
-await loadProfile(App.user.uid);
-
-}catch(error){
-
-console.error(error);
-
-}
-
-}
-
-window.refreshProfile=refreshProfile;
-
-// ===============================
-// Save Current Page
-// ===============================
-
-window.addEventListener(
-
-"beforeunload",
-
-()=>{
-
-localStorage.setItem(
-
-"fb_page",
-
-App.page
-
-);
-
-}
-
-);
-// ======================================
-// Profile + App Utilities
-// Part 10/12
-// ======================================
-
-// ===============================
-// Update Profile Header
-// ===============================
-
-function updateProfileUI(){
-
-if(!App.profile) return;
-
-if($("menuUserName")){
-
-$("menuUserName").textContent=
-App.profile.name || "Friendsbook User";
-
-}
-
-if($("headerProfile")){
-
-$("headerProfile").src=
-App.profile.profilePhoto || "default-profile.png";
-
-}
-
-if($("menuProfileImage")){
-
-$("menuProfileImage").src=
-App.profile.profilePhoto || "default-profile.png";
-
-}
-
-}
-
-
-// ===============================
-// Refresh User Data
-// ===============================
-
-async function refreshUser(){
-
-if(!App.user) return;
-
-try{
-
-await loadProfile(App.user.uid);
-
-updateProfileUI();
-
-}catch(error){
-
-console.error(error);
-
-toast("Profile update failed");
-
-}
-
-}
-
-
-// ===============================
-// User Status
-// ===============================
-
-function userStatus(){
-
-return {
-
-loggedIn:!!App.user,
-
-admin:App.admin,
-
-page:App.page
-
-};
-
-}
-
-window.refreshUser=refreshUser;
-
-window.userStatus=userStatus;
-
-
-// ===============================
-// App Info
-// ===============================
-
-console.log(
-"Friendsbook Utility Loaded"
-);
-// ======================================
-// Security + Cleanup
-// Part 11/12
-// ======================================
-
-// ===============================
-// Safe User Check
-// ===============================
-
-function requireLogin(){
-
-if(!App.user){
-
-toast("Please login first");
-
-return false;
-
-}
-
-return true;
-
-}
-
-window.requireLogin=requireLogin;
-
-
-// ===============================
-// Admin Check
-// ===============================
-
-function requireAdmin(){
-
-if(!App.admin){
-
-toast("Admin access required");
-
-return false;
-
-}
-
-return true;
-
-}
-
-window.requireAdmin=requireAdmin;
-
-
-// ===============================
-// Clean Storage Helper
-// ===============================
-
-function clearAppStorage(){
-
-localStorage.removeItem("fb_page");
-
-localStorage.removeItem("fb_dark");
-
-}
-
-window.clearAppStorage=clearAppStorage;
-
-
-// ===============================
-// Debug Status
-// ===============================
-
-function debugApp(){
-
-console.log({
-
-user:App.user,
-
-profile:App.profile,
-
-admin:App.admin,
-
-page:App.page,
-
-dark:App.dark
-
-});
-
-}
-
-window.debugApp=debugApp;
-
-
-// ===============================
-// Final Cleanup Log
-// ===============================
-
-console.log(
-"Friendsbook Security Layer Loaded"
-);
-// ======================================
-// Friendsbook 2026
-// Final Initialization
-// Part 12/12
-// ======================================
-
-// ===============================
-// Final App Start
-// ===============================
-
-function startApp(){
-
-const darkMode =
-
-localStorage.getItem("fb_dark")==="true";
-
-
-setDarkMode(darkMode);
-
-
-hideLoading();
-
-
-console.log(
-"Friendsbook 2026 Started"
-);
-
-
-console.log(
-"Version: Foundation V1"
-);
-
-}
-
-
-// ===============================
-// Start Once
-// ===============================
-
-//startApp();
-
-
-// ===============================
-// Final API
-// ===============================
-
-window.FriendsbookApp={
-
-version:"2026",
-
-status:"Foundation Ready",
-
-user:()=>App.user,
-
-profile:()=>App.profile,
-
-admin:()=>App.admin
-
-};
-
-
-// ======================================
-// END OF SCRIPT.JS
-// ======================================
