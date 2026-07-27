@@ -378,13 +378,13 @@ console.error(error);
 // ======================================
 // Firebase Auth Listener
 // ======================================
-
+alert("AUTH START");
 onAuthStateChanged(
 
 auth,
 
 async(user)=>{
-
+alert("AUTH START");
 if(!user){
 
 App.user=null;
