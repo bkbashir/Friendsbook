@@ -281,3 +281,4 @@ APP_INFO.version+
 " Firebase Ready"
 
 );
+alert("FIREBASE READY");
