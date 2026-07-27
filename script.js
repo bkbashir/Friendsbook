@@ -6,10 +6,12 @@
 // ======================================
 
 import{
+
 auth,
 db,
 
 onAuthStateChanged,
+
 signInWithEmailAndPassword,
 createUserWithEmailAndPassword,
 sendEmailVerification,
@@ -22,32 +24,26 @@ setDoc,
 getDoc,
 
 createUserObject,
-isAdmin
+isAdmin,
+
+getDefaultProfile,
+getDefaultCover,
+getDefaultBio,
+
+appName,
+appVersion
 
 }from "./firebase.js";
-alert("STEP 1");
-alert("STEP 2");
 
-document.addEventListener("DOMContentLoaded", () => {
-    alert("STEP 3");
-});
-window.onerror = function(message, source, line, col, error) {
-    alert(
-        "ERROR:\n" +
-        message +
-        "\nLine: " + line
-    );
-};
-
-// ==============================
-// DOM Helper
-// ==============================
+// ======================================
+// DOM
+// ======================================
 
 const $=(id)=>document.getElementById(id);
 
-// ==============================
-// App State
-// ==============================
+// ======================================
+// APP
+// ======================================
 
 const App={
 
@@ -57,15 +53,15 @@ profile:null,
 
 page:"home",
 
-dark:false,
+admin:false,
 
-admin:false
+dark:false
 
 };
 
-// ==============================
+// ======================================
 // Helpers
-// ==============================
+// ======================================
 
 function show(id){
 
@@ -91,6 +87,10 @@ el.classList.add("hidden");
 
 }
 
+// ======================================
+// Toast
+// ======================================
+
 function toast(message){
 
 const box=$("toast");
@@ -103,13 +103,19 @@ text.textContent=message;
 
 box.classList.remove("hidden");
 
-setTimeout(()=>{
+clearTimeout(box.timer);
+
+box.timer=setTimeout(()=>{
 
 box.classList.add("hidden");
 
 },2500);
 
 }
+
+// ======================================
+// Loading
+// ======================================
 
 function showLoading(){
 
@@ -123,9 +129,9 @@ hide("globalLoading");
 
 }
 
-// ==============================
+// ======================================
 // Authentication Pages
-// ==============================
+// ======================================
 
 function openLogin(){
 
@@ -157,9 +163,9 @@ show("forgotPage");
 
 }
 
-// ==============================
-// Page Events
-// ==============================
+// ======================================
+// Page Switch
+// ======================================
 
 $("openSignup").onclick=openSignup;
 
@@ -168,21 +174,28 @@ $("openLogin").onclick=openLogin;
 $("forgotPasswordBtn").onclick=openForgot;
 
 $("backLogin").onclick=openLogin;
+
+console.log(
+
+appName(),
+appVersion(),
+"Script Loaded"
+
+);
 // ======================================
 // Authentication
 // Part 2/10
 // ======================================
 
+// Login
 async function login(){
 
 const email=$("loginEmail").value.trim();
-
 const password=$("loginPassword").value;
 
 if(!email||!password){
 
 toast("Enter email and password");
-
 return;
 
 }
@@ -197,6 +210,8 @@ email,
 password
 );
 
+toast("Login successful");
+
 }catch(error){
 
 toast(error.message);
@@ -209,6 +224,7 @@ hideLoading();
 
 }
 
+// Signup
 async function signup(){
 
 const name=$("signupName").value.trim();
@@ -220,7 +236,6 @@ const password=$("signupPassword").value;
 if(!name||!email||!password){
 
 toast("Fill all fields");
-
 return;
 
 }
@@ -229,8 +244,7 @@ showLoading();
 
 try{
 
-const credential=
-
+const result=
 await createUserWithEmailAndPassword(
 auth,
 email,
@@ -238,20 +252,20 @@ password
 );
 
 await updateProfile(
-credential.user,
+result.user,
 {
 displayName:name
 }
 );
 
 await sendEmailVerification(
-credential.user
+result.user
 );
 
 await setDoc(
-doc(db,"users",credential.user.uid),
+doc(db,"users",result.user.uid),
 createUserObject(
-credential.user,
+result.user,
 name
 )
 );
@@ -272,6 +286,7 @@ hideLoading();
 
 }
 
+// Forgot Password
 async function forgotPassword(){
 
 const email=$("forgotEmail").value.trim();
@@ -279,7 +294,6 @@ const email=$("forgotEmail").value.trim();
 if(!email){
 
 toast("Enter your email");
-
 return;
 
 }
@@ -293,7 +307,7 @@ auth,
 email
 );
 
-toast("Reset email sent");
+toast("Reset link sent");
 
 openLogin();
 
@@ -309,9 +323,7 @@ hideLoading();
 
 }
 
-// ==============================
 // Button Events
-// ==============================
 
 $("loginBtn").onclick=login;
 
@@ -323,115 +335,79 @@ $("resetPasswordBtn").onclick=forgotPassword;
 // Part 3/10
 // ======================================
 
-async function loadUserProfile(uid){
+onAuthStateChanged(auth, async(user)=>{
 
-try{
-
-const snap=await getDoc(
-
-doc(db,"users",uid)
-
-);
-
-if(!snap.exists()) return;
-
-App.profile=snap.data();
-
-if($("headerProfile")){
-
-$("headerProfile").src=
-
-App.profile.profilePhoto||
-
-"default-profile.png";
-
-}
-
-if($("menuProfileImage")){
-
-$("menuProfileImage").src=
-
-App.profile.profilePhoto||
-
-"default-profile.png";
-
-}
-
-if($("menuUserName")){
-
-$("menuUserName").textContent=
-
-App.profile.name||
-
-"Friendsbook User";
-
-}
-
-}catch(error){
-
-console.error(error);
-
-}
-
-}
-
-// ======================================
-// Firebase Auth Listener
-// ======================================
-alert("AUTH START");
-onAuthStateChanged(
-
-auth,
-
-async(user)=>{
-alert("AUTH START");
-if(!user){
-
-App.user=null;
-
-App.profile=null;
-
-App.admin=false;
-
-show("authContainer");
-
-hide("homePage");
-
-hideLoading();
-
-return;
-
-}
-
-showLoading();
-
-try{
+if(user){
 
 App.user=user;
-
-App.admin=isAdmin(user);
-
-await loadUserProfile(user.uid);
 
 hide("authContainer");
 
 show("homePage");
 
-toast("Welcome");
+try{
+
+const snap=await getDoc(
+doc(db,"users",user.uid)
+);
+
+if(snap.exists()){
+
+App.profile=snap.data();
+
+}
 
 }catch(error){
 
-toast(error.message);
-
-}finally{
-
-hideLoading();
+console.log(error);
 
 }
 
+$("headerProfile").src=
+App.profile?.profilePhoto||
+getDefaultProfile();
+
+$("menuProfileImage").src=
+App.profile?.profilePhoto||
+getDefaultProfile();
+
+$("menuUserName").textContent=
+App.profile?.name||
+user.displayName||
+"Friendsbook User";
+
+App.admin=isAdmin(user);
+
+if(App.admin){
+
+show("adminPage");
+
+}else{
+
+hide("adminPage");
+
 }
 
-);
+toast("Welcome "+(
+user.displayName||
+"User"
+));
+
+}else{
+
+App.user=null;
+
+App.profile=null;
+
+hide("homePage");
+
+show("authContainer");
+
+openLogin();
+
+}
+
+});
 
 // ======================================
 // Logout
@@ -439,19 +415,15 @@ hideLoading();
 
 async function logout(){
 
-showLoading();
-
 try{
 
 await signOut(auth);
 
+toast("Logged out");
+
 }catch(error){
 
 toast(error.message);
-
-}finally{
-
-hideLoading();
 
 }
 
@@ -463,9 +435,9 @@ $("logoutBtn").onclick=logout;
 // Part 4/10
 // ======================================
 
-const Pages={
+const pages={
 
-home:$("mainContent"),
+home:null,
 
 profile:$("profilePage"),
 
@@ -495,9 +467,9 @@ admin:$("adminPage")
 
 };
 
-function closeAllPages(){
+function hideAllPages(){
 
-Object.values(Pages).forEach(page=>{
+Object.values(pages).forEach(page=>{
 
 if(page){
 
@@ -507,29 +479,35 @@ page.classList.add("hidden");
 
 });
 
-}
-
-function openPage(name){
-
-closeAllPages();
-
-if(Pages[name]){
-
-Pages[name].classList.remove("hidden");
-
-App.page=name;
+$("mainContent").classList.remove("hidden");
 
 }
 
-hide("sideMenu");
+function openPage(page){
 
-hide("overlay");
+hideAllPages();
+
+App.page=page;
+
+if(page==="home"){
+
+$("mainContent").classList.remove("hidden");
+
+return;
 
 }
 
-// ==============================
+$("mainContent").classList.add("hidden");
+
+if(pages[page]){
+
+pages[page].classList.remove("hidden");
+
+}
+
+}
+
 // Bottom Navigation
-// ==============================
 
 $("navHome").onclick=()=>openPage("home");
 
@@ -546,19 +524,18 @@ $("navNotification").onclick=()=>openPage("notification");
 $("navProfile").onclick=()=>openPage("profile");
 
 $("navAI").onclick=()=>openPage("ai");
-
-// Header Profile
-
-$("headerProfile").onclick=()=>openPage("profile");
 // ======================================
-// Side Menu
+// Side Menu + Search + Dark Mode
 // Part 5/10
 // ======================================
+
+// =============================
+// Side Menu
+// =============================
 
 function openMenu(){
 
 show("sideMenu");
-
 show("overlay");
 
 }
@@ -566,110 +543,59 @@ show("overlay");
 function closeMenu(){
 
 hide("sideMenu");
-
 hide("overlay");
 
 }
-
-// ==============================
-// Menu Events
-// ==============================
 
 $("navMenu").onclick=openMenu;
 
 $("overlay").onclick=closeMenu;
 
-// ==============================
-// Menu Navigation
-// ==============================
+// =============================
+// Search
+// =============================
 
-$("menuProfileBtn").onclick=()=>{
+function searchPosts(){
 
-openPage("profile");
+const keyword=$("searchInput")
+.value
+.trim()
+.toLowerCase();
 
-closeMenu();
+console.log("Search:",keyword);
 
-};
+// Search System
+// Coming Next Phase
 
-$("menuSavedBtn").onclick=()=>{
+}
 
-openPage("saved");
+$("searchBtn").onclick=searchPosts;
 
-closeMenu();
+$("searchInput").addEventListener(
 
-};
+"keyup",
 
-$("menuMarketplaceBtn").onclick=()=>{
+function(e){
 
-openPage("marketplace");
+if(e.key==="Enter"){
 
-closeMenu();
+searchPosts();
 
-};
+}
 
-$("menuPagesBtn").onclick=()=>{
+}
 
-openPage("pages");
+);
 
-closeMenu();
-
-};
-
-$("menuGroupsBtn").onclick=()=>{
-
-openPage("groups");
-
-closeMenu();
-
-};
-
-$("menuSettingsBtn").onclick=()=>{
-
-openPage("settings");
-
-closeMenu();
-
-};
-
-// ==============================
+// =============================
 // Dark Mode
-// ==============================
+// =============================
 
-function setDarkMode(enable){
+$("menuDarkBtn").onclick=function(){
 
-App.dark=enable;
+document.body.classList.toggle("dark");
 
-document.body.classList.toggle(
-
-"dark",
-
-enable
-
-);
-
-localStorage.setItem(
-
-"fb_dark",
-
-enable
-
-);
-
-}
-
-const savedDark=
-
-localStorage.getItem("fb_dark");
-
-if(savedDark==="true"){
-
-setDarkMode(true);
-
-}
-
-$("menuDarkBtn").onclick=()=>{
-
-setDarkMode(!App.dark);
+App.dark=!App.dark;
 
 toast(
 
@@ -677,51 +603,101 @@ App.dark?
 
 "Dark Mode Enabled":
 
-"Light Mode Enabled"
+"Dark Mode Disabled"
 
 );
 
 };
+
+// =============================
+// Menu Buttons
+// =============================
+
+$("menuProfileBtn").onclick=()=>{
+
+closeMenu();
+
+openPage("profile");
+
+};
+
+$("menuSavedBtn").onclick=()=>{
+
+closeMenu();
+
+openPage("saved");
+
+};
+
+$("menuMarketplaceBtn").onclick=()=>{
+
+closeMenu();
+
+openPage("marketplace");
+
+};
+
+$("menuPagesBtn").onclick=()=>{
+
+closeMenu();
+
+openPage("pages");
+
+};
+
+$("menuGroupsBtn").onclick=()=>{
+
+closeMenu();
+
+openPage("groups");
+
+};
+
+$("menuSettingsBtn").onclick=()=>{
+
+closeMenu();
+
+openPage("settings");
+
+};
 // ======================================
-// Search + Preview
+// Preview + Message Modal
 // Part 6/10
 // ======================================
 
-// ==============================
-// Search
-// ==============================
+// =============================
+// Message Modal
+// =============================
 
-function searchPosts(keyword){
+function showMessage(title,message){
 
-keyword=keyword.trim().toLowerCase();
+$("messageTitle").textContent=title;
 
-console.log("Search:",keyword);
+$("messageText").textContent=message;
 
-// Future Search Logic
+show("messageModal");
 
 }
 
-$("searchInput").oninput=(e)=>{
+function closeMessage(){
 
-searchPosts(e.target.value);
+hide("messageModal");
 
-};
+}
 
-$("searchBtn").onclick=()=>{
+$("messageOkBtn").onclick=closeMessage;
 
-$("searchInput").focus();
-
-};
-
-// ==============================
+// =============================
 // Image Preview
-// ==============================
+// =============================
 
 function openImage(src){
 
 $("previewImage").src=src;
 
 show("imageViewer");
+
+show("overlay");
 
 }
 
@@ -731,13 +707,15 @@ $("previewImage").src="";
 
 hide("imageViewer");
 
+hide("overlay");
+
 }
 
 $("closeImageViewer").onclick=closeImage;
 
-// ==============================
+// =============================
 // Video Preview
-// ==============================
+// =============================
 
 function openVideo(src){
 
@@ -746,6 +724,8 @@ const video=$("previewVideo");
 video.src=src;
 
 show("videoViewer");
+
+show("overlay");
 
 video.play();
 
@@ -763,12 +743,118 @@ video.load();
 
 hide("videoViewer");
 
+hide("overlay");
+
 }
 
 $("closeVideoViewer").onclick=closeVideo;
 
+// =============================
 // Global Access
+// =============================
 
 window.openImage=openImage;
 
 window.openVideo=openVideo;
+
+window.showMessage=showMessage;
+// ======================================
+// Header + Feed Foundation
+// Part 7/10
+// ======================================
+
+// =============================
+// Header Buttons
+// =============================
+
+$("headerLogo").onclick=()=>{
+
+openPage("home");
+
+};
+
+$("headerProfile").onclick=()=>{
+
+openPage("profile");
+
+};
+
+$("messengerBtn").onclick=()=>{
+
+openPage("messenger");
+
+};
+
+$("notificationBtn").onclick=()=>{
+
+openPage("notification");
+
+};
+
+// =============================
+// Feed
+// =============================
+
+function clearFeed(){
+
+$("feedContainer").innerHTML="";
+
+}
+
+function emptyFeed(){
+
+$("feedContainer").innerHTML=`
+
+<div class="emptyFeed">
+
+<h3>No Posts Yet</h3>
+
+<p>Create your first post.</p>
+
+</div>
+
+`;
+
+}
+
+function loadFeed(){
+
+clearFeed();
+
+emptyFeed();
+
+}
+
+// =============================
+// App Start
+// =============================
+
+document.addEventListener(
+
+"DOMContentLoaded",
+
+()=>{
+
+openLogin();
+
+loadFeed();
+
+hide("sideMenu");
+
+hide("overlay");
+
+hide("globalLoading");
+
+}
+
+);
+
+// =============================
+// Console
+// =============================
+
+console.log(
+
+"Friendsbook 2026 Ready"
+
+);
