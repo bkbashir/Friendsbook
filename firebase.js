@@ -1,11 +1,15 @@
 // ======================================
-// Friendsbook 2026 V3
-// Firebase Configuration
+// Friendsbook 2026
+// Firebase.js
 // Part 1/3
+// Stable Foundation
 // ======================================
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+// Firebase Core
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 
+// Authentication
 import {
 
 getAuth,
@@ -17,8 +21,10 @@ sendPasswordResetEmail,
 signOut,
 updateProfile
 
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+}
+from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
+// Firestore
 import {
 
 getFirestore,
@@ -31,8 +37,10 @@ collection,
 addDoc,
 serverTimestamp
 
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+}
+from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
+// Storage
 import {
 
 getStorage,
@@ -41,52 +49,52 @@ uploadBytes,
 getDownloadURL,
 deleteObject
 
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-storage.js";
+}
+from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
 
 // ======================================
 // Firebase Config
 // ======================================
 
-const firebaseConfig = {
+const firebaseConfig={
 
-apiKey: "AIzaSyBRad-Z7zxRRnvy17nRXEh7ZG4hu6fluZ4",
+apiKey:"AIzaSyBRad-Z7zxRRnvy17nRXEh7ZG4hu6fluZ4",
 
-authDomain: "friendsbook-4a40c.firebaseapp.com",
+authDomain:"friendsbook-4a40c.firebaseapp.com",
 
-projectId: "friendsbook-4a40c",
+projectId:"friendsbook-4a40c",
 
-storageBucket: "friendsbook-4a40c.firebasestorage.app",
+storageBucket:"friendsbook-4a40c.firebasestorage.app",
 
-messagingSenderId: "1000346329473",
+messagingSenderId:"1000346329473",
 
-appId: "1:1000346329473:web:9bd69019e2b09f971e8880"
+appId:"1:1000346329473:web:9bd69019e2b09f971e8880"
 
 };
 
 // ======================================
-// Initialize Firebase
+// Initialize
 // ======================================
 
-const app = initializeApp(firebaseConfig);
+const app=initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
+const auth=getAuth(app);
 
-const db = getFirestore(app);
+const db=getFirestore(app);
 
-const storage = getStorage(app);
+const storage=getStorage(app);
 
 // ======================================
-// Admin Email
+// Admin
 // ======================================
 
-const ADMIN_EMAIL = "bashirahmed0052@gmail.com";
+const ADMIN_EMAIL="bashirahmed0052@gmail.com";
 // ======================================
-// Friendsbook 2026 V3
 // Firebase Export
 // Part 2/3
 // ======================================
 
-export {
+export{
 
 app,
 
@@ -143,7 +151,7 @@ deleteObject
 };
 
 // ======================================
-// Default User Data
+// Default User Profile
 // ======================================
 
 export const DEFAULT_PROFILE={
@@ -182,15 +190,14 @@ export const APP_INFO={
 
 name:"Friendsbook",
 
-version:"2026 V3",
+version:"2026",
 
 theme:"Purple Premium"
 
 };
+
 // ======================================
-// Friendsbook 2026 V3
-// Firebase Helpers
-// Part 3/3
+// Create User Object
 // ======================================
 
 export function createUserObject(user,name){
@@ -199,7 +206,7 @@ return{
 
 uid:user.uid,
 
-name:name,
+name,
 
 email:user.email,
 
@@ -213,24 +220,31 @@ role:user.email===ADMIN_EMAIL?"admin":"user",
 
 verified:user.emailVerified,
 
-premium:DEFAULT_PROFILE.premium,
+premium:false,
 
-coins:DEFAULT_PROFILE.coins,
+coins:0,
 
-followers:DEFAULT_PROFILE.followers,
+followers:0,
 
-following:DEFAULT_PROFILE.following,
+following:0,
 
-friends:DEFAULT_PROFILE.friends,
+friends:0,
 
-posts:DEFAULT_PROFILE.posts,
+posts:0,
 
 createdAt:serverTimestamp()
 
 };
 
 }
+// ======================================
+// Friendsbook 2026
+// Firebase.js
+// Part 3/3
+// Final Helpers
+// ======================================
 
+// Check Admin
 export function isAdmin(user){
 
 if(!user) return false;
@@ -238,6 +252,8 @@ if(!user) return false;
 return user.email===ADMIN_EMAIL;
 
 }
+
+// Default Values
 
 export function getDefaultProfile(){
 
@@ -257,11 +273,7 @@ return DEFAULT_PROFILE.bio;
 
 }
 
-export function appVersion(){
-
-return APP_INFO.version;
-
-}
+// App Information
 
 export function appName(){
 
@@ -269,16 +281,25 @@ return APP_INFO.name;
 
 }
 
-// ======================================
+export function appVersion(){
+
+return APP_INFO.version;
+
+}
+
+export function appTheme(){
+
+return APP_INFO.theme;
+
+}
+
 // Firebase Ready
-// ======================================
 
 console.log(
 
 APP_INFO.name+
 " "+
 APP_INFO.version+
-" Firebase Ready"
+" Ready"
 
 );
-alert("FIREBASE READY");
