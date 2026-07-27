@@ -34,6 +34,11 @@ window.onerror = function(message, source, line, col, error) {
         "\nLine: " + line
     );
 };
+alert("STEP 2");
+
+document.addEventListener("DOMContentLoaded", () => {
+    alert("STEP 3");
+});
 // ==============================
 // DOM Helper
 // ==============================
