@@ -25,7 +25,15 @@ createUserObject,
 isAdmin
 
 }from "./firebase.js";
+alert("STEP 1");
 
+window.onerror = function(message, source, line, col, error) {
+    alert(
+        "ERROR:\n" +
+        message +
+        "\nLine: " + line
+    );
+};
 // ==============================
 // DOM Helper
 // ==============================
