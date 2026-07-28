@@ -727,10 +727,10 @@ $("postBtn")?.addEventListener("click", async () => {
 
                 uid: App.user.uid,
 
-                name: App.profile.name,
+                name: App.profile?.name || App.user.displayName || "User",
 
-                photo: App.profile.photo,
-
+photo: App.profile?.photo || "default-profile.png",
+                
                 text: text,
 
                 image: "",
