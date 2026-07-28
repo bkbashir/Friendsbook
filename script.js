@@ -409,6 +409,11 @@ openLogin();
 }
 alert("AUTH END");
   const splash = document.getElementById("splashScreen");
+
+splash.style.display = "none";
+
+alert("SPLASH HIDDEN");
+  const splash = document.getElementById("splashScreen");
 alert("Splash = " + (splash ? "YES" : "NO"));
 
 const authBox = document.getElementById("authContainer");
