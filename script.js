@@ -1,111 +1,486 @@
 // ======================================
 // Friendsbook 2026
-// Script.js
-// Part 1/10
-// Foundation
+// script.js
+// Part 1 - Foundation
 // ======================================
 
-import{
+import {
+    auth,
+    db,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    sendEmailVerification,
+    sendPasswordResetEmail,
+    signOut,
+    updateProfile,
+    doc,
+    setDoc,
+    getDoc,
+    createUserObject,
+    isAdmin
+} from "./firebase.js";
 
-auth,
-db,
+// ======================
+// DOM Helper
+// ======================
 
-onAuthStateChanged,
+const $ = (id) => document.getElementById(id);
 
-signInWithEmailAndPassword,
-createUserWithEmailAndPassword,
-sendEmailVerification,
-sendPasswordResetEmail,
-signOut,
-updateProfile,
-
-doc,
-setDoc,
-getDoc,
-
-createUserObject,
-isAdmin,
-
-getDefaultProfile,
-getDefaultCover,
-getDefaultBio,
-
-appName,
-appVersion
-
-}from "./firebase.js";
-
-// ======================================
-// DOM
-// ======================================
-
-const $=(id)=>document.getElementById(id);
-
-// ======================================
-// APP
-// ======================================
-
-const App={
-
-user:null,
-
-profile:null,
-
-page:"home",
-
-admin:false,
-
-dark:false
-
+const App = {
+    user: null,
+    profile: null,
+    page: "home",
+    dark: false,
+    admin: false
 };
 
+// ======================
+// Show / Hide
+// ======================
+
+function show(id) {
+    const el = $(id);
+    if (el) el.classList.remove("hidden");
+}
+
+function hide(id) {
+    const el = $(id);
+    if (el) el.classList.add("hidden");
+}
+
+// ======================
+// Auth Pages
+// ======================
+
+function openLogin() {
+
+    show("loginPage");
+    hide("signupPage");
+    hide("forgotPage");
+
+}
+
+function openSignup() {
+
+    hide("loginPage");
+    show("signupPage");
+    hide("forgotPage");
+
+}
+
+function openForgot() {
+
+    hide("loginPage");
+    hide("signupPage");
+    show("forgotPage");
+
+}
+
+// ======================
+// Event
+// ======================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    $("openSignup")?.addEventListener("click", openSignup);
+
+    $("openLogin")?.addEventListener("click", openLogin);
+
+    $("forgotPasswordBtn")?.addEventListener("click", openForgot);
+
+    $("backLogin")?.addEventListener("click", openLogin);
+
+    hide("homePage");
+    show("authContainer");
+
+});
 // ======================================
-// Helpers
+// Part 2
+// Authentication
 // ======================================
 
-function show(id){
+// Login
+$("loginBtn")?.addEventListener("click", async () => {
 
-const el=$(id);
+    const email = $("loginEmail").value.trim();
+    const password = $("loginPassword").value;
 
-if(el){
+    if (!email || !password) {
+        alert("Enter email and password");
+        return;
+    }
 
-el.classList.remove("hidden");
+    try {
 
-}
+        await signInWithEmailAndPassword(auth, email, password);
 
-}
+    } catch (e) {
 
-function hide(id){
+        alert(e.message);
 
-const el=$(id);
+    }
 
-if(el){
+});
 
-el.classList.add("hidden");
+// Signup
+$("signupBtn")?.addEventListener("click", async () => {
 
-}
+    const name = $("signupName").value.trim();
+    const email = $("signupEmail").value.trim();
+    const password = $("signupPassword").value;
 
-}
+    if (!name || !email || !password) {
+        alert("Fill all fields");
+        return;
+    }
 
+    try {
+
+        const result =
+        await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+
+        await updateProfile(result.user,{
+            displayName:name
+        });
+
+        await sendEmailVerification(result.user);
+
+        await setDoc(
+            doc(db,"users",result.user.uid),
+            createUserObject(result.user,name)
+        );
+
+        alert("Account Created");
+
+        openLogin();
+
+    } catch(e){
+
+        alert(e.message);
+
+    }
+
+});
+
+// Forgot Password
+$("resetPasswordBtn")?.addEventListener("click", async()=>{
+
+    const email=$("forgotEmail").value.trim();
+
+    if(!email){
+        alert("Enter email");
+        return;
+    }
+
+    try{
+
+        await sendPasswordResetEmail(auth,email);
+
+        alert("Reset email sent");
+
+        openLogin();
+
+    }catch(e){
+
+        alert(e.message);
+
+    }
+
+});
 // ======================================
+// Part 3
+// Auth State + Logout
+// ======================================
+
+onAuthStateChanged(auth, async (user) => {
+
+    if (user) {
+
+        App.user = user;
+
+        App.admin = isAdmin(user.email);
+
+        hide("authContainer");
+        show("homePage");
+
+        try {
+
+            const snap = await getDoc(
+                doc(db, "users", user.uid)
+            );
+
+            if (snap.exists()) {
+
+                App.profile = snap.data();
+
+                if ($("menuUserName"))
+                    $("menuUserName").textContent =
+                        App.profile.name || user.displayName || "User";
+
+                if ($("menuProfileImage"))
+                    $("menuProfileImage").src =
+                        App.profile.photo || "default-profile.png";
+
+                if ($("headerProfile"))
+                    $("headerProfile").src =
+                        App.profile.photo || "default-profile.png";
+
+            }
+
+        } catch (e) {
+
+            console.error(e);
+
+        }
+
+    } else {
+
+        App.user = null;
+        App.profile = null;
+
+        show("authContainer");
+        hide("homePage");
+
+        openLogin();
+
+    }
+
+});
+
+// ========================
+// Logout
+// ========================
+
+$("logoutBtn")?.addEventListener("click", async () => {
+
+    try {
+
+        await signOut(auth);
+
+    } catch (e) {
+
+        alert(e.message);
+
+    }
+
+});
+// ======================================
+// Part 4
+// Navigation System
+// ======================================
+
+const pages = [
+
+"homePage",
+"profilePage",
+"friendsPage",
+"createPage",
+"reelsPage",
+"messengerPage",
+"notificationPage",
+"aiPage",
+"settingsPage",
+"marketplacePage",
+"savedPage",
+"groupsPage",
+"pagesPage",
+"adminPage"
+
+];
+
+function openPage(page){
+
+pages.forEach(id=>{
+
+hide(id);
+
+});
+
+show(page);
+
+hide("sideMenu");
+hide("overlay");
+
+}
+
+// Bottom Navigation
+
+$("navHome")?.addEventListener("click",()=>{
+
+openPage("homePage");
+
+});
+
+$("navFriends")?.addEventListener("click",()=>{
+
+openPage("friendsPage");
+
+});
+
+$("navCreate")?.addEventListener("click",()=>{
+
+openPage("createPage");
+
+});
+
+$("navReels")?.addEventListener("click",()=>{
+
+openPage("reelsPage");
+
+});
+
+$("navMessenger")?.addEventListener("click",()=>{
+
+openPage("messengerPage");
+
+});
+
+$("navNotification")?.addEventListener("click",()=>{
+
+openPage("notificationPage");
+
+});
+
+$("navProfile")?.addEventListener("click",()=>{
+
+openPage("profilePage");
+
+});
+
+$("navAI")?.addEventListener("click",()=>{
+
+openPage("aiPage");
+
+});
+
+// ======================
+// Side Menu
+// ======================
+
+$("navMenu")?.addEventListener("click",()=>{
+
+show("sideMenu");
+show("overlay");
+
+});
+
+$("overlay")?.addEventListener("click",()=>{
+
+hide("sideMenu");
+hide("overlay");
+
+});
+
+// ======================
+// Menu Buttons
+// ======================
+
+$("menuProfileBtn")?.addEventListener("click",()=>{
+
+openPage("profilePage");
+
+});
+
+$("menuSavedBtn")?.addEventListener("click",()=>{
+
+openPage("savedPage");
+
+});
+
+$("menuMarketplaceBtn")?.addEventListener("click",()=>{
+
+openPage("marketplacePage");
+
+});
+
+$("menuPagesBtn")?.addEventListener("click",()=>{
+
+openPage("pagesPage");
+
+});
+
+$("menuGroupsBtn")?.addEventListener("click",()=>{
+
+openPage("groupsPage");
+
+});
+
+$("menuSettingsBtn")?.addEventListener("click",()=>{
+
+openPage("settingsPage");
+
+});
+
+// Admin
+
+if(App.admin){
+
+show("adminPage");
+
+}
+// ======================================
+// Part 5
+// UI System
+// ======================================
+
+// ======================
+// Dark Mode
+// ======================
+
+function applyDarkMode(){
+
+if(App.dark){
+
+document.body.classList.add("dark");
+
+}else{
+
+document.body.classList.remove("dark");
+
+}
+
+localStorage.setItem(
+"fb_dark",
+App.dark
+);
+
+}
+
+App.dark=
+localStorage.getItem("fb_dark")==="true";
+
+applyDarkMode();
+
+$("menuDarkBtn")?.addEventListener("click",()=>{
+
+App.dark=!App.dark;
+
+applyDarkMode();
+
+});
+
+// ======================
 // Toast
-// ======================================
+// ======================
 
-function toast(message){
+function toast(text){
 
 const box=$("toast");
 
-const text=$("toastText");
+const txt=$("toastText");
 
-if(!box||!text)return;
+if(!box||!txt)return;
 
-text.textContent=message;
+txt.textContent=text;
 
 box.classList.remove("hidden");
 
-clearTimeout(box.timer);
-
-box.timer=setTimeout(()=>{
+setTimeout(()=>{
 
 box.classList.add("hidden");
 
@@ -113,576 +488,57 @@ box.classList.add("hidden");
 
 }
 
-// ======================================
-// Authentication Pages
-// ======================================
+// ======================
+// Global Loading
+// ======================
 
-function openLogin(){
+function showLoading(){
 
-show("loginPage");
-
-hide("signupPage");
-
-hide("forgotPage");
+show("globalLoading");
 
 }
 
-function openSignup(){
+function hideLoading(){
 
-hide("loginPage");
-
-show("signupPage");
-
-hide("forgotPage");
+hide("globalLoading");
 
 }
 
-function openForgot(){
-
-hide("loginPage");
-
-hide("signupPage");
-
-show("forgotPage");
-
-}
-
-// ======================================
-// Page Switch
-// ======================================
-
-const openSignupBtn = $("openSignup");
-const openLoginBtn = $("openLogin");
-const forgotBtn = $("forgotPasswordBtn");
-const backLoginBtn = $("backLogin");
-
-if (openSignupBtn) openSignupBtn.onclick = openSignup;
-if (openLoginBtn) openLoginBtn.onclick = openLogin;
-if (forgotBtn) forgotBtn.onclick = openForgot;
-if (backLoginBtn) backLoginBtn.onclick = openLogin;
-console.log(
-
-appName(),
-appVersion(),
-"Script Loaded"
-
-);
-// ======================================
-// Authentication
-// Part 2/10
-// ======================================
-
-// Login
-async function login(){
-
-const email=$("loginEmail").value.trim();
-const password=$("loginPassword").value;
-
-if(!email||!password){
-
-toast("Enter email and password");
-return;
-
-}
-
-showLoading();
-
-try{
-
-await signInWithEmailAndPassword(
-auth,
-email,
-password
-);
-
-toast("Login successful");
-
-}catch(error){
-
-toast(error.message);
-
-}finally{
-
-hideLoading();
-
-}
-
-}
-
-// Signup
-async function signup(){
-
-const name=$("signupName").value.trim();
-
-const email=$("signupEmail").value.trim();
-
-const password=$("signupPassword").value;
-
-if(!name||!email||!password){
-
-toast("Fill all fields");
-return;
-
-}
-
-showLoading();
-
-try{
-
-const result=
-await createUserWithEmailAndPassword(
-auth,
-email,
-password
-);
-
-await updateProfile(
-result.user,
-{
-displayName:name
-}
-);
-
-await sendEmailVerification(
-result.user
-);
-
-await setDoc(
-doc(db,"users",result.user.uid),
-createUserObject(
-result.user,
-name
-)
-);
-
-toast("Verification email sent");
-
-openLogin();
-
-}catch(error){
-
-toast(error.message);
-
-}finally{
-
-hideLoading();
-
-}
-
-}
-
-// Forgot Password
-async function forgotPassword(){
-
-const email=$("forgotEmail").value.trim();
-
-if(!email){
-
-toast("Enter your email");
-return;
-
-}
-
-showLoading();
-
-try{
-
-await sendPasswordResetEmail(
-auth,
-email
-);
-
-toast("Reset link sent");
-
-openLogin();
-
-}catch(error){
-
-toast(error.message);
-
-}finally{
-
-hideLoading();
-
-}
-
-}
-
-// Button Events
-
-$("loginBtn").onclick=login;
-
-$("signupBtn").onclick=signup;
-
-$("resetPasswordBtn").onclick=forgotPassword;
-// ======================================
-// Auth State
-// Part 3/10
-// ======================================
-
-onAuthStateChanged(auth, async(user)=>{
-
-if(user){
-
-App.user=user;
-
-hide("authContainer");
-
-show("homePage");
-
-try{
-
-const snap=await getDoc(
-doc(db,"users",user.uid)
-);
-
-if(snap.exists()){
-
-App.profile=snap.data();
-
-}
-
-}catch(error){
-
-console.log(error);
-
-}
-
-$("headerProfile").src=
-App.profile?.profilePhoto||
-getDefaultProfile();
-
-$("menuProfileImage").src=
-App.profile?.profilePhoto||
-getDefaultProfile();
-
-$("menuUserName").textContent=
-App.profile?.name||
-user.displayName||
-"Friendsbook User";
-
-App.admin=isAdmin(user);
-
-if(App.admin){
-
-show("adminPage");
-
-}else{
-
-hide("adminPage");
-
-}
-
-toast("Welcome "+(
-user.displayName||
-"User"
-));
-
-}else{
-
-App.user=null;
-
-App.profile=null;
-
-hide("homePage");
-
-show("authContainer");
-
-openLogin();
-
-}
-
-});
-
-// ======================================
-// Logout
-// ======================================
-
-async function logout(){
-
-try{
-
-await signOut(auth);
-
-toast("Logged out");
-
-}catch(error){
-
-toast(error.message);
-
-}
-
-}
-
-$("logoutBtn").onclick=logout;
-// ======================================
-// Navigation
-// Part 4/10
-// ======================================
-
-const pages={
-
-home:null,
-
-profile:$("profilePage"),
-
-friends:$("friendsPage"),
-
-create:$("createPage"),
-
-reels:$("reelsPage"),
-
-messenger:$("messengerPage"),
-
-notification:$("notificationPage"),
-
-ai:$("aiPage"),
-
-settings:$("settingsPage"),
-
-marketplace:$("marketplacePage"),
-
-saved:$("savedPage"),
-
-groups:$("groupsPage"),
-
-pages:$("pagesPage"),
-
-admin:$("adminPage")
-
-};
-
-function hideAllPages(){
-
-Object.values(pages).forEach(page=>{
-
-if(page){
-
-page.classList.add("hidden");
-
-}
-
-});
-
-$("mainContent").classList.remove("hidden");
-
-}
-
-function openPage(page){
-
-hideAllPages();
-
-App.page=page;
-
-if(page==="home"){
-
-$("mainContent").classList.remove("hidden");
-
-return;
-
-}
-
-$("mainContent").classList.add("hidden");
-
-if(pages[page]){
-
-pages[page].classList.remove("hidden");
-
-}
-
-}
-
-// Bottom Navigation
-
-$("navHome").onclick=()=>openPage("home");
-
-$("navFriends").onclick=()=>openPage("friends");
-
-$("navCreate").onclick=()=>openPage("create");
-
-$("navReels").onclick=()=>openPage("reels");
-
-$("navMessenger").onclick=()=>openPage("messenger");
-
-$("navNotification").onclick=()=>openPage("notification");
-
-$("navProfile").onclick=()=>openPage("profile");
-
-$("navAI").onclick=()=>openPage("ai");
-// ======================================
-// Side Menu + Search + Dark Mode
-// Part 5/10
-// ======================================
-
-// =============================
-// Side Menu
-// =============================
-
-function openMenu(){
-
-show("sideMenu");
-show("overlay");
-
-}
-
-function closeMenu(){
-
-hide("sideMenu");
-hide("overlay");
-
-}
-
-$("navMenu").onclick=openMenu;
-
-$("overlay").onclick=closeMenu;
-
-// =============================
-// Search
-// =============================
-
-function searchPosts(){
-
-const keyword=$("searchInput")
-.value
-.trim()
-.toLowerCase();
-
-console.log("Search:",keyword);
-
-// Search System
-// Coming Next Phase
-
-}
-
-$("searchBtn").onclick=searchPosts;
-
-$("searchInput").addEventListener(
-
-"keyup",
-
-function(e){
-
-if(e.key==="Enter"){
-
-searchPosts();
-
-}
-
-}
-
-);
-
-// =============================
-// Dark Mode
-// =============================
-
-$("menuDarkBtn").onclick=function(){
-
-document.body.classList.toggle("dark");
-
-App.dark=!App.dark;
-
-toast(
-
-App.dark?
-
-"Dark Mode Enabled":
-
-"Dark Mode Disabled"
-
-);
-
-};
-
-// =============================
-// Menu Buttons
-// =============================
-
-$("menuProfileBtn").onclick=()=>{
-
-closeMenu();
-
-openPage("profile");
-
-};
-
-$("menuSavedBtn").onclick=()=>{
-
-closeMenu();
-
-openPage("saved");
-
-};
-
-$("menuMarketplaceBtn").onclick=()=>{
-
-closeMenu();
-
-openPage("marketplace");
-
-};
-
-$("menuPagesBtn").onclick=()=>{
-
-closeMenu();
-
-openPage("pages");
-
-};
-
-$("menuGroupsBtn").onclick=()=>{
-
-closeMenu();
-
-openPage("groups");
-
-};
-
-$("menuSettingsBtn").onclick=()=>{
-
-closeMenu();
-
-openPage("settings");
-
-};
-// ======================================
-// Preview + Message Modal
-// Part 6/10
-// ======================================
-
-// =============================
+// ======================
 // Message Modal
-// =============================
+// ======================
 
-function showMessage(title,message){
+function message(title,text){
 
 $("messageTitle").textContent=title;
 
-$("messageText").textContent=message;
+$("messageText").textContent=text;
 
 show("messageModal");
 
 }
 
-function closeMessage(){
+$("messageOkBtn")?.addEventListener("click",()=>{
 
 hide("messageModal");
 
-}
+});
+// ======================================
+// Part 6
+// Header + Preview System
+// ======================================
 
-$("messageOkBtn").onclick=closeMessage;
-
-// =============================
-// Image Preview
-// =============================
+// ======================
+// Image Viewer
+// ======================
 
 function openImage(src){
+
+if(!src)return;
 
 $("previewImage").src=src;
 
 show("imageViewer");
-
-show("overlay");
 
 }
 
@@ -692,154 +548,228 @@ $("previewImage").src="";
 
 hide("imageViewer");
 
-hide("overlay");
+}
+
+$("closeImageViewer")?.addEventListener("click",closeImage);
+
+$("imageViewer")?.addEventListener("click",(e)=>{
+
+if(e.target.id==="imageViewer"){
+
+closeImage();
 
 }
 
-$("closeImageViewer").onclick=closeImage;
+});
 
-// =============================
-// Video Preview
-// =============================
+// ======================
+// Video Viewer
+// ======================
 
 function openVideo(src){
 
-const video=$("previewVideo");
+if(!src)return;
 
-video.src=src;
+$("previewVideo").src=src;
 
 show("videoViewer");
-
-show("overlay");
-
-video.play();
 
 }
 
 function closeVideo(){
 
-const video=$("previewVideo");
+$("previewVideo").pause();
 
-video.pause();
-
-video.removeAttribute("src");
-
-video.load();
+$("previewVideo").src="";
 
 hide("videoViewer");
 
-hide("overlay");
+}
+
+$("closeVideoViewer")?.addEventListener("click",closeVideo);
+
+$("videoViewer")?.addEventListener("click",(e)=>{
+
+if(e.target.id==="videoViewer"){
+
+closeVideo();
 
 }
 
-$("closeVideoViewer").onclick=closeVideo;
+});
 
-// =============================
-// Global Access
-// =============================
-
-window.openImage=openImage;
-
-window.openVideo=openVideo;
-
-window.showMessage=showMessage;
-// ======================================
-// Header + Feed Foundation
-// Part 7/10
-// ======================================
-
-// =============================
+// ======================
 // Header Buttons
-// =============================
+// ======================
 
-$("headerLogo").onclick=()=>{
+$("searchBtn")?.addEventListener("click",()=>{
 
-openPage("home");
+const text=$("searchInput").value.trim();
 
-};
+if(!text){
 
-$("headerProfile").onclick=()=>{
+toast("Write something to search");
 
-openPage("profile");
-
-};
-
-$("messengerBtn").onclick=()=>{
-
-openPage("messenger");
-
-};
-
-$("notificationBtn").onclick=()=>{
-
-openPage("notification");
-
-};
-
-// =============================
-// Feed
-// =============================
-
-function clearFeed(){
-
-$("feedContainer").innerHTML="";
+return;
 
 }
 
-function emptyFeed(){
+toast("Searching: "+text);
 
-$("feedContainer").innerHTML=`
+});
 
-<div class="emptyFeed">
+$("messengerBtn")?.addEventListener("click",()=>{
 
-<h3>No Posts Yet</h3>
+openPage("messengerPage");
 
-<p>Create your first post.</p>
+});
 
-</div>
+$("notificationBtn")?.addEventListener("click",()=>{
 
-`;
+openPage("notificationPage");
 
-}
+});
 
-function loadFeed(){
+$("headerProfile")?.addEventListener("click",()=>{
 
-clearFeed();
+openPage("profilePage");
 
-emptyFeed();
+});
 
-}
+// ======================
+// Search Enter Key
+// ======================
 
-// =============================
-// App Start
-// =============================
+$("searchInput")?.addEventListener("keydown",(e)=>{
 
-document.addEventListener(
+if(e.key==="Enter"){
 
-"DOMContentLoaded",
-
-()=>{
-
-openLogin();
-
-loadFeed();
-
-hide("sideMenu");
-
-hide("overlay");
-
-hide("globalLoading");
+$("searchBtn").click();
 
 }
 
-);
+});
+// ======================================
+// Part 7
+// Feed + Create Post
+// ======================================
 
-// =============================
-// Console
-// =============================
+let posts = [];
 
-console.log(
+// ======================
+// Create Post
+// ======================
 
-"Friendsbook 2026 Ready"
+function createPost(text,image=""){
 
-);
+    const post={
+
+        id:Date.now(),
+
+        uid:App.user.uid,
+
+        name:App.profile?.name || App.user.displayName,
+
+        photo:App.profile?.photo || "default-profile.png",
+
+        text:text,
+
+        image:image,
+
+        likes:0,
+
+        comments:[],
+
+        time:new Date().toLocaleString()
+
+    };
+
+    posts.unshift(post);
+
+    renderFeed();
+
+}
+
+// ======================
+// Render Feed
+// ======================
+
+function renderFeed(){
+
+    const feed=$("feedContainer");
+
+    if(!feed)return;
+
+    feed.innerHTML="";
+
+    posts.forEach(post=>{
+
+        feed.innerHTML+=`
+
+        <div class="postCard">
+
+            <div class="postHeader">
+
+                <img src="${post.photo}" class="postAvatar">
+
+                <div>
+
+                    <h4>${post.name}</h4>
+
+                    <small>${post.time}</small>
+
+                </div>
+
+            </div>
+
+            <p class="postText">
+
+                ${post.text}
+
+            </p>
+
+            ${post.image?
+
+            `<img
+            src="${post.image}"
+            class="postImage"
+            onclick="openImage('${post.image}')">`
+            :""
+            }
+
+            <div class="postActions">
+
+                <button onclick="likePost(${post.id})">
+
+                👍 Like (<span id="like-${post.id}">${post.likes}</span>)
+
+                </button>
+
+                <button onclick="commentPost(${post.id})">
+
+                💬 Comment
+
+                </button>
+
+                <button onclick="sharePost(${post.id})">
+
+                ↗ Share
+
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+// ======================
+// Demo
+// ======================
+
+window.createPost=createPost;
+window.renderFeed=renderFeed;
