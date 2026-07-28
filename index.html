@@ -252,60 +252,18 @@ alt="Profile">
 <!-- Main Content -->
 
 <main id="mainContent">
+<div id="createPostCard" class="create-post-card">
 
-  <!-- =========================
-Create Post Card
-========================= -->
-
-<div id="createPostCard" class="card">
-
-    <div class="createTop">
+    <div class="create-top">
 
         <img id="createProfileImage"
              src="default-profile.png"
-             class="avatar">
+             class="create-avatar">
 
         <input
-            type="text"
             id="postText"
-            placeholder="What's on your mind?"
-            autocomplete="off">
-
-    </div>
-
-    <div id="imagePreviewBox" class="hidden">
-        <img id="imagePreview">
-    </div>
-
-    <div id="videoPreviewBox" class="hidden">
-        <video id="videoPreview" controls></video>
-    </div>
-
-    <div class="createBottom">
-
-        <label class="postAction">
-
-            📷 Photo
-
-            <input
-                type="file"
-                id="postImage"
-                accept="image/*"
-                hidden>
-
-        </label>
-
-        <label class="postAction">
-
-            🎥 Video
-
-            <input
-                type="file"
-                id="postVideo"
-                accept="video/*"
-                hidden>
-
-        </label>
+            type="text"
+            placeholder="What's on your mind?">
 
         <button id="postBtn">
             Post
@@ -313,8 +271,45 @@ Create Post Card
 
     </div>
 
-</div>
+    <div class="create-divider"></div>
 
+    <div class="create-bottom">
+
+        <label class="create-item">
+
+            📷 Photo
+
+            <input
+                id="postImage"
+                type="file"
+                accept="image/*"
+                hidden>
+
+        </label>
+
+        <label class="create-item">
+
+            🎥 Video
+
+            <input
+                id="postVideo"
+                type="file"
+                accept="video/*"
+                hidden>
+
+        </label>
+
+        <button
+            id="feelingBtn"
+            class="create-item">
+
+            😊 Feeling
+
+        </button>
+
+    </div>
+
+</div>
 <!-- Feed -->
 
 <div id="feedContainer"></div>
