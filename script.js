@@ -1,456 +1,954 @@
 // =======================================
 // Friendsbook 2026
-// script.js Stable
+// script.js v2
 // Part 1
-// Authentication + Profile Load
 // =======================================
 
 import {
 
 auth,
 db,
+storage,
+
+onAuthStateChanged,
 
 signInWithEmailAndPassword,
 createUserWithEmailAndPassword,
+
 sendPasswordResetEmail,
+sendEmailVerification,
+
 signOut,
-onAuthStateChanged,
+
 updateProfile,
 
+collection,
 doc,
 setDoc,
+addDoc,
 getDoc,
+getDocs,
+updateDoc,
+deleteDoc,
 
-serverTimestamp
+query,
+where,
+orderBy,
+limit,
+
+onSnapshot,
+
+serverTimestamp,
+
+ref,
+uploadBytes,
+uploadBytesResumable,
+getDownloadURL,
+deleteObject,
+
+createUserObject,
+isAdmin
 
 } from "./firebase.js";
 
-
-// Helper
+// =======================================
+// DOM Helper
+// =======================================
 
 const $ = id => document.getElementById(id);
 
+// =======================================
+// App State
+// =======================================
 
-// App Data
+const App={
 
-let currentUser = null;
-let userData = null;
+user:null,
 
+profile:null,
 
-// ==========================
-// Login
-// ==========================
+dark:false,
 
-$("loginBtn")?.addEventListener("click", async()=>{
+page:"home",
 
-const email = $("loginEmail").value.trim();
+admin:false
 
-const password = $("loginPassword").value;
+};
 
+// =======================================
+// UI Helper
+// =======================================
 
-try{
+function show(id){
 
-await signInWithEmailAndPassword(
-auth,
-email,
-password
-);
+const el=$(id);
 
-
-}catch(error){
-
-alert(error.message);
+if(el)el.classList.remove("hidden");
 
 }
 
-});
+function hide(id){
 
+const el=$(id);
 
-// ==========================
-// Signup
-// ==========================
-
-$("signupBtn")?.addEventListener("click", async()=>{
-
-
-const name = $("signupName").value.trim();
-
-const email = $("signupEmail").value.trim();
-
-const password = $("signupPassword").value;
-
-
-
-try{
-
-
-const result =
-await createUserWithEmailAndPassword(
-auth,
-email,
-password
-);
-
-
-
-await updateProfile(
-result.user,
-{
-displayName:name
-}
-);
-
-
-
-await setDoc(
-
-doc(
-db,
-"users",
-result.user.uid
-),
-
-{
-
-uid:result.user.uid,
-
-name:name,
-
-email:email,
-
-photo:"default-profile.png",
-
-cover:"default-cover.jpg",
-
-bio:"",
-
-createdAt:serverTimestamp()
+if(el)el.classList.add("hidden");
 
 }
 
-);
+function toggle(id){
 
+const el=$(id);
 
-
-alert("Account Created");
-
-
-}catch(error){
-
-alert(error.message);
+if(el)el.classList.toggle("hidden");
 
 }
 
+// =======================================
+// Authentication Pages
+// =======================================
 
-});
+function openLogin(){
 
+show("loginPage");
 
-// ==========================
-// Forgot Password
-// ==========================
+hide("signupPage");
 
-$("resetPasswordBtn")?.addEventListener("click",async()=>{
-
-
-const email=$("forgotEmail").value.trim();
-
-
-try{
-
-
-await sendPasswordResetEmail(
-auth,
-email
-);
-
-
-alert("Reset email sent");
-
-
-}catch(error){
-
-alert(error.message);
+hide("forgotPage");
 
 }
 
+function openSignup(){
 
-});
+hide("loginPage");
 
+show("signupPage");
 
-// ==========================
-// Auth State
-// ==========================
-
-
-onAuthStateChanged(auth,async(user)=>{
-
-
-if(user){
-
-
-currentUser=user;
-
-
-const snap =
-await getDoc(
-doc(
-db,
-"users",
-user.uid
-)
-);
-
-
-
-if(snap.exists()){
-
-userData=snap.data();
+hide("forgotPage");
 
 }
 
+function openForgot(){
 
-// Show Home
+hide("loginPage");
 
-$("loginPage").style.display="none";
+hide("signupPage");
 
-$("mainPage").style.display="block";
-
-
-
-// Update Name
-
-if($("userName")){
-
-$("userName").innerText =
-userData?.name || user.displayName;
+show("forgotPage");
 
 }
 
+// =======================================
+// Startup
+// =======================================
 
-// Update Photo
+document.addEventListener("DOMContentLoaded",()=>{
 
-if($("profileImage")){
+$("openSignup")?.addEventListener("click",openSignup);
 
-$("profileImage").src =
-userData?.photo ||
-"default-profile.png";
+$("openLogin")?.addEventListener("click",openLogin);
 
-}
+$("forgotPasswordBtn")?.addEventListener("click",openForgot);
 
+$("backLogin")?.addEventListener("click",openLogin);
 
-}else{
+show("authContainer");
 
-
-currentUser=null;
-
-userData=null;
-
-
-$("loginPage").style.display="block";
-
-$("mainPage").style.display="none";
-
-
-}
-
-
-});
-
-
-// ==========================
-// Logout
-// ==========================
-
-
-$("logoutBtn")?.addEventListener("click",async()=>{
-
-
-await signOut(auth);
-
+hide("homePage");
 
 });
 // =======================================
 // Friendsbook 2026
-// script.js Stable
+// script.js v2
 // Part 2
+// Authentication
+// =======================================
+
+// Login
+
+$("loginBtn")?.addEventListener("click", async () => {
+
+    const email = $("loginEmail").value.trim();
+    const password = $("loginPassword").value;
+
+    if (!email || !password) {
+        alert("Please enter email and password");
+        return;
+    }
+
+    try {
+
+        await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+
+    } catch (error) {
+
+        alert(error.message);
+
+    }
+
+});
+
+// Signup
+
+$("signupBtn")?.addEventListener("click", async () => {
+
+    const name = $("signupName").value.trim();
+    const email = $("signupEmail").value.trim();
+    const password = $("signupPassword").value;
+
+    if (!name || !email || !password) {
+
+        alert("Please fill all fields");
+
+        return;
+
+    }
+
+    try {
+
+        const result =
+        await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+
+        await updateProfile(result.user, {
+
+            displayName: name
+
+        });
+
+        await sendEmailVerification(result.user);
+
+        await setDoc(
+
+            doc(db, "users", result.user.uid),
+
+            createUserObject(
+                result.user,
+                name
+            )
+
+        );
+
+        alert("Account created successfully");
+
+        openLogin();
+
+    } catch (error) {
+
+        alert(error.message);
+
+    }
+
+});
+
+// Forgot Password
+
+$("resetPasswordBtn")?.addEventListener("click", async () => {
+
+    const email = $("forgotEmail").value.trim();
+
+    if (!email) {
+
+        alert("Enter your email");
+
+        return;
+
+    }
+
+    try {
+
+        await sendPasswordResetEmail(
+            auth,
+            email
+        );
+
+        alert("Password reset email sent");
+
+        openLogin();
+
+    } catch (error) {
+
+        alert(error.message);
+
+    }
+
+});
+// =======================================
+// Friendsbook 2026
+// script.js v2
+// Part 3
+// Auth State
+// =======================================
+
+onAuthStateChanged(auth, async (user) => {
+
+    if (user) {
+
+        App.user = user;
+
+        App.admin = isAdmin(user.email);
+
+        hide("authContainer");
+        show("homePage");
+
+        try {
+
+            const snap = await getDoc(
+                doc(db, "users", user.uid)
+            );
+
+            if (snap.exists()) {
+
+                App.profile = snap.data();
+
+                if ($("menuUserName")) {
+                    $("menuUserName").textContent =
+                        App.profile.name || user.displayName;
+                }
+
+                if ($("menuProfileImage")) {
+                    $("menuProfileImage").src =
+                        App.profile.photo || "default-profile.png";
+                }
+
+                if ($("headerProfile")) {
+                    $("headerProfile").src =
+                        App.profile.photo || "default-profile.png";
+                }
+
+            }
+
+        } catch (e) {
+
+            console.error(e);
+
+        }
+
+    } else {
+
+        App.user = null;
+        App.profile = null;
+
+        show("authContainer");
+        hide("homePage");
+
+        openLogin();
+
+    }
+
+});
+
+// =======================================
+// Logout
+// =======================================
+
+$("logoutBtn")?.addEventListener("click", async () => {
+
+    try {
+
+        await signOut(auth);
+
+    } catch (e) {
+
+        alert(e.message);
+
+    }
+
+});
+// =======================================
+// Friendsbook 2026
+// script.js v2
+// Part 4
+// Navigation + Dark Mode
+// =======================================
+
+// All Pages
+const pages = [
+
+"homePage",
+"profilePage",
+"friendsPage",
+"reelsPage",
+"messengerPage",
+"notificationPage",
+"marketplacePage",
+"settingsPage",
+"savedPage",
+"groupsPage"
+
+];
+
+// Open Page
+function openPage(page){
+
+pages.forEach(id=>{
+
+const el=$(id);
+
+if(el) hide(id);
+
+});
+
+show(page);
+
+App.page=page;
+
+}
+
+// Bottom Navigation
+
+$("navHome")?.addEventListener("click",()=>{
+
+openPage("homePage");
+
+});
+
+$("navFriends")?.addEventListener("click",()=>{
+
+openPage("friendsPage");
+
+});
+
+$("navReels")?.addEventListener("click",()=>{
+
+openPage("reelsPage");
+
+});
+
+$("navMessenger")?.addEventListener("click",()=>{
+
+openPage("messengerPage");
+
+});
+
+$("navNotification")?.addEventListener("click",()=>{
+
+openPage("notificationPage");
+
+});
+
+$("navProfile")?.addEventListener("click",()=>{
+
+openPage("profilePage");
+
+});
+
+// =======================
+// Dark Mode
+// =======================
+
+App.dark =
+localStorage.getItem("fb_dark") === "true";
+
+function applyDarkMode(){
+
+if(App.dark){
+
+document.body.classList.add("dark");
+
+}else{
+
+document.body.classList.remove("dark");
+
+}
+
+localStorage.setItem(
+
+"fb_dark",
+
+App.dark
+
+);
+
+}
+
+applyDarkMode();
+
+$("darkModeBtn")?.addEventListener("click",()=>{
+
+App.dark=!App.dark;
+
+applyDarkMode();
+
+});
+
+// =======================
+// Search
+// =======================
+
+$("searchBtn")?.addEventListener("click",()=>{
+
+const text=$("searchInput")?.value.trim();
+
+if(!text){
+
+alert("Type something");
+
+return;
+
+}
+
+console.log("Search:",text);
+
+});
+
+// =======================
+// Menu
+// =======================
+
+$("menuBtn")?.addEventListener("click",()=>{
+
+toggle("sideMenu");
+
+});
+// =======================================
+// Friendsbook 2026
+// script.js v2
+// Part 5
 // Profile System
 // =======================================
 
-
 // Load Profile
 
-async function loadProfile(){
+async function loadProfile() {
 
-if(!currentUser) return;
+    if (!App.user) return;
 
+    const snap = await getDoc(
+        doc(db, "users", App.user.uid)
+    );
 
-const snap = await getDoc(
+    if (!snap.exists()) return;
 
-doc(
-db,
-"users",
-currentUser.uid
-)
+    App.profile = snap.data();
 
-);
+    if ($("profileName"))
+        $("profileName").textContent =
+            App.profile.name || "";
 
+    if ($("profileBio"))
+        $("profileBio").textContent =
+            App.profile.bio || "";
 
-if(snap.exists()){
+    if ($("profilePhoto"))
+        $("profilePhoto").src =
+            App.profile.photo || "default-profile.png";
 
-userData = snap.data();
-
-
-}
-
-
-// Name
-
-if($("profileName")){
-
-$("profileName").innerText =
-userData?.name || "User";
+    if ($("coverPhoto"))
+        $("coverPhoto").src =
+            App.profile.cover || "default-cover.jpg";
 
 }
 
-
-// Bio
-
-if($("profileBio")){
-
-$("profileBio").innerText =
-userData?.bio || "";
-
-}
-
-
-// Profile Photo
-
-if($("profileImage")){
-
-$("profileImage").src =
-userData?.photo ||
-"default-profile.png";
-
-}
-
-
-// Cover
-
-if($("coverImage")){
-
-$("coverImage").src =
-userData?.cover ||
-"default-cover.jpg";
-
-}
-
-
-}
-
-
-
-// ==========================
+// =======================
 // Save Bio
-// ==========================
+// =======================
 
-$("saveBioBtn")?.addEventListener("click",async()=>{
+$("saveBioBtn")?.addEventListener("click", async () => {
 
+    const bio = $("bioInput").value.trim();
 
-const bio =
-$("bioInput").value.trim();
+    await updateDoc(
 
+        doc(db, "users", App.user.uid),
 
+        {
 
-await updateDoc(
+            bio: bio
 
-doc(
-db,
-"users",
-currentUser.uid
-),
+        }
 
-{
+    );
 
-bio:bio
+    loadProfile();
+
+    alert("Bio updated");
+
+});
+
+// =======================
+// Profile Photo
+// =======================
+
+$("profilePhotoInput")?.addEventListener("change", (e) => {
+
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    console.log(file);
+
+    // Upload Part আসবে Part 6-এ
+
+});
+
+// =======================
+// Cover Photo
+// =======================
+
+$("coverPhotoInput")?.addEventListener("change", (e) => {
+
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    console.log(file);
+
+    // Upload Part আসবে Part 6-এ
+
+});
+// =======================================
+// Friendsbook 2026
+// script.js v2
+// Part 6
+// Firebase Storage Upload
+// =======================================
+
+// Upload Image
+async function uploadImage(file, folder) {
+
+    const fileName = Date.now() + "_" + file.name;
+
+    const storageRef = ref(
+        storage,
+        folder + "/" + fileName
+    );
+
+    await uploadBytes(storageRef, file);
+
+    return await getDownloadURL(storageRef);
 
 }
 
+// =======================
+// Profile Photo Upload
+// =======================
+
+$("profilePhotoInput")?.addEventListener("change", async (e) => {
+
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    try {
+
+        const url = await uploadImage(file, "profiles");
+
+        await updateDoc(
+            doc(db, "users", App.user.uid),
+            {
+                photo: url
+            }
+        );
+
+        loadProfile();
+
+        alert("Profile photo updated");
+
+    } catch (err) {
+
+        alert(err.message);
+
+    }
+
+});
+
+// =======================
+// Cover Photo Upload
+// =======================
+
+$("coverPhotoInput")?.addEventListener("change", async (e) => {
+
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    try {
+
+        const url = await uploadImage(file, "covers");
+
+        await updateDoc(
+            doc(db, "users", App.user.uid),
+            {
+                cover: url
+            }
+        );
+
+        loadProfile();
+
+        alert("Cover photo updated");
+
+    } catch (err) {
+
+        alert(err.message);
+
+    }
+
+});
+// =======================================
+// Friendsbook 2026
+// script.js v2
+// Part 7
+// Post System
+// =======================================
+
+// Posts Array
+let posts = [];
+
+// =======================
+// Create Post
+// =======================
+
+$("postBtn")?.addEventListener("click", async () => {
+
+    const text = $("postText").value.trim();
+
+    if (!text) {
+
+        alert("Write something first");
+
+        return;
+
+    }
+
+    try {
+
+        await addDoc(
+
+            collection(db, "posts"),
+
+            {
+
+                uid: App.user.uid,
+
+                name: App.profile?.name || App.user.displayName || "User",
+
+photo: App.profile?.photo || "default-profile.png",
+              
+                text: text,
+
+                image: "",
+
+                video: "",
+
+                likes: 0,
+
+                comments: 0,
+
+                shares: 0,
+
+                createdAt: serverTimestamp()
+
+            }
+
+        );
+
+        $("postText").value = "";
+
+    } catch (e) {
+
+        alert(e.message);
+
+    }
+
+});
+
+// =======================
+// Load Posts
+// =======================
+
+const postQuery = query(
+
+    collection(db, "posts"),
+
+    orderBy("createdAt", "desc")
+
 );
 
+onSnapshot(postQuery, (snapshot) => {
 
+    posts = [];
 
-loadProfile();
+    snapshot.forEach((doc) => {
 
+        posts.push({
 
-alert("Bio Updated");
+            id: doc.id,
 
+            ...doc.data()
 
-});
+        });
 
+    });
 
-
-
-// ==========================
-// Profile Photo Preview
-// ==========================
-
-$("profileInput")?.addEventListener("change",(e)=>{
-
-
-const file=e.target.files[0];
-
-
-if(!file)return;
-
-
-const reader=new FileReader();
-
-
-reader.onload=()=>{
-
-
-$("profileImage").src =
-reader.result;
-
-
-};
-
-
-reader.readAsDataURL(file);
-
+    renderPosts();
 
 });
 
+// =======================
+// Render Posts
+// =======================
 
+function renderPosts() {
 
+    const feed = $("feedContainer");
 
-// ==========================
-// Cover Photo Preview
-// ==========================
+    if (!feed) return;
 
-$("coverInput")?.addEventListener("change",(e)=>{
+    feed.innerHTML = "";
 
+    posts.forEach(post => {
 
-const file=e.target.files[0];
+        feed.innerHTML += `
 
+<div class="post-card">
 
-if(!file)return;
+<div class="post-header">
 
+<img src="${post.photo}" class="post-avatar">
 
-const reader=new FileReader();
+<div>
 
+<b>${post.name}</b>
 
-reader.onload=()=>{
+<br>
 
+<small>Just now</small>
 
-$("coverImage").src =
-reader.result;
+</div>
 
+</div>
 
-};
+<p>${post.text}</p>
 
+<div class="post-actions">
 
-reader.readAsDataURL(file);
+<button onclick="likePost('${post.id}')">
 
+👍 Like
 
-});
+</button>
+
+<button onclick="commentPost('${post.id}')">
+
+💬 Comment
+
+</button>
+
+<button onclick="sharePost('${post.id}')">
+
+↗ Share
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+    });
+
+                  }
+// =======================================
+// Friendsbook 2026
+// script.js v2
+// Part 8
+// Facebook Reactions
+// =======================================
+
+// Save Reaction
+
+async function reactPost(postId, reaction){
+
+    try{
+
+        await updateDoc(
+
+            doc(db,"posts",postId),
+
+            {
+
+                reaction:reaction
+
+            }
+
+        );
+
+    }catch(e){
+
+        alert(e.message);
+
+    }
+
+}
+
+// Like
+
+function likePost(id){
+
+    reactPost(id,"👍");
+
+}
+
+// Love
+
+function lovePost(id){
+
+    reactPost(id,"❤️");
+
+}
+
+// Haha
+
+function hahaPost(id){
+
+    reactPost(id,"😂");
+
+}
+
+// Wow
+
+function wowPost(id){
+
+    reactPost(id,"😮");
+
+}
+
+// Sad
+
+function sadPost(id){
+
+    reactPost(id,"😢");
+
+}
+
+// Angry
+
+function angryPost(id){
+
+    reactPost(id,"😡");
+
+}
+
+// Share
+
+function sharePost(id){
+
+    alert("Share feature coming in next part");
+
+}
+
+// Comment
+
+function commentPost(id){
+
+    alert("Comment feature coming in next part");
+
+}
