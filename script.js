@@ -1,275 +1,213 @@
 // =======================================
 // Friendsbook 2026
-// script.js v2
+// script.js Stable
 // Part 1
+// Login + Signup + Auth
 // =======================================
+
 
 import {
 
 auth,
 db,
-storage,
-
-onAuthStateChanged,
 
 signInWithEmailAndPassword,
 createUserWithEmailAndPassword,
-
 sendPasswordResetEmail,
-sendEmailVerification,
-
 signOut,
-
+onAuthStateChanged,
 updateProfile,
 
-collection,
 doc,
 setDoc,
-addDoc,
 getDoc,
-getDocs,
-updateDoc,
-deleteDoc,
 
-query,
-where,
-orderBy,
-limit,
-
-onSnapshot,
-
-serverTimestamp,
-
-ref,
-uploadBytes,
-uploadBytesResumable,
-getDownloadURL,
-deleteObject,
-
-createUserObject,
-isAdmin
+serverTimestamp
 
 } from "./firebase.js";
 
-// =======================================
-// DOM Helper
-// =======================================
 
-const $ = id => document.getElementById(id);
+// ID Helper
 
-// =======================================
-// App State
-// =======================================
+const $ = (id) => document.getElementById(id);
 
-const App={
 
-user:null,
+// App Data
 
-profile:null,
+let currentUser = null;
+let userData = null;
 
-dark:false,
 
-page:"home",
+// ==========================
+// Login
+// ==========================
 
-admin:false
+$("loginBtn")?.addEventListener("click", async()=>{
 
-};
+    const email =
+    $("loginEmail")?.value.trim();
 
-// =======================================
-// UI Helper
-// =======================================
+    const password =
+    $("loginPassword")?.value;
 
-function show(id){
 
-const el=$(id);
+    if(!email || !password){
 
-if(el)el.classList.remove("hidden");
+        alert("Email and Password required");
 
-}
+        return;
+    }
 
-function hide(id){
 
-const el=$(id);
+    try{
 
-if(el)el.classList.add("hidden");
+        await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
 
-}
 
-function toggle(id){
+    }catch(error){
 
-const el=$(id);
+        alert(error.message);
 
-if(el)el.classList.toggle("hidden");
-
-}
-
-// =======================================
-// Authentication Pages
-// =======================================
-
-function openLogin(){
-
-show("loginPage");
-
-hide("signupPage");
-
-hide("forgotPage");
-
-}
-
-function openSignup(){
-
-hide("loginPage");
-
-show("signupPage");
-
-hide("forgotPage");
-
-}
-
-function openForgot(){
-
-hide("loginPage");
-
-hide("signupPage");
-
-show("forgotPage");
-
-}
-
-// =======================================
-// Startup
-// =======================================
-
-document.addEventListener("DOMContentLoaded",()=>{
-
-$("openSignup")?.addEventListener("click",openSignup);
-
-$("openLogin")?.addEventListener("click",openLogin);
-
-$("forgotPasswordBtn")?.addEventListener("click",openForgot);
-
-$("backLogin")?.addEventListener("click",openLogin);
-
-show("authContainer");
-
-hide("homePage");
+    }
 
 });
-// =======================================
-// Friendsbook 2026
-// script.js Stable
-// Part 2
-// Profile System
-// =======================================
-
-
-// Load Profile
-
-async function loadProfile(){
-
-if(!currentUser) return;
-
-
-const snap = await getDoc(
-
-doc(
-db,
-"users",
-currentUser.uid
-)
-
-);
-
-
-if(snap.exists()){
-
-userData = snap.data();
-
-
-}
-
-
-// Name
-
-if($("profileName")){
-
-$("profileName").innerText =
-userData?.name || "User";
-
-}
-
-
-// Bio
-
-if($("profileBio")){
-
-$("profileBio").innerText =
-userData?.bio || "";
-
-}
-
-
-// Profile Photo
-
-if($("profileImage")){
-
-$("profileImage").src =
-userData?.photo ||
-"default-profile.png";
-
-}
-
-
-// Cover
-
-if($("coverImage")){
-
-$("coverImage").src =
-userData?.cover ||
-"default-cover.jpg";
-
-}
-
-
-}
 
 
 
 // ==========================
-// Save Bio
+// Signup
 // ==========================
 
-$("saveBioBtn")?.addEventListener("click",async()=>{
+$("signupBtn")?.addEventListener("click", async()=>{
 
 
-const bio =
-$("bioInput").value.trim();
+    const name =
+    $("signupName")?.value.trim();
 
+    const email =
+    $("signupEmail")?.value.trim();
 
-
-await updateDoc(
-
-doc(
-db,
-"users",
-currentUser.uid
-),
-
-{
-
-bio:bio
-
-}
-
-);
+    const password =
+    $("signupPassword")?.value;
 
 
 
-loadProfile();
+    if(!name || !email || !password){
+
+        alert("Fill all fields");
+
+        return;
+    }
 
 
-alert("Bio Updated");
+
+    try{
+
+
+        const result =
+        await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+
+
+
+        await updateProfile(
+            result.user,
+            {
+                displayName:name
+            }
+        );
+
+
+
+        await setDoc(
+
+            doc(
+                db,
+                "users",
+                result.user.uid
+            ),
+
+            {
+
+                uid:result.user.uid,
+
+                name:name,
+
+                email:email,
+
+                photo:"default-profile.png",
+
+                cover:"default-cover.jpg",
+
+                bio:"",
+
+                createdAt:serverTimestamp()
+
+            }
+
+        );
+
+
+        alert("Account Created");
+
+
+    }catch(error){
+
+        alert(error.message);
+
+    }
+
+
+});
+
+
+
+// ==========================
+// Forgot Password
+// ==========================
+
+$("resetPasswordBtn")?.addEventListener("click",async()=>{
+
+
+    const email =
+    $("forgotEmail")?.value.trim();
+
+
+
+    if(!email){
+
+        alert("Enter email");
+
+        return;
+
+    }
+
+
+
+    try{
+
+
+        await sendPasswordResetEmail(
+            auth,
+            email
+        );
+
+
+        alert("Reset email sent");
+
+
+    }catch(error){
+
+        alert(error.message);
+
+    }
 
 
 });
@@ -278,66 +216,85 @@ alert("Bio Updated");
 
 
 // ==========================
-// Profile Photo Preview
+// Auth State
 // ==========================
 
-$("profileInput")?.addEventListener("change",(e)=>{
+
+onAuthStateChanged(auth, async(user)=>{
 
 
-const file=e.target.files[0];
+    if(user){
 
 
-if(!file)return;
+        currentUser = user;
 
 
-const reader=new FileReader();
+
+        const snap =
+        await getDoc(
+
+            doc(
+                db,
+                "users",
+                user.uid
+            )
+
+        );
 
 
-reader.onload=()=>{
+
+        if(snap.exists()){
+
+            userData = snap.data();
+
+        }
 
 
-$("profileImage").src =
-reader.result;
+
+        // Login hide
+
+        if($("loginPage"))
+        $("loginPage").style.display="none";
 
 
-};
+        // Main show
+
+        if($("mainPage"))
+        $("mainPage").style.display="block";
 
 
-reader.readAsDataURL(file);
+
+    }else{
+
+
+        currentUser=null;
+
+        userData=null;
+
+
+
+        if($("loginPage"))
+        $("loginPage").style.display="block";
+
+
+
+        if($("mainPage"))
+        $("mainPage").style.display="none";
+
+
+    }
 
 
 });
 
 
 
-
 // ==========================
-// Cover Photo Preview
+// Logout
 // ==========================
 
-$("coverInput")?.addEventListener("change",(e)=>{
+$("logoutBtn")?.addEventListener("click",async()=>{
 
-
-const file=e.target.files[0];
-
-
-if(!file)return;
-
-
-const reader=new FileReader();
-
-
-reader.onload=()=>{
-
-
-$("coverImage").src =
-reader.result;
-
-
-};
-
-
-reader.readAsDataURL(file);
-
+    await signOut(auth);
 
 });
