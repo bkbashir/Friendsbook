@@ -974,3 +974,66 @@ transition:.25s ease;
 CSS COMPLETE
 Friendsbook 2026 V3
 =========================== */
+.create-post-card{
+background:#fff;
+padding:14px;
+border-radius:18px;
+margin:12px;
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.create-top{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.create-avatar{
+width:48px;
+height:48px;
+border-radius:50%;
+object-fit:cover;
+}
+
+#postText{
+flex:1;
+height:46px;
+border:none;
+background:#f0f2f5;
+border-radius:30px;
+padding:0 16px;
+font-size:16px;
+outline:none;
+}
+
+#postBtn{
+background:#6C63FF;
+color:#fff;
+border:none;
+padding:12px 18px;
+border-radius:12px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.create-divider{
+height:1px;
+background:#ddd;
+margin:12px 0;
+}
+
+.create-bottom{
+display:flex;
+justify-content:space-between;
+gap:10px;
+}
+
+.create-item{
+flex:1;
+text-align:center;
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+background:#f7f7f7;
+font-weight:600;
+}
