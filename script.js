@@ -336,7 +336,7 @@ $("resetPasswordBtn").onclick=forgotPassword;
 // ======================================
 
 onAuthStateChanged(auth, async(user)=>{
-
+alert("AUTH START");
 if(user){
 
 App.user=user;
@@ -406,7 +406,7 @@ show("authContainer");
 openLogin();
 
 }
-
+alert("AUTH END");
 });
 
 // ======================================
