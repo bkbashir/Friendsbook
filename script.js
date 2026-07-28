@@ -408,6 +408,14 @@ openLogin();
 
 }
 alert("AUTH END");
+  const splash = document.getElementById("splashScreen");
+alert("Splash = " + (splash ? "YES" : "NO"));
+
+const authBox = document.getElementById("authContainer");
+alert("Auth = " + (authBox ? "YES" : "NO"));
+
+const home = document.getElementById("homePage");
+alert("Home = " + (home ? "YES" : "NO"));
 });
 
 // ======================================
