@@ -114,22 +114,6 @@ box.classList.add("hidden");
 }
 
 // ======================================
-// Loading
-// ======================================
-
-function showLoading(){
-
-show("globalLoading");
-
-}
-
-function hideLoading(){
-
-hide("globalLoading");
-
-}
-
-// ======================================
 // Authentication Pages
 // ======================================
 
@@ -337,7 +321,7 @@ $("resetPasswordBtn").onclick=forgotPassword;
 // ======================================
 
 onAuthStateChanged(auth, async(user)=>{
-alert("AUTH START");
+
 if(user){
 
 App.user=user;
@@ -407,20 +391,7 @@ show("authContainer");
 openLogin();
 
 }
-alert("AUTH END");
-  const splash = document.getElementById("splashScreen");
 
-splash.style.display = "none";
-
-alert("SPLASH HIDDEN");
-  const splash = document.getElementById("splashScreen");
-alert("Splash = " + (splash ? "YES" : "NO"));
-
-const authBox = document.getElementById("authContainer");
-alert("Auth = " + (authBox ? "YES" : "NO"));
-
-const home = document.getElementById("homePage");
-alert("Home = " + (home ? "YES" : "NO"));
 });
 
 // ======================================
