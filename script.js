@@ -167,14 +167,15 @@ show("forgotPage");
 // Page Switch
 // ======================================
 
-$("openSignup").onclick=openSignup;
+const openSignupBtn = $("openSignup");
+const openLoginBtn = $("openLogin");
+const forgotBtn = $("forgotPasswordBtn");
+const backLoginBtn = $("backLogin");
 
-$("openLogin").onclick=openLogin;
-
-$("forgotPasswordBtn").onclick=openForgot;
-
-$("backLogin").onclick=openLogin;
-
+if (openSignupBtn) openSignupBtn.onclick = openSignup;
+if (openLoginBtn) openLoginBtn.onclick = openLogin;
+if (forgotBtn) forgotBtn.onclick = openForgot;
+if (backLoginBtn) backLoginBtn.onclick = openLogin;
 console.log(
 
 appName(),
