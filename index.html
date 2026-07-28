@@ -253,6 +253,72 @@ alt="Profile">
 
 <main id="mainContent">
 
+  <!-- =========================
+Create Post Card
+========================= -->
+
+<div id="createPostCard" class="card">
+
+    <div class="createTop">
+
+        <img id="createProfileImage"
+             src="default-profile.png"
+             class="avatar">
+
+        <input
+            type="text"
+            id="postText"
+            placeholder="What's on your mind?"
+            autocomplete="off">
+
+    </div>
+
+    <div id="imagePreviewBox" class="hidden">
+        <img id="imagePreview">
+    </div>
+
+    <div id="videoPreviewBox" class="hidden">
+        <video id="videoPreview" controls></video>
+    </div>
+
+    <div class="createBottom">
+
+        <label class="postAction">
+
+            📷 Photo
+
+            <input
+                type="file"
+                id="postImage"
+                accept="image/*"
+                hidden>
+
+        </label>
+
+        <label class="postAction">
+
+            🎥 Video
+
+            <input
+                type="file"
+                id="postVideo"
+                accept="video/*"
+                hidden>
+
+        </label>
+
+        <button id="postBtn">
+            Post
+        </button>
+
+    </div>
+
+</div>
+
+<!-- Feed -->
+
+<div id="feedContainer"></div>
+  
 <div id="feedContainer">
 
 <!-- Posts will load here -->
