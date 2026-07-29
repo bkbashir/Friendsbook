@@ -1037,3 +1037,30 @@ cursor:pointer;
 background:#f7f7f7;
 font-weight:600;
 }
+/* Friendsbook Post */
+
+.post-header{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:10px;
+}
+
+.post-avatar{
+width:40px;
+height:40px;
+border-radius:50%;
+object-fit:cover;
+border:1px solid #ddd;
+flex-shrink:0;
+}
+
+.post-header b{
+font-size:15px;
+font-weight:600;
+}
+
+.post-header small{
+color:#65676B;
+font-size:12px;
+}
