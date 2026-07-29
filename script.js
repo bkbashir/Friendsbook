@@ -259,6 +259,10 @@ if ($("followingCount"))
                     $("headerProfile").src =
                         App.profile.photo || "default-profile.png";
 
+                // Header Name
+if ($("headerUserName"))
+    $("headerUserName").textContent =
+        App.profile.name || user.displayName || "User";
             }
 
         } catch (e) {
