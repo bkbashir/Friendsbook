@@ -321,7 +321,27 @@ onAuthStateChanged(auth, async (user) => {
                     $("headerProfile").src =
                         App.profile.photo || "default-profile.png";
                 }
+// Profile Page
 
+if ($("profileName")) {
+    $("profileName").textContent =
+        App.profile.name || user.displayName;
+}
+
+if ($("profilePhoto")) {
+    $("profilePhoto").src =
+        App.profile.photo || "default-profile.png";
+}
+
+if ($("coverPhoto")) {
+    $("coverPhoto").src =
+        App.profile.cover || "default-cover.jpg";
+}
+
+if ($("profileBio")) {
+    $("profileBio").textContent =
+        App.profile.bio || "";
+        }
             }
 
         } catch (e) {
