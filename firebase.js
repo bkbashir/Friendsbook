@@ -15,10 +15,30 @@ import {
 
 import {
   getFirestore,
+  collection,
   doc,
   setDoc,
-  getDoc
+  getDoc,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  onSnapshot,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBRad-Z7zxRRnvy17nRXEh7ZG4hu6fluZ4",
@@ -33,6 +53,7 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 function createUserObject(user, name) {
   return {
@@ -42,7 +63,7 @@ function createUserObject(user, name) {
     photo: "default-profile.png",
     cover: "default-cover.jpg",
     bio: "",
-    createdAt: Date.now()
+    createdAt: serverTimestamp()
   };
 }
 
@@ -53,6 +74,8 @@ function isAdmin(email) {
 export {
   auth,
   db,
+  storage,
+
   onAuthStateChanged,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -60,9 +83,28 @@ export {
   sendPasswordResetEmail,
   signOut,
   updateProfile,
+
+  collection,
   doc,
   setDoc,
   getDoc,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  onSnapshot,
+  serverTimestamp,
+
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+
   createUserObject,
   isAdmin
 };
