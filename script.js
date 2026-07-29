@@ -741,19 +741,20 @@ function renderFeed(){
 
         <div class="postCard">
 
-            <div class="postHeader">
+            <div class="post-header">
 
-                <img src="${post.photo}" class="postAvatar">
+    <img class="post-profile"
+         src="${post.photo}">
 
-                <div>
+    <div class="post-user">
 
-                    <h4>${post.name}</h4>
+        <h4>${post.name}</h4>
 
-                    <small>${post.time}</small>
+        <small>${post.time}</small>
 
-                </div>
+    </div>
 
-            </div>
+</div>
 
             <p class="postText">
 
