@@ -266,117 +266,66 @@ color:#999;
 Header
 =========================== */
 
-#header{
-
-position:fixed;
+.top-header{
+position:sticky;
 top:0;
 left:0;
 width:100%;
-height:65px;
-background:var(--white);
+height:60px;
+background:#fff;
 display:flex;
 align-items:center;
 justify-content:space-between;
 padding:0 12px;
-box-shadow:var(--shadow);
+box-shadow:0 2px 10px rgba(0,0,0,.08);
 z-index:1000;
-
 }
 
-#headerLeft{
-
-display:flex;
-align-items:center;
-gap:10px;
-
-}
-
-#headerLogo{
-
-width:42px;
-height:42px;
-border-radius:12px;
-
-}
-
-#headerLeft h2{
-
+.logo-text{
 font-size:22px;
-color:var(--primary);
 font-weight:700;
-
+color:#6C63FF;
 }
 
-/* ===========================
-Search
-=========================== */
-
-#headerCenter{
-
+.search-box{
 flex:1;
-padding:0 12px;
-
+margin:0 15px;
 }
 
-#searchInput{
-
+.search-box input{
 width:100%;
-height:42px;
-border:1px solid var(--border);
+height:40px;
+border:none;
+outline:none;
+background:#f1f3f5;
 border-radius:25px;
-padding:0 16px;
-background:#F7F7FF;
-font-size:14px;
-
+padding:0 18px;
+font-size:15px;
 }
 
-#searchInput:focus{
-
-border-color:var(--primary);
-
-}
-
-/* ===========================
-Header Right
-=========================== */
-
-#headerRight{
-
+.header-icons{
 display:flex;
 align-items:center;
-gap:8px;
-
+gap:12px;
 }
 
-#headerRight button{
-
-width:42px;
-height:42px;
+.header-icons button{
+width:40px;
+height:40px;
+border:none;
 border-radius:50%;
-background:#F3F3FF;
-color:var(--primary);
+background:#f1f3f5;
 font-size:18px;
-transition:.25s;
-
+cursor:pointer;
 }
 
-#headerRight button:hover{
-
-background:var(--primary);
-color:white;
-
-}
-
-#headerProfile{
-
+.header-profile{
 width:42px;
 height:42px;
 border-radius:50%;
 object-fit:cover;
-border:2px solid var(--primary);
-
+border:2px solid #6C63FF;
 }
-
 /* ===========================
 Home
 =========================== */
