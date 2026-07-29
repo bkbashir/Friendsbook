@@ -417,28 +417,60 @@ Friendsbook User
 
 <section id="profilePage" class="page hidden">
 
-    <div class="profile-cover">
+    <div class="cover-area">
 
-        <img id="coverPhoto"
-             src="default-cover.jpg"
-             alt="Cover">
+        <img
+            id="coverPhoto"
+            src="default-cover.jpg"
+            class="cover-photo">
+
+        <button id="changeCoverBtn" class="cover-edit">
+            📷
+        </button>
 
     </div>
 
     <div class="profile-info">
 
-        <img id="profilePhoto"
-             src="default-profile.png"
-             alt="Profile">
+        <img
+            id="profilePhoto"
+            src="default-profile.png"
+            class="profile-photo">
 
-        <h2 id="profileName">User</h2>
+        <button id="changeProfileBtn" class="profile-edit">
+            📷
+        </button>
 
-        <p id="profileBio"></p>
+        <h2 id="profileName">Your Name</h2>
+
+        <p id="profileUsername">@username</p>
+
+        <p id="profileBio">
+            Add your bio...
+        </p>
+
+        <div class="follow-box">
+
+            <div>
+                <b id="followersCount">0</b>
+                <span>Followers</span>
+            </div>
+
+            <div>
+                <b id="followingCount">0</b>
+                <span>Following</span>
+            </div>
+
+        </div>
+
+        <button id="editProfileBtn" class="edit-profile-btn">
+            Edit Profile
+        </button>
 
     </div>
 
 </section>
-
+    
 <section id="friendsPage" class="page hidden">
 
 <h2>Friends</h2>
