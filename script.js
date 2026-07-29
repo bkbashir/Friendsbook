@@ -218,6 +218,35 @@ onAuthStateChanged(auth, async (user) => {
 
                 App.profile = snap.data();
 
+                // Profile Page
+if ($("profileName"))
+    $("profileName").textContent =
+        App.profile.name || user.displayName || "User";
+
+if ($("profileUsername"))
+    $("profileUsername").textContent =
+        "@" + (App.profile.username || user.uid.substring(0,8));
+
+if ($("profileBio"))
+    $("profileBio").textContent =
+        App.profile.bio || "";
+
+if ($("profilePhoto"))
+    $("profilePhoto").src =
+        App.profile.photo || "default-profile.png";
+
+if ($("coverPhoto"))
+    $("coverPhoto").src =
+        App.profile.cover || "default-cover.jpg";
+
+if ($("followersCount"))
+    $("followersCount").textContent =
+        App.profile.followers || 0;
+
+if ($("followingCount"))
+    $("followingCount").textContent =
+        App.profile.following || 0;
+                
                 if ($("menuUserName"))
                     $("menuUserName").textContent =
                         App.profile.name || user.displayName || "User";
