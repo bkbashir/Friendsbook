@@ -804,6 +804,28 @@ ${post.comments.map(c=>`
 
 <small>${c.time}</small>
 
+<br>
+
+<button onclick="replyComment(${post.id}, ${post.comments.indexOf(c)})">
+↩ Reply
+</button>
+
+${c.replies ? c.replies.map(r=>`
+
+<div class="replyBox">
+
+<img src="${r.photo}" class="commentPhoto">
+
+<div>
+<b>${r.name}</b><br>
+<span>${r.text}</span><br>
+<small>${r.time}</small>
+</div>
+
+</div>
+
+`).join("") : ""}
+
 </div>
 
 </div>
@@ -860,6 +882,72 @@ function commentPost(id){
 
 }
 
+// ======================
+// Reply Comment
+// ======================
+
+function replyComment(postId, commentIndex){
+
+    const text = prompt("Write a reply");
+
+    if(!text) return;
+
+    const post = posts.find(p => p.id === postId);
+
+    if(!post) return;
+
+    if(!post.comments[commentIndex].replies){
+
+        post.comments[commentIndex].replies = [];
+
+    }
+
+    post.comments[commentIndex].replies.push({
+
+        name: App.profile?.name || "User",
+
+        photo: App.profile?.photo || "default-profile.png",
+
+        text:text,
+
+        time:new Date().toLocaleString()
+
+    });
+
+    renderFeed();
+
+}
+
+// ======================
+// Comment Reaction
+// ======================
+
+function reactComment(postId, commentIndex, type){
+
+    const post = posts.find(p=>p.id===postId);
+
+    if(!post) return;
+
+    const comment = post.comments[commentIndex];
+
+    if(!comment) return;
+
+
+    if(!comment.reactions){
+
+        comment.reactions = {};
+
+    }
+
+
+    comment.reactions[type] =
+    (comment.reactions[type] || 0) + 1;
+
+
+    renderFeed();
+
+}
+
 function sharePost(id){
 
     alert("Share System Coming...");
@@ -871,3 +959,4 @@ window.renderFeed=renderFeed;
 window.likePost = likePost;
 window.commentPost = commentPost;
 window.sharePost = sharePost;
+window.reactComment = reactComment;
