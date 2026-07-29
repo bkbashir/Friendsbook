@@ -790,7 +790,25 @@ function renderFeed(){
                 ↗ Share
 
                 </button>
+${post.comments.map(c=>`
 
+<div class="commentBox">
+
+<img src="${c.photo}" class="commentPhoto">
+
+<div>
+
+<b>${c.name}</b><br>
+
+<span>${c.text}</span><br>
+
+<small>${c.time}</small>
+
+</div>
+
+</div>
+
+`).join("")}
             </div>
 
         </div>
@@ -804,6 +822,52 @@ function renderFeed(){
 // ======================
 // Demo
 // ======================
+function likePost(id){
+
+    const post = posts.find(p => p.id === id);
+
+    if(!post) return;
+
+    post.likes++;
+
+    renderFeed();
+
+}
+
+function commentPost(id){
+
+    const text = prompt("Write a comment");
+
+    if(!text) return;
+
+    const post = posts.find(p => p.id === id);
+
+    if(!post) return;
+
+    post.comments.push({
+
+        name: App.profile?.name || "User",
+
+        photo: App.profile?.photo || "default-profile.png",
+
+        text: text,
+
+        time: new Date().toLocaleString()
+
+    });
+
+    renderFeed();
+
+}
+
+function sharePost(id){
+
+    alert("Share System Coming...");
+
+    }
 
 window.createPost=createPost;
 window.renderFeed=renderFeed;
+window.likePost = likePost;
+window.commentPost = commentPost;
+window.sharePost = sharePost;
