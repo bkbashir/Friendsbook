@@ -1,735 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <title>Friendsbook 2026</title>
-
-<link rel="stylesheet"
-href="style.css">
-
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<!-- ========================= -->
-<!-- Authentication -->
-<!-- ========================= -->
-
 <div id="authContainer">
-<!-- ========================= -->
-<!-- Login Page -->
-<!-- ========================= -->
-
-<div id="loginPage" class="authPage">
-
-<img
-src="logo.png"
-class="authLogo"
-alt="Logo">
-
-<h2>
-
-Login
-
-</h2>
-
-<input
-type="email"
-id="loginEmail"
-placeholder="Email">
-
-<input
-type="password"
-id="loginPassword"
-placeholder="Password">
-
-<button
-id="loginBtn">
-
-Login
-
-</button>
-
-<p
-id="forgotPasswordBtn"
-class="authLink">
-
-Forgot Password?
-
-</p>
-
-<p
-class="authText">
-
-Don't have an account?
-
-<span id="openSignup">
-
-Sign Up
-
-</span>
-
-</p>
-
-</div>
-
-<!-- ========================= -->
-<!-- Signup Page -->
-<!-- ========================= -->
-
-<div
-id="signupPage"
-class="authPage hidden">
-
-<img
-src="logo.png"
-class="authLogo"
-alt="Logo">
-
-<h2>
-
-Create Account
-
-</h2>
-
-<input
-type="text"
-id="signupName"
-placeholder="Full Name">
-
-<input
-type="email"
-id="signupEmail"
-placeholder="Email">
-
-<input
-type="password"
-id="signupPassword"
-placeholder="Password">
-
-<button
-id="signupBtn">
-
-Create Account
-
-</button>
-
-<p
-class="authText">
-
-Already have an account?
-
-<span id="openLogin">
-
-Login
-
-</span>
-
-</p>
-
-</div>
-
-<!-- ========================= -->
-<!-- Forgot Password -->
-<!-- ========================= -->
-
-<div
-id="forgotPage"
-class="authPage hidden">
-
-<img
-src="logo.png"
-class="authLogo"
-alt="Logo">
-
-<h2>
-
-Reset Password
-
-</h2>
-
-<input
-type="email"
-id="forgotEmail"
-placeholder="Enter your email">
-
-<button
-id="resetPasswordBtn">
-
-Send Reset Link
-
-</button>
-
-<p
-class="authText">
-
-<span id="backLogin">
-
-Back To Login
-
-</span>
-
-</p>
-
-</div>
-
-</div>
-<!-- ========================= -->
-<!-- Home -->
-<!-- ========================= -->
-
-<div id="homePage" class="hidden">
-
-<!-- Header -->
-
-<header class="top-header">
-
-    <div class="logo-text">
-        Friendsbook
+  <section id="loginPage" class="authPage">
+    <div class="brandBlock">
+      <h1>Friendsbook</h1>
+      <p>Connect with friends and the world around you</p>
     </div>
+    <h2>Login</h2>
+    <input id="loginEmail" type="email" placeholder="Email">
+    <input id="loginPassword" type="password" placeholder="Password">
+    <button id="loginBtn" class="primaryBtn">Login</button>
+    <button id="forgotPasswordBtn" class="linkBtn">Forgot Password?</button>
+    <p class="authText">Don't have an account? <span id="openSignup">Sign Up</span></p>
+  </section>
 
-    <div class="search-box">
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="Search Friendsbook">
+  <section id="signupPage" class="authPage hidden">
+    <div class="brandBlock">
+      <h1>Friendsbook</h1>
+      <p>Connect with friends and the world around you</p>
     </div>
+    <h2>Create Account</h2>
+    <input id="signupName" type="text" placeholder="Full Name">
+    <input id="signupUsername" type="text" placeholder="Username">
+    <input id="signupEmail" type="email" placeholder="Email">
+    <input id="signupPassword" type="password" placeholder="Password">
+    <button id="signupBtn" class="primaryBtn">Create Account</button>
+    <p class="authText">Already have an account? <span id="openLogin">Login</span></p>
+  </section>
 
-    <div class="header-icons">
-
-        <button id="messageBtn">
-            💬
-        </button>
-
-        <button id="notifyBtn">
-            🔔
-        </button>
-
-        <img
-            id="headerProfile"
-            class="header-profile"
-            src="default-profile.png"
-            alt="Profile">
-<span id="headerUserName" class="header-user-name">
-    User
-</span>
-    
+  <section id="forgotPage" class="authPage hidden">
+    <div class="brandBlock">
+      <h1>Friendsbook</h1>
+      <p>Connect with friends and the world around you</p>
     </div>
-
-</header>
-
-<!-- Main Content -->
-
-<main id="mainContent">
-<div id="createPostCard" class="create-post-card">
-
-    <div class="create-top">
-
-        <img id="createProfileImage"
-             src="default-profile.png"
-             class="create-avatar">
-
-        <input
-            id="postText"
-            type="text"
-            placeholder="What's on your mind?">
-
-        <button id="postBtn">
-            Post
-        </button>
-
-    </div>
-
-    <div class="create-divider"></div>
-
-    <div class="create-bottom">
-
-        <label class="create-item">
-
-            📷 Photo
-
-            <input
-                id="postImage"
-                type="file"
-                accept="image/*"
-                hidden>
-
-        </label>
-
-        <label class="create-item">
-
-            🎥 Video
-
-            <input
-                id="postVideo"
-                type="file"
-                accept="video/*"
-                hidden>
-
-        </label>
-
-        <button
-            id="feelingBtn"
-            class="create-item">
-
-            😊 Feeling
-
-        </button>
-
-    </div>
-
-</div>
-<!-- Feed -->
-
-<div id="feedContainer"></div>
-  
-<div id="feedContainer">
-
-<!-- Posts will load here -->
-
+    <h2>Reset Password</h2>
+    <input id="forgotEmail" type="email" placeholder="Enter your email">
+    <button id="resetPasswordBtn" class="primaryBtn">Send Reset Link</button>
+    <button id="backLogin" class="linkBtn">Back To Login</button>
+  </section>
 </div>
 
-</main>
-<!-- ========================= -->
-<!-- Bottom Navigation -->
-<!-- ========================= -->
-
-<nav id="bottomNav">
-
-<button id="navHome" class="navItem">
-
-🏠
-
-<span>Home</span>
-
-</button>
-
-<button id="navFriends" class="navItem">
-
-👥
-
-<span>Friends</span>
-
-</button>
-
-<button id="navCreate" class="navItem">
-
-➕
-
-<span>Create</span>
-
-</button>
-
-<button id="navReels" class="navItem">
-
-🎬
-
-<span>Reels</span>
-
-</button>
-
-<button id="navMessenger" class="navItem">
-
-💬
-
-<span>Chat</span>
-
-</button>
-
-<button id="navNotification" class="navItem">
-
-🔔
-
-<span>Alerts</span>
-
-</button>
-
-<button id="navProfile" class="navItem">
-
-👤
-
-<span>Profile</span>
-
-</button>
-
-<button id="navAI" class="navItem">
-
-🤖
-
-<span>AI</span>
-
-</button>
-
-<button id="navMenu" class="navItem">
-
-☰
-
-<span>Menu</span>
-
-</button>
-
-</nav>
-
-<!-- ========================= -->
-<!-- Side Menu -->
-<!-- ========================= -->
-
-<aside id="sideMenu" class="hidden">
-
-<div id="menuHeader">
-
-<img
-src="default-profile.png"
-id="menuProfileImage"
-alt="Profile">
-
-<h3 id="menuUserName">
-
-Friendsbook User
-
-</h3>
-
-</div>
-
-<button id="menuProfileBtn">👤 Profile</button>
-
-<button id="menuSavedBtn">🔖 Saved Posts</button>
-
-<button id="menuMarketplaceBtn">🛒 Marketplace</button>
-
-<button id="menuPagesBtn">📄 Pages</button>
-
-<button id="menuGroupsBtn">👥 Groups</button>
-
-<button id="menuSettingsBtn">⚙️ Settings</button>
-
-<button id="menuDarkBtn">🌙 Dark Mode</button>
-
-<button id="logoutBtn">🚪 Logout</button>
-
-</aside>
-<!-- ========================= -->
-<!-- Placeholder Pages -->
-<!-- ========================= -->
-
-<section id="profilePage" class="page hidden">
-
-    <div class="cover-area">
-
-        <img
-            id="coverPhoto"
-            src="default-cover.jpg"
-            class="cover-photo">
-
-        <button id="changeCoverBtn" class="cover-edit">
-            📷
-        </button>
-
+<div id="homePage" class="appShell hidden">
+  <header id="header">
+    <div class="brandText">Friendsbook</div>
+    <div class="headerSearch"><input id="searchInput" type="search" placeholder="Search Friendsbook..."></div>
+    <div class="headerActions">
+      <button id="messengerBtn" title="Messenger">💬</button>
+      <button id="notificationBtn" title="Notifications">🔔</button>
+      <img id="headerProfile" src="default-profile.png" alt="Profile">
     </div>
+  </header>
 
-    <div class="profile-info">
-
-        <img
-            id="profilePhoto"
-            src="default-profile.png"
-            class="profile-photo">
-
-        <button id="changeProfileBtn" class="profile-edit">
-            📷
-        </button>
-
-        <h2 id="profileName">Your Name</h2>
-
-        <p id="profileUsername">@username</p>
-
-        <p id="profileBio">
-            Add your bio...
-        </p>
-
-        <div class="follow-box">
-
-            <div>
-                <b id="followersCount">0</b>
-                <span>Followers</span>
-            </div>
-
-            <div>
-                <b id="followingCount">0</b>
-                <span>Following</span>
-            </div>
-
+  <main id="mainContent">
+    <section id="homeContent" class="pageView">
+      <div class="storyRow">
+        <div class="storyCard ownStory">
+          <img id="storyProfile" src="default-profile.png" alt="Story">
+          <div class="storyPlus">+</div>
+          <strong>Your story</strong>
         </div>
+        <div class="storyCard"><div class="storyPlaceholder">😊</div><strong>Friends</strong></div>
+        <div class="storyCard"><div class="storyPlaceholder">📷</div><strong>Photos</strong></div>
+        <div class="storyCard"><div class="storyPlaceholder">🎬</div><strong>Reels</strong></div>
+      </div>
 
-        <button id="editProfileBtn" class="edit-profile-btn">
-            Edit Profile
-        </button>
+      <section class="composer card">
+        <div class="composerTop">
+          <img id="createProfileImage" src="default-profile.png" alt="Profile">
+          <input id="postText" type="text" placeholder="What's on your mind?">
+          <button id="postBtn" class="primarySmall">Post</button>
+        </div>
+        <div class="composerBottom">
+          <label class="composerItem">📷 Photo<input id="postImage" type="file" accept="image/*" hidden></label>
+          <button id="feelingBtn" class="composerItem">😊 Feeling</button>
+        </div>
+      </section>
 
-    </div>
+      <div id="feedContainer"></div>
+    </section>
 
-</section>
-    
-<section id="friendsPage" class="page hidden">
+    <section id="profilePage" class="pageView hidden">
+      <div class="profileCard">
+        <div class="profileCoverWrap">
+          <img id="coverPhoto" class="profileCover" src="default-cover.jpg" alt="Cover">
+          <label class="coverCamera">📷<input id="coverInput" type="file" accept="image/*" hidden></label>
+        </div>
+        <div class="profileMain">
+          <div class="profileAvatarWrap">
+            <img id="profilePhoto" class="profileAvatar" src="default-profile.png" alt="Profile">
+            <label class="avatarCamera">📷<input id="profileInput" type="file" accept="image/*" hidden></label>
+          </div>
+          <div class="profileNameBlock">
+            <h2 id="profileName">User</h2>
+            <p id="profileUsername">@username</p>
+            <p id="profileBio">Add your bio...</p>
+          </div>
+          <div class="profileStats">
+            <div><strong id="followersCount">0</strong><span>Followers</span></div>
+            <div><strong id="followingCount">0</strong><span>Following</span></div>
+            <div><strong id="postsCount">0</strong><span>Posts</span></div>
+          </div>
+          <div class="profileButtons"><button id="editProfileBtn" class="primaryBtn">Edit Profile</button><button id="createStoryBtn" class="secondaryBtn">+ Add Story</button></div>
+          <div class="profileTabs"><button class="active">All</button><button>Posts</button><button>Photos</button><button>Reels</button><button>More</button></div>
+          <div class="detailsCard card"><h3>About</h3><p>📍 <span id="profileLocation">Bangladesh</span></p><p>👤 Friendsbook member</p><p>📅 Joined Friendsbook</p></div>
+          <div id="profilePosts"></div>
+        </div>
+      </div>
+    </section>
 
-<h2>Friends</h2>
+    <section id="friendsPage" class="pageView hidden"><div class="sectionCard"><h2>Friends</h2><p>Find people, follow friends and manage friend requests.</p><button class="primaryBtn" id="findFriendsBtn">Find Friends</button></div></section>
+    <section id="aiPage" class="pageView hidden"><div class="sectionCard"><h2>Friendsbook AI</h2><p>Your Gemini chat will live here.</p><div class="aiChatBox" id="aiMessages"><div class="aiBubble">Hello! How can I help?</div></div><div class="aiComposer"><input id="aiInput" placeholder="Ask Gemini..."><button id="aiSend" class="primarySmall">Send</button></div></div></section>
+    <section id="reelsPage" class="pageView hidden"><div class="sectionCard"><h2>Reels</h2><p>Short videos will appear here.</p></div></section>
+    <section id="messengerPage" class="pageView hidden"><div class="sectionCard"><h2>Messenger</h2><p>Your conversations will appear here.</p></div></section>
+    <section id="notificationPage" class="pageView hidden"><div class="sectionCard"><h2>Notifications</h2><p>Your activity notifications will appear here.</p></div></section>
+    <section id="settingsPage" class="pageView hidden"><div class="sectionCard"><h2>Settings</h2><label class="settingRow">🌙 Dark Mode <input id="darkToggle" type="checkbox"></label><button class="secondaryBtn" id="logoutFromSettings">Logout</button></div></section>
+    <section id="savedPage" class="pageView hidden"><div class="sectionCard"><h2>Saved Posts</h2><p>Your saved posts will appear here.</p></div></section>
+    <section id="marketplacePage" class="pageView hidden"><div class="sectionCard"><h2>Marketplace</h2><p>Marketplace will appear here.</p></div></section>
+    <section id="groupsPage" class="pageView hidden"><div class="sectionCard"><h2>Groups</h2><p>Your groups will appear here.</p></div></section>
+    <section id="pagesPage" class="pageView hidden"><div class="sectionCard"><h2>Pages</h2><p>Your pages will appear here.</p></div></section>
+    <section id="adminPage" class="pageView hidden"><div class="sectionCard"><h2>Admin Panel</h2><div class="adminGrid"><div><strong id="totalUsers">0</strong><span>Total Users</span></div><div><strong id="totalPosts">0</strong><span>Total Posts</span></div></div></div></section>
+  </main>
 
-<p>Friends System - Coming in Phase 4</p>
+  <nav id="bottomNav">
+    <button id="navHome" class="navItem active">🏠<span>Home</span></button>
+    <button id="navFriends" class="navItem">👥<span>Friends</span></button>
+    <button id="navAI" class="navItem">🤖<span>AI</span></button>
+    <button id="navReels" class="navItem">🎬<span>Reels</span></button>
+    <button id="navMenu" class="navItem">☰<span>Menu</span></button>
+  </nav>
 
-</section>
-
-<section id="createPage" class="page hidden">
-
-<h2>Create Post</h2>
-
-<p>Create Post - Coming in Phase 2</p>
-
-</section>
-
-<section id="reelsPage" class="page hidden">
-
-<h2>Reels</h2>
-
-<p>Reels - Coming in Phase 5</p>
-
-</section>
-
-<section id="messengerPage" class="page hidden">
-
-<h2>Messenger</h2>
-
-<p>Messenger - Coming in Phase 4</p>
-
-</section>
-
-<section id="notificationPage" class="page hidden">
-
-<h2>Notifications</h2>
-
-<p>Notifications - Coming in Phase 4</p>
-
-</section>
-
-<section id="aiPage" class="page hidden">
-
-<h2>Friendsbook AI</h2>
-
-<p>AI Assistant - Coming Soon</p>
-
-</section>
-
-<section id="settingsPage" class="page hidden">
-
-<h2>Settings</h2>
-
-<p>Settings - Coming in Phase 5</p>
-
-</section>
-
-<section id="marketplacePage" class="page hidden">
-
-<h2>Marketplace</h2>
-
-<p>Marketplace - Coming in Phase 5</p>
-
-</section>
-
-<section id="savedPage" class="page hidden">
-
-<h2>Saved Posts</h2>
-
-<p>Saved Posts - Coming in Phase 3</p>
-
-</section>
-
-<section id="groupsPage" class="page hidden">
-
-<h2>Groups</h2>
-
-<p>Groups - Future Update</p>
-
-</section>
-
-<section id="pagesPage" class="page hidden">
-
-<h2>Pages</h2>
-
-<p>Pages - Future Update</p>
-
-</section>
-<!-- ========================= -->
-<!-- Admin Panel -->
-<!-- ========================= -->
-
-<section id="adminPage" class="page hidden">
-
-<div class="pageHeader">
-
-<h2>Admin Panel</h2>
-
+  <aside id="sideMenu" class="hidden">
+    <div class="menuUser"><img id="menuProfileImage" src="default-profile.png" alt="Profile"><h3 id="menuUserName">Friendsbook User</h3></div>
+    <button id="menuProfileBtn">👤 Profile</button>
+    <button id="menuMessengerBtn">💬 Messenger</button>
+    <button id="menuNotificationBtn">🔔 Notifications</button>
+    <button id="menuSavedBtn">🔖 Saved</button>
+    <button id="menuMarketplaceBtn">🛒 Marketplace</button>
+    <button id="menuPagesBtn">📄 Pages</button>
+    <button id="menuGroupsBtn">👥 Groups</button>
+    <button id="menuSettingsBtn">⚙️ Settings</button>
+    <button id="menuAdminBtn" class="hidden">🛡️ Admin Panel</button>
+    <button id="logoutBtn">🚪 Logout</button>
+  </aside>
+  <div id="overlay" class="hidden"></div>
 </div>
 
-<div class="adminGrid">
-
-<div class="adminCard">
-
-<h3>Total Users</h3>
-
-<p id="totalUsers">0</p>
-
-</div>
-
-<div class="adminCard">
-
-<h3>Total Posts</h3>
-
-<p id="totalPosts">0</p>
-
-</div>
-
-<div class="adminCard">
-
-<h3>Reports</h3>
-
-<p id="totalReports">0</p>
-
-</div>
-
-<div class="adminCard">
-
-<h3>Premium Users</h3>
-
-<p id="premiumUsers">0</p>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- ========================= -->
-<!-- Global Loading -->
-<!-- ========================= -->
-
-<div id="globalLoading" class="hidden">
-
-<div class="loadingBox">
-
-<div class="loadingSpinner"></div>
-
-<p>
-
-Please Wait...
-
-</p>
-
-</div>
-
-</div>
-
-<!-- ========================= -->
-<!-- Global Message -->
-<!-- ========================= -->
-
-<div id="messageModal" class="hidden">
-
-<div class="messageBox">
-
-<h3 id="messageTitle">
-
-Friendsbook
-
-</h3>
-
-<p id="messageText">
-
-Message
-
-</p>
-
-<button id="messageOkBtn">
-
-OK
-
-</button>
-
-</div>
-
-</div>
-
-<!-- ========================= -->
-<!-- Image Preview -->
-
-<div id="imageViewer" class="hidden">
-
-<span id="closeImageViewer">
-
-✕
-
-</span>
-
-<img
-id="previewImage"
-src=""
-alt="Preview">
-
-</div>
-
-<!-- ========================= -->
-<!-- Video Preview -->
-
-<div id="videoViewer" class="hidden">
-
-<span id="closeVideoViewer">
-
-✕
-
-</span>
-
-<video
-id="previewVideo"
-controls>
-
-</video>
-
-</div>
-<!-- ========================= -->
-<!-- App End -->
-<!-- ========================= -->
-
-</div>
-<!-- End Home Page -->
-
-<!-- ========================= -->
-<!-- Overlay -->
-<!-- ========================= -->
-
-<div id="overlay" class="hidden"></div>
-
-<!-- ========================= -->
-<!-- Toast -->
-<!-- ========================= -->
-
-<div id="toast" class="hidden">
-
-<span id="toastText">
-
-Friendsbook
-
-</span>
-
-</div>
-
-<!-- ========================= -->
-<!-- Scripts -->
-<!-- ========================= -->
+<div id="editProfileModal" class="modal hidden"><div class="modalCard"><h3>Edit Profile</h3><input id="editName" placeholder="Name"><input id="editUsername" placeholder="Username"><textarea id="editBio" placeholder="Bio"></textarea><div class="modalActions"><button id="cancelEdit" class="secondaryBtn">Cancel</button><button id="saveEdit" class="primarySmall">Save</button></div></div></div>
+<div id="toast" class="toast hidden"></div>
 
 <script type="module" src="firebase.js"></script>
 <script type="module" src="script.js"></script>
-
 </body>
-                 </html>
+    </html>
