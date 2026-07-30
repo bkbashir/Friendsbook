@@ -803,7 +803,21 @@ ${post.comments.map(c=>`
 <span>${c.text}</span><br>
 
 <small>${c.time}</small>
+<div class="comment-reactions">
 
+<button onclick="reactComment(${post.id}, ${post.comments.indexOf(c)}, 'like')">
+👍 ${c.reactions?.like || 0}
+</button>
+
+<button onclick="reactComment(${post.id}, ${post.comments.indexOf(c)}, 'love')">
+❤️ ${c.reactions?.love || 0}
+</button>
+
+<button onclick="reactComment(${post.id}, ${post.comments.indexOf(c)}, 'haha')">
+😂 ${c.reactions?.haha || 0}
+</button>
+
+</div>
 <br>
 
 <button onclick="replyComment(${post.id}, ${post.comments.indexOf(c)})">
