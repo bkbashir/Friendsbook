@@ -688,7 +688,21 @@ $("searchBtn").click();
 // ======================================
 
 let posts = [];
+// Save / Load Posts
+function savePosts(){
+    localStorage.setItem("friendsbook_posts", JSON.stringify(posts));
+}
 
+function loadPosts(){
+    const saved = localStorage.getItem("friendsbook_posts");
+    if(saved){
+        try{
+            posts = JSON.parse(saved);
+        }catch(e){
+            console.error("Post load error:", e);
+        }
+    }
+         }
 // ======================
 // Create Post
 // ======================
@@ -718,9 +732,8 @@ function createPost(text,image=""){
     };
 
     posts.unshift(post);
-
-    renderFeed();
-
+savePosts();
+renderFeed();
 }
 const postBtn = $("postBtn");
 
@@ -907,7 +920,8 @@ function likePost(id){
     if(!post) return;
 
     post.likes++;
-
+    
+    savePosts();
     renderFeed();
 
 }
@@ -934,6 +948,7 @@ function commentPost(id){
 
     });
 
+    savePosts();
     renderFeed();
 
 }
@@ -1016,3 +1031,5 @@ window.likePost = likePost;
 window.commentPost = commentPost;
 window.sharePost = sharePost;
 window.reactComment = reactComment;
+loadPosts();
+renderFeed();
