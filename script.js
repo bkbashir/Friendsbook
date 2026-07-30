@@ -701,7 +701,7 @@ function createPost(text,image=""){
 
         uid:App.user.uid,
 
-        name:App.profile?.name || App.user.displayName,
+        name:App.profile?.name || "Friendsbook User",
 
         photo:App.profile?.photo || "default-profile.png",
 
@@ -722,7 +722,47 @@ function createPost(text,image=""){
     renderFeed();
 
 }
+const postBtn = $("postBtn");
 
+if(postBtn){
+
+    postBtn.addEventListener("click", function(){
+
+        const text = $("postText")?.value.trim() || "";
+        const imageInput = $("postImage");
+
+        if(!text && !imageInput?.files?.length){
+            alert("কিছু লিখো অথবা ছবি নির্বাচন করো");
+            return;
+        }
+
+        if(imageInput?.files?.length){
+
+            const file = imageInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(){
+
+                createPost(text, reader.result);
+
+                if($("postText")) $("postText").value = "";
+                imageInput.value = "";
+
+            };
+
+            reader.readAsDataURL(file);
+
+        }else{
+
+            createPost(text, "");
+
+            if($("postText")) $("postText").value = "";
+
+        }
+
+    });
+
+        }
 // ======================
 // Render Feed
 // ======================
