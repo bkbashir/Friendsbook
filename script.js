@@ -715,10 +715,8 @@ function createPost(text,image=""){
 
         uid:App.user.uid,
 
-        name:App.profile?.name || "Friendsbook User",
-
-        photo:App.profile?.photo || "default-profile.png",
-
+        name:App.profile?.name || App.user?.displayName || "User",
+photo:App.profile?.photo || App.user?.photoURL || "default-profile.png",
         text:text,
 
         image:image,
