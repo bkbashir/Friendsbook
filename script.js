@@ -790,6 +790,8 @@ function renderFeed(){
                 ↗ Share
 
                 </button>
+                </div>
+                
 ${post.comments.map(c=>`
 
 <div class="commentBox">
