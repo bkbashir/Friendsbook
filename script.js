@@ -874,30 +874,181 @@ ${post.comments.map(c=>`
 <br>
 
 <button onclick="replyComment(${post.id}, ${post.comments.indexOf(c)})">
-↩ Reply
-</button>
+// ======================
+// Render Feed
+// ======================
 
-${c.replies ? c.replies.map(r=>`
+function renderFeed(){
 
-<div class="replyBox">
+    const feed = $("feedContainer");
 
-<img src="${r.photo}" class="commentPhoto">
+    if(!feed) return;
 
-<div>
-<b>${r.name}</b><br>
-<span>${r.text}</span><br>
-<small>${r.time}</small>
-</div>
+    feed.innerHTML = "";
 
-</div>
+    posts.forEach(post => {
 
-`).join("") : ""}
+        const comments = Array.isArray(post.comments)
+            ? post.comments
+            : [];
 
-</div>
+        feed.innerHTML += `
 
-</div>
+        <div class="postCard">
 
-`).join("")}
+            <!-- Post Header -->
+            <div class="post-header">
+
+                <img
+                    class="post-profile"
+                    src="${post.photo || "default-profile.png"}"
+                    alt="Profile">
+
+                <div class="post-user">
+
+                    <h4>${post.name || "User"}</h4>
+
+                    <small>${post.time || "Just now"}</small>
+
+                </div>
+
+            </div>
+
+            <!-- Post Text -->
+            ${
+                post.text
+                ? `<p class="postText">${post.text}</p>`
+                : ""
+            }
+
+            <!-- Post Image -->
+            ${
+                post.image
+                ? `
+                <img
+                    src="${post.image}"
+                    class="postImage"
+                    onclick="openImage('${post.image}')">
+                `
+                : ""
+            }
+
+            <!-- Post Actions -->
+            <div class="postActions">
+
+                <button onclick="likePost(${post.id})">
+                    👍 Like
+                    (<span id="like-${post.id}">
+                        ${post.likes || 0}
+                    </span>)
+                </button>
+
+                <button onclick="commentPost(${post.id})">
+                    💬 Comment
+                </button>
+
+                <button onclick="sharePost(${post.id})">
+                    ↗ Share
+                </button>
+
+            </div>
+
+            <!-- Comments -->
+            <div class="commentList">
+
+                ${
+                    comments.map((c, index) => `
+
+                        <div class="commentBox">
+
+                            <img
+                                src="${c.photo || "default-profile.png"}"
+                                class="commentPhoto"
+                                alt="Profile">
+
+                            <div class="commentContent">
+
+                                <div class="commentBubble">
+
+                                    <b>${c.name || "User"}</b>
+
+                                    <div>
+                                        ${c.text || ""}
+                                    </div>
+
+                                </div>
+
+                                <small class="commentTime">
+                                    ${c.time || "Just now"}
+                                </small>
+
+                                <!-- Comment Reactions -->
+                                <div class="comment-reactions">
+
+                                    <button
+                                        onclick="reactComment(${post.id}, ${index}, 'like')">
+                                        👍 ${c.reactions?.like || 0}
+                                    </button>
+
+                                    <button
+                                        onclick="reactComment(${post.id}, ${index}, 'love')">
+                                        ❤️ ${c.reactions?.love || 0}
+                                    </button>
+
+                                    <button
+                                        onclick="reactComment(${post.id}, ${index}, 'haha')">
+                                        😂 ${c.reactions?.haha || 0}
+                                    </button>
+
+                                    <button
+                                        onclick="replyComment(${post.id}, ${index})">
+                                        ↩ Reply
+                                    </button>
+
+                                </div>
+
+                                <!-- Replies -->
+                                ${
+                                    Array.isArray(c.replies)
+                                    ? c.replies.map(r => `
+
+                                        <div class="replyBox">
+
+                                            <img
+                                                src="${r.photo || "default-profile.png"}"
+                                                class="commentPhoto">
+
+                                            <div class="replyContent">
+
+                                                <div class="commentBubble">
+
+                                                    <b>${r.name || "User"}</b>
+
+                                                    <div>
+                                                        ${r.text || ""}
+                                                    </div>
+
+                                                </div>
+
+                                                <small class="commentTime">
+                                                    ${r.time || "Just now"}
+                                                </small>
+
+                                            </div>
+
+                                        </div>
+
+                                    `).join("")
+                                    : ""
+                                }
+
+                            </div>
+
+                        </div>
+
+                    `).join("")
+                }
+
             </div>
 
         </div>
@@ -907,7 +1058,6 @@ ${c.replies ? c.replies.map(r=>`
     });
 
 }
-
 // ======================
 // Demo
 // ======================
