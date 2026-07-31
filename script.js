@@ -685,11 +685,3 @@ $("searchBtn").click();
 
 
 
-window.createPost=createPost;
-window.renderFeed=renderFeed;
-window.likePost = likePost;
-window.commentPost = commentPost;
-window.sharePost = sharePost;
-window.reactComment = reactComment;
-loadPosts();
-renderFeed();
