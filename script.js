@@ -18,7 +18,17 @@ import {
     setDoc,
     getDoc,
     createUserObject,
-    isAdmin
+    isAdmin,
+    collection,
+addDoc,
+getDocs,
+query,
+orderBy,
+serverTimestamp,
+updateDoc,
+increment,
+   arrayUnion,
+    deleteDoc
 } from "./firebase.js";
 
 // ======================
@@ -206,6 +216,8 @@ onAuthStateChanged(auth, async (user) => {
         App.admin = isAdmin(user.email);
 
         hide("authContainer");
+
+        loadPosts();
         show("homePage");
 
         try {
@@ -682,6 +694,210 @@ $("searchBtn").click();
 }
 
 });
+// ======================================
+// Part 7A
+// Firebase Posts
+// ======================================
 
+let posts = [];
 
+async function loadPosts(){
 
+    const q = query(
+        collection(db,"posts"),
+        orderBy("time","desc")
+    );
+
+    const snap = await getDocs(q);
+
+    posts = [];
+
+    snap.forEach(doc=>{
+
+        posts.push({
+            id:doc.id,
+            ...doc.data()
+        });
+
+    });
+
+    renderFeed();
+
+}
+async function createPost(text,image=""){
+
+    await addDoc(collection(db,"posts"),{
+
+        uid:App.user.uid,
+
+        name:App.profile.name,
+
+        photo:App.profile.photo || "default-profile.png",
+
+        text,
+
+        image,
+
+        likes:0,
+
+        comments:[],
+
+        time:serverTimestamp()
+
+    });
+
+    loadPosts();
+
+}
+function renderFeed(){
+
+    const feed = $("feedContainer");
+
+    if(!feed) return;
+
+    feed.innerHTML = "";
+
+    posts.forEach(post=>{
+
+        feed.innerHTML += `
+
+        <div class="postCard">
+
+            <div class="post-header">
+
+                <img class="post-profile"
+                     src="${post.photo || "default-profile.png"}">
+
+                <div class="post-user">
+
+                    <h4>${post.name}</h4>
+
+                    <small>Just now</small>
+
+                </div>
+
+            </div>
+
+            ${post.text ? `
+            <p class="postText">${post.text}</p>
+            ` : ""}
+
+            ${post.image ? `
+            <img
+            src="${post.image}"
+            class="postImage"
+            onclick="openImage('${post.image}')">
+            ` : ""}
+
+${post.uid===App.user.uid?`
+
+<button onclick="editPost('${post.id}')">
+✏️ Edit
+</button>
+
+<button onclick="deletePost('${post.id}')">
+🗑 Delete
+</button>
+
+`:""}
+            <div class="postActions">
+
+                <button onclick="likePost('${post.id}')">
+                    👍 ${post.likes || 0}
+                </button>
+
+                <button onclick="commentPost('${post.id}')">
+                    💬 ${(post.comments || []).length}
+                </button>
+
+async function deletePost(postId){
+
+    if(!confirm("Delete this post?")) return;
+
+    await deleteDoc(
+        doc(db,"posts",postId)
+    );
+
+    loadPosts();
+
+}
+
+window.deletePost=deletePost;
+async function editPost(postId){
+
+    const post=posts.find(p=>p.id===postId);
+
+    if(!post) return;
+
+    const text=prompt("Edit Post",post.text);
+
+    if(text===null) return;
+
+    await updateDoc(
+        doc(db,"posts",postId),
+        {
+            text:text
+        }
+    );
+
+    loadPosts();
+
+}
+
+window.editPost=editPost;
+                <button onclick="sharePost('${post.id}')">
+                    ↗ Share
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+// ======================
+// Like Post
+// ======================
+
+async function likePost(postId){
+
+    await updateDoc(
+        doc(db,"posts",postId),
+        {
+            likes: increment(1)
+        }
+    );
+
+    loadPosts();
+
+}
+
+window.likePost = likePost;
+
+async function commentPost(postId){
+
+    const text = prompt("Write a comment");
+
+    if(!text) return;
+
+    await updateDoc(
+        doc(db,"posts",postId),
+        {
+            comments: arrayUnion({
+                uid: App.user.uid,
+                name: App.profile.name,
+                photo: App.profile.photo || "default-profile.png",
+                text: text,
+                time: new Date().toLocaleString()
+            })
+        }
+    );
+
+    loadPosts();
+
+}
+
+window.commentPost = commentPost;
