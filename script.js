@@ -906,3 +906,64 @@ async function commentPost(postId){
 }
 
 window.commentPost = commentPost;
+function openPostMenu(postId){
+
+const post=posts.find(p=>p.id===postId);
+
+if(!post)return;
+
+if(post.uid===App.user.uid){
+
+const action=prompt(
+
+"1 = Edit\n2 = Delete\n3 = Copy Link"
+
+);
+
+if(action=="1"){
+
+editPost(postId);
+
+}
+
+else if(action=="2"){
+
+deletePost(postId);
+
+}
+
+else if(action=="3"){
+
+navigator.clipboard.writeText(location.href);
+
+alert("Link Copied");
+
+}
+
+}else{
+
+const action=prompt(
+
+"1 = Report\n2 = Copy Link"
+
+);
+
+if(action=="1"){
+
+alert("Reported");
+
+}
+
+else if(action=="2"){
+
+navigator.clipboard.writeText(location.href);
+
+alert("Link Copied");
+
+}
+
+}
+
+}
+
+window.openPostMenu=openPostMenu;
