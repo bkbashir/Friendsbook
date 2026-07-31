@@ -119,3 +119,24 @@ body.dark{--bg:#11131a;--card:#1b1d25;--text:#f4f4f5;--muted:#a0a2aa;--line:#2b2
     width:30px;
     height:30px;
     }
+.post-header{
+display:flex;
+align-items:center;
+}
+
+.post-user{
+flex:1;
+margin-left:10px;
+}
+
+.postMenuBtn{
+
+background:none;
+
+font-size:28px;
+
+padding:5px 10px;
+
+color:#666;
+
+    }
