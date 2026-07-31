@@ -765,18 +765,23 @@ function renderFeed(){
 
             <div class="post-header">
 
-                <img class="post-profile"
-                     src="${post.photo || "default-profile.png"}">
+    <img class="post-profile"
+         src="${post.photo || "default-profile.png"}">
 
-                <div class="post-user">
+    <div class="post-user">
 
-                    <h4>${post.name}</h4>
+        <h4>${post.name}</h4>
 
-                    <small>Just now</small>
+        <small>Just now</small>
 
-                </div>
+    </div>
 
-            </div>
+    <button class="postMenuBtn"
+            onclick="openPostMenu('${post.id}')">
+        ⋮
+    </button>
+
+</div>
 
             ${post.text ? `
             <p class="postText">${post.text}</p>
