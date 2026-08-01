@@ -37,7 +37,9 @@ import {
     orderBy,
     limit,
     onSnapshot,
-    serverTimestamp
+    serverTimestamp,
+    increment,
+arrayUnion,
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
 // Storage
