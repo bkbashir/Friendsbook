@@ -749,6 +749,21 @@ async function createPost(text,image=""){
     loadPosts();
 
 }
+$("postBtn")?.addEventListener("click", async () => {
+
+    const text = $("postText").value.trim();
+
+    if(!text){
+        alert("Write something");
+        return;
+    }
+
+    await createPost(text);
+
+    $("postText").value="";
+
+});
+
 function renderFeed(){
 
     const feed = $("feedContainer");
