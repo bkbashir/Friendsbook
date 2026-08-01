@@ -315,13 +315,13 @@ $("logoutBtn")?.addEventListener("click", async () => {
 
 });
 
+
 // ======================================
 // Part 4
-// Navigation System
+// COMPLETE NAVIGATION SYSTEM
 // ======================================
 
-const pages = [
-
+const pageViews = [
     "homeContent",
     "profilePage",
     "friendsPage",
@@ -330,36 +330,55 @@ const pages = [
     "messengerPage",
     "notificationPage",
     "settingsPage",
-    "marketplacePage",
     "savedPage",
+    "marketplacePage",
     "groupsPage",
     "pagesPage",
     "adminPage"
-
 ];
 
-function openPage(page){
+function openPage(pageId){
 
     // সব page hide
-    pages.forEach(id => {
-
+    pageViews.forEach(id => {
         hide(id);
-
     });
 
-    // যেটা চাই সেটা show
-    show(page);
+    // selected page show
+    show(pageId);
 
-    // Menu বন্ধ
+    // drawer বন্ধ
     hide("sideMenu");
     hide("overlay");
 
+    // bottom nav active state
+    document
+        .querySelectorAll(".navItem")
+        .forEach(btn => {
+            btn.classList.remove("active");
+        });
+
+    if(pageId === "homeContent"){
+        $("navHome")?.classList.add("active");
+    }
+
+    if(pageId === "friendsPage"){
+        $("navFriends")?.classList.add("active");
+    }
+
+    if(pageId === "aiPage"){
+        $("navAI")?.classList.add("active");
+    }
+
+    if(pageId === "reelsPage"){
+        $("navReels")?.classList.add("active");
+    }
 }
 
 
-// ======================
+// ======================================
 // HOME
-// ======================
+// ======================================
 
 $("navHome")?.addEventListener("click", () => {
 
@@ -368,9 +387,9 @@ $("navHome")?.addEventListener("click", () => {
 });
 
 
-// ======================
+// ======================================
 // FRIENDS
-// ======================
+// ======================================
 
 $("navFriends")?.addEventListener("click", () => {
 
@@ -379,9 +398,9 @@ $("navFriends")?.addEventListener("click", () => {
 });
 
 
-// ======================
+// ======================================
 // AI
-// ======================
+// ======================================
 
 $("navAI")?.addEventListener("click", () => {
 
@@ -390,9 +409,9 @@ $("navAI")?.addEventListener("click", () => {
 });
 
 
-// ======================
+// ======================================
 // REELS
-// ======================
+// ======================================
 
 $("navReels")?.addEventListener("click", () => {
 
@@ -401,43 +420,9 @@ $("navReels")?.addEventListener("click", () => {
 });
 
 
-// ======================
-// MESSENGER
-// ======================
-
-$("messengerBtn")?.addEventListener("click", () => {
-
-    openPage("messengerPage");
-
-});
-
-$("menuMessengerBtn")?.addEventListener("click", () => {
-
-    openPage("messengerPage");
-
-});
-
-
-// ======================
-// NOTIFICATIONS
-// ======================
-
-$("notificationBtn")?.addEventListener("click", () => {
-
-    openPage("notificationPage");
-
-});
-
-$("menuNotificationBtn")?.addEventListener("click", () => {
-
-    openPage("notificationPage");
-
-});
-
-
-// ======================
+// ======================================
 // PROFILE
-// ======================
+// ======================================
 
 $("headerProfile")?.addEventListener("click", () => {
 
@@ -452,9 +437,117 @@ $("menuProfileBtn")?.addEventListener("click", () => {
 });
 
 
-// ======================
-// MENU
-// ======================
+// ======================================
+// MESSENGER
+// ======================================
+
+$("messengerBtn")?.addEventListener("click", () => {
+
+    openPage("messengerPage");
+
+});
+
+$("menuMessengerBtn")?.addEventListener("click", () => {
+
+    openPage("messengerPage");
+
+});
+
+
+// ======================================
+// NOTIFICATIONS
+// ======================================
+
+$("notificationBtn")?.addEventListener("click", () => {
+
+    openPage("notificationPage");
+
+});
+
+$("menuNotificationBtn")?.addEventListener("click", () => {
+
+    openPage("notificationPage");
+
+});
+
+
+// ======================================
+// SAVED
+// ======================================
+
+$("menuSavedBtn")?.addEventListener("click", () => {
+
+    openPage("savedPage");
+
+});
+
+
+// ======================================
+// MARKETPLACE
+// ======================================
+
+$("menuMarketplaceBtn")?.addEventListener("click", () => {
+
+    openPage("marketplacePage");
+
+});
+
+
+// ======================================
+// PAGES
+// ======================================
+
+$("menuPagesBtn")?.addEventListener("click", () => {
+
+    openPage("pagesPage");
+
+});
+
+
+// ======================================
+// GROUPS
+// ======================================
+
+$("menuGroupsBtn")?.addEventListener("click", () => {
+
+    openPage("groupsPage");
+
+});
+
+
+// ======================================
+// SETTINGS
+// ======================================
+
+$("menuSettingsBtn")?.addEventListener("click", () => {
+
+    openPage("settingsPage");
+
+});
+
+
+// ======================================
+// ADMIN PANEL
+// ======================================
+
+$("menuAdminBtn")?.addEventListener("click", () => {
+
+    if(!App.admin){
+
+        alert("Admin access required.");
+
+        return;
+
+    }
+
+    openPage("adminPage");
+
+});
+
+
+// ======================================
+// MENU DRAWER
+// ======================================
 
 $("navMenu")?.addEventListener("click", () => {
 
@@ -464,9 +557,9 @@ $("navMenu")?.addEventListener("click", () => {
 });
 
 
-// ======================
+// ======================================
 // OVERLAY
-// ======================
+// ======================================
 
 $("overlay")?.addEventListener("click", () => {
 
@@ -476,68 +569,18 @@ $("overlay")?.addEventListener("click", () => {
 });
 
 
-// ======================
-// SAVED
-// ======================
-
-$("menuSavedBtn")?.addEventListener("click", () => {
-
-    openPage("savedPage");
-
-});
-
-
-// ======================
-// MARKETPLACE
-// ======================
-
-$("menuMarketplaceBtn")?.addEventListener("click", () => {
-
-    openPage("marketplacePage");
-
-});
-
-
-// ======================
-// PAGES
-// ======================
-
-$("menuPagesBtn")?.addEventListener("click", () => {
-
-    openPage("pagesPage");
-
-});
-
-
-// ======================
-// GROUPS
-// ======================
-
-$("menuGroupsBtn")?.addEventListener("click", () => {
-
-    openPage("groupsPage");
-
-});
-
-
-// ======================
-// SETTINGS
-// ======================
-
-$("menuSettingsBtn")?.addEventListener("click", () => {
-
-    openPage("settingsPage");
-
-});
-
-
-// ======================
-// ADMIN
-// ======================
+// ======================================
+// ADMIN BUTTON VISIBILITY
+// ======================================
 
 if(App.admin){
 
-    show("adminPage");
+    show("menuAdminBtn");
+
+}
+else{
+
+    hide("menuAdminBtn");
 
 }
 // ======================================
@@ -546,7 +589,7 @@ if(App.admin){
 
 $("editProfileBtn")?.addEventListener("click", () => {
 
-    if(!App.profile) {
+    if (!App.profile) {
         alert("Profile loading...");
         return;
     }
@@ -561,13 +604,12 @@ $("editProfileBtn")?.addEventListener("click", () => {
         App.profile.bio || "";
 
     show("editProfileModal");
-
 });
 
 
-// ======================
+// ======================================
 // CANCEL EDIT
-// ======================
+// ======================================
 
 $("cancelEdit")?.addEventListener("click", () => {
 
@@ -576,14 +618,14 @@ $("cancelEdit")?.addEventListener("click", () => {
 });
 
 
-// ======================
+// ======================================
 // SAVE PROFILE
-// ======================
+// ======================================
 
 $("saveEdit")?.addEventListener("click", async () => {
 
-    if(!App.user) {
-        alert("Please login first");
+    if (!App.user) {
+        alert("Please login first.");
         return;
     }
 
@@ -596,19 +638,12 @@ $("saveEdit")?.addEventListener("click", async () => {
     const bio =
         $("editBio").value.trim();
 
-
-    if(!name) {
-
-        alert("Name cannot be empty");
-
+    if (!name) {
+        alert("Name cannot be empty.");
         return;
-
     }
 
-
     try {
-
-        // Firebase Users document update
 
         await updateDoc(
             doc(db, "users", App.user.uid),
@@ -619,9 +654,6 @@ $("saveEdit")?.addEventListener("click", async () => {
             }
         );
 
-
-        // Firebase Authentication display name
-
         await updateProfile(
             App.user,
             {
@@ -629,56 +661,36 @@ $("saveEdit")?.addEventListener("click", async () => {
             }
         );
 
-
-        // Update local app data
-
         App.profile = {
-
             ...App.profile,
-
             name: name,
             username: username,
             bio: bio
-
         };
 
+        $("profileName").textContent =
+            name;
 
-        // Update Profile Page
+        $("profileUsername").textContent =
+            "@" + (username || "username");
 
-        if($("profileName"))
-            $("profileName").textContent =
-                name;
+        $("profileBio").textContent =
+            bio || "Add your bio...";
 
-
-        if($("profileUsername"))
-            $("profileUsername").textContent =
-                "@" + (username || App.user.uid.substring(0,8));
-
-
-        if($("profileBio"))
-            $("profileBio").textContent =
-                bio;
-
-
-        // Update Menu Name
-
-        if($("menuUserName"))
-            $("menuUserName").textContent =
-                name;
-
+        $("menuUserName").textContent =
+            name;
 
         hide("editProfileModal");
 
         alert("Profile updated successfully!");
 
-    }
-    catch(e) {
+    } catch (error) {
 
-        console.error(e);
+        console.error(error);
 
         alert(
             "Profile update failed: " +
-            e.message
+            error.message
         );
 
     }
