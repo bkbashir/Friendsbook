@@ -730,9 +730,9 @@ async function createPost(text,image=""){
 
         uid:App.user.uid,
 
-        name:App.profile.name,
+        name: App.profile?.name || App.user.displayName || "User",
 
-        photo:App.profile.photo || "default-profile.png",
+photo: App.profile?.photo || "default-profile.png",
 
         text,
 
