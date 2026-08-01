@@ -794,20 +794,12 @@ function renderFeed(){
             onclick="openImage('${post.image}')">
             ` : ""}
 
-${post.uid===App.user.uid?`
 <div class="postActions">
 
-${post.uid===App.user.uid?`
-
-<button onclick="editPost('${post.id}')">
-✏️ Edit
-</button>
-
-<button onclick="deletePost('${post.id}')">
-🗑 Delete
-</button>
-
-`:""}
+${post.uid===App.user.uid ? `
+<button onclick="editPost('${post.id}')">✏️ Edit</button>
+<button onclick="deletePost('${post.id}')">🗑 Delete</button>
+` : ""}
 
 <button onclick="likePost('${post.id}')">
 👍 ${post.likes || 0}
@@ -823,9 +815,9 @@ ${post.uid===App.user.uid?`
 
 </div>
 
-        </div>
+</div>
 
-        `;
+`;
 
     });
 
