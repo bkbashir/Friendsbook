@@ -725,7 +725,7 @@ async function loadPosts(){
 
 }
 async function createPost(text,image=""){
-console.log(App.profile);
+
     await addDoc(collection(db,"posts"),{
 
         uid:App.user.uid,
@@ -816,7 +816,15 @@ ${post.uid===App.user.uid ? `
 <button onclick="deletePost('${post.id}')">🗑 Delete</button>
 ` : ""}
 
-<button onclick="likePost('${post.id}')">
+<button
+    class="likeBtn"
+    data-post-id="${post.id}"
+    onclick="handleLikeClick('${post.id}')"
+    onpointerdown="startReaction(event,'${post.id}')"
+    onpointerup="endReaction()"
+    onpointerleave="endReaction()"
+    onpointercancel="endReaction()"
+>
 👍 ${post.likes || 0}
 </button>
 
@@ -837,6 +845,130 @@ ${post.uid===App.user.uid ? `
     });
 
 }
+// ======================
+// Long Press Reaction
+// ======================
+
+let reactionTimer = null;
+let reactionOpened = false;
+
+function startReaction(event, postId){
+
+    reactionOpened = false;
+
+    reactionTimer = setTimeout(() => {
+
+        reactionOpened = true;
+
+        showReactionMenu(event, postId);
+
+    }, 550);
+
+}
+
+function endReaction(){
+
+    if(reactionTimer){
+
+        clearTimeout(reactionTimer);
+
+        reactionTimer = null;
+
+    }
+
+}
+
+function handleLikeClick(postId){
+
+    if(reactionOpened){
+
+        reactionOpened = false;
+
+        return;
+
+    }
+
+    likePost(postId);
+
+}
+
+function showReactionMenu(event, postId){
+
+    closeReactionMenu();
+
+    const menu = document.createElement("div");
+
+    menu.id = "reactionMenu";
+
+    menu.innerHTML = `
+
+        <button onclick="sendReaction('${postId}','like')">👍</button>
+
+        <button onclick="sendReaction('${postId}','love')">❤️</button>
+
+        <button onclick="sendReaction('${postId}','haha')">😂</button>
+
+        <button onclick="sendReaction('${postId}','wow')">😮</button>
+
+        <button onclick="sendReaction('${postId}','sad')">😢</button>
+
+        <button onclick="sendReaction('${postId}','angry')">😡</button>
+
+    `;
+
+    document.body.appendChild(menu);
+
+    const rect = event.currentTarget.getBoundingClientRect();
+
+    menu.style.left =
+        Math.max(10, rect.left - 20) + "px";
+
+    menu.style.top =
+        Math.max(10, rect.top - 65) + "px";
+
+}
+
+function closeReactionMenu(){
+
+    const old = $("reactionMenu");
+
+    if(old) old.remove();
+
+}
+
+async function sendReaction(postId,type){
+
+    closeReactionMenu();
+
+    try{
+
+        await updateDoc(
+
+            doc(db,"posts",postId),
+
+            {
+                [`reactions.${type}`]: increment(1)
+            }
+
+        );
+
+        await loadPosts();
+
+    }catch(e){
+
+        console.error(e);
+
+        alert(e.message);
+
+    }
+
+}
+
+window.startReaction = startReaction;
+window.endReaction = endReaction;
+window.handleLikeClick = handleLikeClick;
+window.sendReaction = sendReaction;
+
 async function deletePost(postId){
 if(!confirm("Delete this post?")) return;
 
