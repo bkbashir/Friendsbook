@@ -541,6 +541,150 @@ if(App.admin){
 
 }
 // ======================================
+// PROFILE EDIT SYSTEM
+// ======================================
+
+$("editProfileBtn")?.addEventListener("click", () => {
+
+    if(!App.profile) {
+        alert("Profile loading...");
+        return;
+    }
+
+    $("editName").value =
+        App.profile.name || "";
+
+    $("editUsername").value =
+        App.profile.username || "";
+
+    $("editBio").value =
+        App.profile.bio || "";
+
+    show("editProfileModal");
+
+});
+
+
+// ======================
+// CANCEL EDIT
+// ======================
+
+$("cancelEdit")?.addEventListener("click", () => {
+
+    hide("editProfileModal");
+
+});
+
+
+// ======================
+// SAVE PROFILE
+// ======================
+
+$("saveEdit")?.addEventListener("click", async () => {
+
+    if(!App.user) {
+        alert("Please login first");
+        return;
+    }
+
+    const name =
+        $("editName").value.trim();
+
+    const username =
+        $("editUsername").value.trim();
+
+    const bio =
+        $("editBio").value.trim();
+
+
+    if(!name) {
+
+        alert("Name cannot be empty");
+
+        return;
+
+    }
+
+
+    try {
+
+        // Firebase Users document update
+
+        await updateDoc(
+            doc(db, "users", App.user.uid),
+            {
+                name: name,
+                username: username,
+                bio: bio
+            }
+        );
+
+
+        // Firebase Authentication display name
+
+        await updateProfile(
+            App.user,
+            {
+                displayName: name
+            }
+        );
+
+
+        // Update local app data
+
+        App.profile = {
+
+            ...App.profile,
+
+            name: name,
+            username: username,
+            bio: bio
+
+        };
+
+
+        // Update Profile Page
+
+        if($("profileName"))
+            $("profileName").textContent =
+                name;
+
+
+        if($("profileUsername"))
+            $("profileUsername").textContent =
+                "@" + (username || App.user.uid.substring(0,8));
+
+
+        if($("profileBio"))
+            $("profileBio").textContent =
+                bio;
+
+
+        // Update Menu Name
+
+        if($("menuUserName"))
+            $("menuUserName").textContent =
+                name;
+
+
+        hide("editProfileModal");
+
+        alert("Profile updated successfully!");
+
+    }
+    catch(e) {
+
+        console.error(e);
+
+        alert(
+            "Profile update failed: " +
+            e.message
+        );
+
+    }
+
+});
+// ======================================
 // Part 5
 // UI System
 // ======================================
