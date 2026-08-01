@@ -815,9 +815,21 @@ ${post.uid===App.user.uid?`
                     💬 ${(post.comments || []).length}
                 </button>
 
-async function deletePost(postId){
+                <button onclick="sharePost('${post.id}')">
+                    ↗ Share
+                </button>
 
-    if(!confirm("Delete this post?")) return;
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+async function deletePost(postId){
+if(!confirm("Delete this post?")) return;
 
     await deleteDoc(
         doc(db,"posts",postId)
@@ -850,19 +862,6 @@ async function editPost(postId){
 }
 
 window.editPost=editPost;
-                <button onclick="sharePost('${post.id}')">
-                    ↗ Share
-                </button>
-
-            </div>
-
-        </div>
-
-        `;
-
-    });
-
-}
 // ======================
 // Like Post
 // ======================
