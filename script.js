@@ -725,7 +725,7 @@ async function loadPosts(){
 
 }
 async function createPost(text,image=""){
-
+console.log(App.profile);
     await addDoc(collection(db,"posts"),{
 
         uid:App.user.uid,
