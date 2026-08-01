@@ -179,6 +179,7 @@ export {
 
     createUserObject,
 
-    isAdmin
-
+    isAdmin,
+increment,
+arrayUnion,
 };
