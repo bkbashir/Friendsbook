@@ -1341,27 +1341,24 @@ async function likePost(postId){
 // LONG PRESS REACTION
 // ======================
 
-function startReaction(
-    event,
-    postId
-){
+function startReaction(event, postId){
 
     reactionOpened = false;
 
-    reactionTimer =
-        setTimeout(
-            () => {
+    const button = event.currentTarget;
 
-                reactionOpened = true;
+    const rect = button.getBoundingClientRect();
 
-                showReactionMenu(
-                    event,
-                    postId
-                );
+    reactionTimer = setTimeout(() => {
 
-            },
-            550
+        reactionOpened = true;
+
+        showReactionMenu(
+            rect,
+            postId
         );
+
+    }, 550);
 
 }
 
@@ -1370,9 +1367,7 @@ function endReaction(){
 
     if(reactionTimer){
 
-        clearTimeout(
-            reactionTimer
-        );
+        clearTimeout(reactionTimer);
 
         reactionTimer = null;
 
@@ -1401,7 +1396,7 @@ function handleLikeClick(postId){
 // ======================
 
 function showReactionMenu(
-    event,
+    rect,
     postId
 ){
 
@@ -1472,10 +1467,6 @@ function showReactionMenu(
     `;
 
     document.body.appendChild(menu);
-
-    const rect =
-        event.currentTarget
-        .getBoundingClientRect();
 
     menu.style.left =
         Math.max(
