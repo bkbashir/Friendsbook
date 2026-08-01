@@ -845,38 +845,692 @@ ${post.uid===App.user.uid ? `
     });
 
 }
-// ======================
-// Long Press Reaction
-// ======================
+
+// ======================================
+// PART 7 - FRIENDSBOOK POST SYSTEM
+// ======================================
+
+let posts = [];
 
 let reactionTimer = null;
 let reactionOpened = false;
 
-function startReaction(event, postId){
+
+// ======================
+// LOAD POSTS
+// ======================
+
+async function loadPosts(){
+
+    try{
+
+        const q = query(
+            collection(db,"posts"),
+            orderBy("time","desc")
+        );
+
+        const snap = await getDocs(q);
+
+        posts = [];
+
+        snap.forEach(item => {
+
+            posts.push({
+                id: item.id,
+                ...item.data()
+            });
+
+        });
+
+        renderFeed();
+
+    }catch(e){
+
+        console.error(e);
+        alert(e.message);
+
+    }
+
+}
+
+
+// ======================
+// CREATE POST
+// ======================
+
+async function createPost(text,image=""){
+
+    try{
+
+        await addDoc(
+            collection(db,"posts"),
+            {
+
+                uid: App.user.uid,
+
+                name:
+                    App.profile?.name ||
+                    App.user.displayName ||
+                    "User",
+
+                photo:
+                    App.profile?.photo ||
+                    "default-profile.png",
+
+                text: text,
+
+                image: image,
+
+                likes: 0,
+
+                reactions: {
+                    like: 0,
+                    love: 0,
+                    haha: 0,
+                    wow: 0,
+                    sad: 0,
+                    angry: 0
+                },
+
+                comments: [],
+
+                time: serverTimestamp()
+
+            }
+        );
+
+        await loadPosts();
+
+    }catch(e){
+
+        console.error(e);
+        alert(e.message);
+
+    }
+
+}
+
+
+// ======================
+// POST BUTTON
+// ======================
+
+$("postBtn")?.addEventListener(
+    "click",
+    async () => {
+
+        const input = $("postText");
+
+        const text =
+            input.value.trim();
+
+        if(!text){
+
+            alert("Write something");
+
+            return;
+
+        }
+
+        await createPost(text);
+
+        input.value = "";
+
+    }
+);
+
+
+// ======================
+// RENDER FEED
+// ======================
+
+function renderFeed(){
+
+    const feed =
+        $("feedContainer");
+
+    if(!feed) return;
+
+    feed.innerHTML = "";
+
+    posts.forEach(post => {
+
+        const comments =
+            post.comments || [];
+
+        const reactions =
+            post.reactions || {};
+
+        feed.innerHTML += `
+
+        <div class="postCard"
+             id="post-${post.id}">
+
+            <!-- POST HEADER -->
+
+            <div class="post-header">
+
+                <img
+                    class="post-profile"
+                    src="${post.photo || "default-profile.png"}"
+                >
+
+                <div class="post-user">
+
+                    <h4>
+                        ${post.name || "User"}
+                    </h4>
+
+                    <small>
+                        Just now
+                    </small>
+
+                </div>
+
+                <button
+                    class="postMenuBtn"
+                    onclick="openPostMenu('${post.id}')"
+                >
+                    ⋮
+                </button>
+
+            </div>
+
+
+            <!-- POST TEXT -->
+
+            ${
+                post.text
+                ?
+                `<p class="postText">
+                    ${escapeHTML(post.text)}
+                </p>`
+                :
+                ""
+            }
+
+
+            <!-- POST IMAGE -->
+
+            ${
+                post.image
+                ?
+                `
+                <img
+                    src="${post.image}"
+                    class="postImage"
+                    onclick="openImage('${post.image}')"
+                >
+                `
+                :
+                ""
+            }
+
+
+            <!-- POST ACTIONS -->
+
+            <div class="postActions">
+
+                <button
+                    class="likeBtn"
+                    onclick="handleLikeClick('${post.id}')"
+                    onpointerdown="startReaction(event,'${post.id}')"
+                    onpointerup="endReaction()"
+                    onpointerleave="endReaction()"
+                    onpointercancel="endReaction()"
+                >
+                    👍 ${post.likes || 0}
+                </button>
+
+
+                <button
+                    onclick="commentPost('${post.id}')"
+                >
+                    💬 ${comments.length}
+                </button>
+
+
+                <button
+                    onclick="sharePost('${post.id}')"
+                >
+                    ↗ Share
+                </button>
+
+            </div>
+
+
+            <!-- REACTION COUNTS -->
+
+            <div class="reactionCounts">
+
+                ${
+                    reactions.like
+                    ?
+                    `👍 ${reactions.like}`
+                    :
+                    ""
+                }
+
+                ${
+                    reactions.love
+                    ?
+                    ` ❤️ ${reactions.love}`
+                    :
+                    ""
+                }
+
+                ${
+                    reactions.haha
+                    ?
+                    ` 😂 ${reactions.haha}`
+                    :
+                    ""
+                }
+
+                ${
+                    reactions.wow
+                    ?
+                    ` 😮 ${reactions.wow}`
+                    :
+                    ""
+                }
+
+                ${
+                    reactions.sad
+                    ?
+                    ` 😢 ${reactions.sad}`
+                    :
+                    ""
+                }
+
+                ${
+                    reactions.angry
+                    ?
+                    ` 😡 ${reactions.angry}`
+                    :
+                    ""
+                }
+
+            </div>
+
+
+            <!-- COMMENTS -->
+
+            <div class="commentList">
+
+                ${
+                    comments.map(
+                        (comment,index) =>
+
+                        renderComment(
+                            post.id,
+                            comment,
+                            index
+                        )
+
+                    ).join("")
+                }
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+
+// ======================
+// COMMENT HTML
+// ======================
+
+function renderComment(
+    postId,
+    comment,
+    commentIndex
+){
+
+    const reactions =
+        comment.reactions || {};
+
+    const replies =
+        comment.replies || [];
+
+    return `
+
+    <div class="commentBox">
+
+        <img
+            src="${comment.photo || "default-profile.png"}"
+            class="commentPhoto"
+        >
+
+        <div class="commentContent">
+
+            <b>
+                ${escapeHTML(comment.name || "User")}
+            </b>
+
+            <div>
+                ${escapeHTML(comment.text || "")}
+            </div>
+
+            <small>
+                ${comment.time || "Just now"}
+            </small>
+
+
+            <!-- COMMENT REACTIONS -->
+
+            <div class="commentActions">
+
+                <button
+                    onclick="reactComment(
+                        '${postId}',
+                        ${commentIndex},
+                        'like'
+                    )"
+                >
+                    👍 ${reactions.like || 0}
+                </button>
+
+
+                <button
+                    onclick="reactComment(
+                        '${postId}',
+                        ${commentIndex},
+                        'love'
+                    )"
+                >
+                    ❤️ ${reactions.love || 0}
+                </button>
+
+
+                <button
+                    onclick="reactComment(
+                        '${postId}',
+                        ${commentIndex},
+                        'haha'
+                    )"
+                >
+                    😂 ${reactions.haha || 0}
+                </button>
+
+
+                <button
+                    onclick="reactComment(
+                        '${postId}',
+                        ${commentIndex},
+                        'wow'
+                    )"
+                >
+                    😮 ${reactions.wow || 0}
+                </button>
+
+
+                <button
+                    onclick="reactComment(
+                        '${postId}',
+                        ${commentIndex},
+                        'sad'
+                    )"
+                >
+                    😢 ${reactions.sad || 0}
+                </button>
+
+
+                <button
+                    onclick="reactComment(
+                        '${postId}',
+                        ${commentIndex},
+                        'angry'
+                    )"
+                >
+                    😡 ${reactions.angry || 0}
+                </button>
+
+
+                <button
+                    onclick="replyComment(
+                        '${postId}',
+                        ${commentIndex}
+                    )"
+                >
+                    ↩ Reply
+                </button>
+
+            </div>
+
+
+            <!-- REPLIES -->
+
+            ${
+                replies.length
+                ?
+
+                replies.map(
+                    (reply,replyIndex) =>
+
+                    renderReply(
+                        postId,
+                        commentIndex,
+                        reply,
+                        replyIndex
+                    )
+
+                ).join("")
+
+                :
+
+                ""
+            }
+
+        </div>
+
+    </div>
+
+    `;
+
+}
+
+
+// ======================
+// REPLY HTML
+// ======================
+
+function renderReply(
+    postId,
+    commentIndex,
+    reply,
+    replyIndex
+){
+
+    const reactions =
+        reply.reactions || {};
+
+    return `
+
+    <div class="replyBox">
+
+        <img
+            src="${reply.photo || "default-profile.png"}"
+            class="commentPhoto"
+        >
+
+        <div>
+
+            <b>
+                ${escapeHTML(reply.name || "User")}
+            </b>
+
+            <div>
+                ${escapeHTML(reply.text || "")}
+            </div>
+
+            <small>
+                ${reply.time || "Just now"}
+            </small>
+
+
+            <div class="commentActions">
+
+                <button
+                    onclick="reactReply(
+                        '${postId}',
+                        ${commentIndex},
+                        ${replyIndex},
+                        'like'
+                    )"
+                >
+                    👍 ${reactions.like || 0}
+                </button>
+
+
+                <button
+                    onclick="reactReply(
+                        '${postId}',
+                        ${commentIndex},
+                        ${replyIndex},
+                        'love'
+                    )"
+                >
+                    ❤️ ${reactions.love || 0}
+                </button>
+
+
+                <button
+                    onclick="reactReply(
+                        '${postId}',
+                        ${commentIndex},
+                        ${replyIndex},
+                        'haha'
+                    )"
+                >
+                    😂 ${reactions.haha || 0}
+                </button>
+
+
+                <button
+                    onclick="reactReply(
+                        '${postId}',
+                        ${commentIndex},
+                        ${replyIndex},
+                        'wow'
+                    )"
+                >
+                    😮 ${reactions.wow || 0}
+                </button>
+
+
+                <button
+                    onclick="reactReply(
+                        '${postId}',
+                        ${commentIndex},
+                        ${replyIndex},
+                        'sad'
+                    )"
+                >
+                    😢 ${reactions.sad || 0}
+                </button>
+
+
+                <button
+                    onclick="reactReply(
+                        '${postId}',
+                        ${commentIndex},
+                        ${replyIndex},
+                        'angry'
+                    )"
+                >
+                    😡 ${reactions.angry || 0}
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    `;
+
+}
+
+
+// ======================
+// LIKE
+// ======================
+
+async function likePost(postId){
+
+    try{
+
+        await updateDoc(
+            doc(db,"posts",postId),
+            {
+                likes: increment(1),
+
+                "reactions.like":
+                    increment(1)
+            }
+        );
+
+        await loadPosts();
+
+    }catch(e){
+
+        console.error(e);
+        alert(e.message);
+
+    }
+
+}
+
+
+// ======================
+// LONG PRESS REACTION
+// ======================
+
+function startReaction(
+    event,
+    postId
+){
 
     reactionOpened = false;
 
-    reactionTimer = setTimeout(() => {
+    reactionTimer =
+        setTimeout(
+            () => {
 
-        reactionOpened = true;
+                reactionOpened = true;
 
-        showReactionMenu(event, postId);
+                showReactionMenu(
+                    event,
+                    postId
+                );
 
-    }, 550);
+            },
+            550
+        );
 
 }
+
 
 function endReaction(){
 
     if(reactionTimer){
 
-        clearTimeout(reactionTimer);
+        clearTimeout(
+            reactionTimer
+        );
 
         reactionTimer = null;
 
     }
 
 }
+
 
 function handleLikeClick(postId){
 
@@ -892,64 +1546,136 @@ function handleLikeClick(postId){
 
 }
 
-function showReactionMenu(event, postId){
+
+// ======================
+// REACTION MENU
+// ======================
+
+function showReactionMenu(
+    event,
+    postId
+){
 
     closeReactionMenu();
 
-    const menu = document.createElement("div");
+    const menu =
+        document.createElement("div");
 
-    menu.id = "reactionMenu";
+    menu.id =
+        "reactionMenu";
 
     menu.innerHTML = `
 
-        <button onclick="sendReaction('${postId}','like')">👍</button>
+        <button
+            onclick="sendReaction(
+                '${postId}',
+                'like'
+            )"
+        >
+            👍
+        </button>
 
-        <button onclick="sendReaction('${postId}','love')">❤️</button>
+        <button
+            onclick="sendReaction(
+                '${postId}',
+                'love'
+            )"
+        >
+            ❤️
+        </button>
 
-        <button onclick="sendReaction('${postId}','haha')">😂</button>
+        <button
+            onclick="sendReaction(
+                '${postId}',
+                'haha'
+            )"
+        >
+            😂
+        </button>
 
-        <button onclick="sendReaction('${postId}','wow')">😮</button>
+        <button
+            onclick="sendReaction(
+                '${postId}',
+                'wow'
+            )"
+        >
+            😮
+        </button>
 
-        <button onclick="sendReaction('${postId}','sad')">😢</button>
+        <button
+            onclick="sendReaction(
+                '${postId}',
+                'sad'
+            )"
+        >
+            😢
+        </button>
 
-        <button onclick="sendReaction('${postId}','angry')">😡</button>
+        <button
+            onclick="sendReaction(
+                '${postId}',
+                'angry'
+            )"
+        >
+            😡
+        </button>
 
     `;
 
     document.body.appendChild(menu);
 
-    const rect = event.currentTarget.getBoundingClientRect();
+    const rect =
+        event.currentTarget
+        .getBoundingClientRect();
 
     menu.style.left =
-        Math.max(10, rect.left - 20) + "px";
+        Math.max(
+            10,
+            rect.left - 20
+        ) + "px";
 
     menu.style.top =
-        Math.max(10, rect.top - 65) + "px";
+        Math.max(
+            10,
+            rect.top - 65
+        ) + "px";
 
 }
+
 
 function closeReactionMenu(){
 
-    const old = $("reactionMenu");
+    const old =
+        $("reactionMenu");
 
-    if(old) old.remove();
+    if(old){
+
+        old.remove();
+
+    }
 
 }
 
-async function sendReaction(postId,type){
+
+// ======================
+// SEND POST REACTION
+// ======================
+
+async function sendReaction(
+    postId,
+    type
+){
 
     closeReactionMenu();
 
     try{
 
         await updateDoc(
-
             doc(db,"posts",postId),
-
             {
-                [`reactions.${type}`]: increment(1)
+                [`reactions.${type}`]:
+                    increment(1)
             }
-
         );
 
         await loadPosts();
@@ -957,153 +1683,557 @@ async function sendReaction(postId,type){
     }catch(e){
 
         console.error(e);
-
         alert(e.message);
 
     }
 
 }
 
-window.startReaction = startReaction;
-window.endReaction = endReaction;
-window.handleLikeClick = handleLikeClick;
-window.sendReaction = sendReaction;
 
-async function deletePost(postId){
-if(!confirm("Delete this post?")) return;
-
-    await deleteDoc(
-        doc(db,"posts",postId)
-    );
-
-    loadPosts();
-
-}
-
-window.deletePost=deletePost;
-async function editPost(postId){
-
-    const post=posts.find(p=>p.id===postId);
-
-    if(!post) return;
-
-    const text=prompt("Edit Post",post.text);
-
-    if(text===null) return;
-
-    await updateDoc(
-        doc(db,"posts",postId),
-        {
-            text:text
-        }
-    );
-
-    loadPosts();
-
-}
-
-window.editPost=editPost;
 // ======================
-// Like Post
+// COMMENT
 // ======================
 
-async function likePost(postId){
+async function commentPost(
+    postId
+){
 
-    await updateDoc(
-        doc(db,"posts",postId),
-        {
-            likes: increment(1)
-        }
-    );
-
-    loadPosts();
-
-}
-
-window.likePost = likePost;
-
-async function commentPost(postId){
-
-    const text = prompt("Write a comment");
+    const text =
+        prompt("Write a comment");
 
     if(!text) return;
 
-    await updateDoc(
-        doc(db,"posts",postId),
-        {
-            comments: arrayUnion({
-                uid: App.user.uid,
-                name: App.profile.name,
-                photo: App.profile.photo || "default-profile.png",
-                text: text,
-                time: new Date().toLocaleString()
-            })
-        }
-    );
+    try{
 
-    loadPosts();
+        await updateDoc(
+            doc(db,"posts",postId),
+            {
+
+                comments:
+
+                    arrayUnion({
+
+                        uid:
+                            App.user.uid,
+
+                        name:
+                            App.profile?.name ||
+                            App.user.displayName ||
+                            "User",
+
+                        photo:
+                            App.profile?.photo ||
+                            "default-profile.png",
+
+                        text:
+                            text,
+
+                        time:
+                            new Date()
+                            .toLocaleString(),
+
+                        reactions: {
+
+                            like: 0,
+                            love: 0,
+                            haha: 0,
+                            wow: 0,
+                            sad: 0,
+                            angry: 0
+
+                        },
+
+                        replies: []
+
+                    })
+
+            }
+        );
+
+        await loadPosts();
+
+    }catch(e){
+
+        console.error(e);
+        alert(e.message);
+
+    }
 
 }
 
-window.commentPost = commentPost;
+
+// ======================
+// COMMENT REACTION
+// ======================
+
+async function reactComment(
+    postId,
+    commentIndex,
+    type
+){
+
+    try{
+
+        const post =
+            posts.find(
+                p => p.id === postId
+            );
+
+        if(!post) return;
+
+        const comments =
+            [...(post.comments || [])];
+
+        const comment =
+            {
+                ...comments[commentIndex]
+            };
+
+        const reactions =
+            {
+                ...(comment.reactions || {})
+            };
+
+        reactions[type] =
+            (reactions[type] || 0) + 1;
+
+        comment.reactions =
+            reactions;
+
+        comments[commentIndex] =
+            comment;
+
+        await updateDoc(
+            doc(db,"posts",postId),
+            {
+                comments: comments
+            }
+        );
+
+        await loadPosts();
+
+    }catch(e){
+
+        console.error(e);
+        alert(e.message);
+
+    }
+
+}
+
+
+// ======================
+// REPLY COMMENT
+// ======================
+
+async function replyComment(
+    postId,
+    commentIndex
+){
+
+    const text =
+        prompt("Write a reply");
+
+    if(!text) return;
+
+    try{
+
+        const post =
+            posts.find(
+                p => p.id === postId
+            );
+
+        if(!post) return;
+
+        const comments =
+            [...(post.comments || [])];
+
+        const comment =
+            {
+                ...comments[commentIndex]
+            };
+
+        const replies =
+            [
+                ...(comment.replies || [])
+            ];
+
+        replies.push({
+
+            uid:
+                App.user.uid,
+
+            name:
+                App.profile?.name ||
+                App.user.displayName ||
+                "User",
+
+            photo:
+                App.profile?.photo ||
+                "default-profile.png",
+
+            text:
+                text,
+
+            time:
+                new Date()
+                .toLocaleString(),
+
+            reactions: {
+
+                like: 0,
+                love: 0,
+                haha: 0,
+                wow: 0,
+                sad: 0,
+                angry: 0
+
+            }
+
+        });
+
+        comment.replies =
+            replies;
+
+        comments[commentIndex] =
+            comment;
+
+        await updateDoc(
+            doc(db,"posts",postId),
+            {
+                comments: comments
+            }
+        );
+
+        await loadPosts();
+
+    }catch(e){
+
+        console.error(e);
+        alert(e.message);
+
+    }
+
+}
+
+
+// ======================
+// REPLY REACTION
+// ======================
+
+async function reactReply(
+    postId,
+    commentIndex,
+    replyIndex,
+    type
+){
+
+    try{
+
+        const post =
+            posts.find(
+                p => p.id === postId
+            );
+
+        if(!post) return;
+
+        const comments =
+            [...(post.comments || [])];
+
+        const comment =
+            {
+                ...comments[commentIndex]
+            };
+
+        const replies =
+            [
+                ...(comment.replies || [])
+            ];
+
+        const reply =
+            {
+                ...replies[replyIndex]
+            };
+
+        const reactions =
+            {
+                ...(reply.reactions || {})
+            };
+
+        reactions[type] =
+            (reactions[type] || 0) + 1;
+
+        reply.reactions =
+            reactions;
+
+        replies[replyIndex] =
+            reply;
+
+        comment.replies =
+            replies;
+
+        comments[commentIndex] =
+            comment;
+
+        await updateDoc(
+            doc(db,"posts",postId),
+            {
+                comments: comments
+            }
+        );
+
+        await loadPosts();
+
+    }catch(e){
+
+        console.error(e);
+        alert(e.message);
+
+    }
+
+}
+
+
+// ======================
+// EDIT POST
+// ======================
+
+async function editPost(postId){
+
+    const post =
+        posts.find(
+            p => p.id === postId
+        );
+
+    if(!post) return;
+
+    if(
+        post.uid !==
+        App.user.uid
+    ){
+
+        alert("Not your post");
+
+        return;
+
+    }
+
+    const text =
+        prompt(
+            "Edit Post",
+            post.text || ""
+        );
+
+    if(text === null) return;
+
+    try{
+
+        await updateDoc(
+            doc(db,"posts",postId),
+            {
+                text: text
+            }
+        );
+
+        await loadPosts();
+
+    }catch(e){
+
+        console.error(e);
+        alert(e.message);
+
+    }
+
+}
+
+
+// ======================
+// DELETE POST
+// ======================
+
+async function deletePost(postId){
+
+    const post =
+        posts.find(
+            p => p.id === postId
+        );
+
+    if(!post) return;
+
+    if(
+        post.uid !==
+        App.user.uid
+    ){
+
+        alert("Not your post");
+
+        return;
+
+    }
+
+    if(
+        !confirm(
+            "Delete this post?"
+        )
+    ) return;
+
+    try{
+
+        await deleteDoc(
+            doc(db,"posts",postId)
+        );
+
+        await loadPosts();
+
+    }catch(e){
+
+        console.error(e);
+        alert(e.message);
+
+    }
+
+}
+
+
+// ======================
+// THREE DOT MENU
+// ======================
+
 function openPostMenu(postId){
 
-const post=posts.find(p=>p.id===postId);
+    const post =
+        posts.find(
+            p => p.id === postId
+        );
 
-if(!post)return;
+    if(!post) return;
 
-if(post.uid===App.user.uid){
+    if(
+        post.uid ===
+        App.user.uid
+    ){
 
-const action=prompt(
+        const action =
+            prompt(
+                "1 = Edit\n" +
+                "2 = Delete\n" +
+                "3 = Copy Link"
+            );
 
-"1 = Edit\n2 = Delete\n3 = Copy Link"
+        if(action === "1"){
 
-);
+            editPost(postId);
 
-if(action=="1"){
+        }
 
-editPost(postId);
+        else if(action === "2"){
+
+            deletePost(postId);
+
+        }
+
+        else if(action === "3"){
+
+            navigator.clipboard
+                ?.writeText(
+                    location.href
+                );
+
+            alert("Link Copied");
+
+        }
+
+    }else{
+
+        const action =
+            prompt(
+                "1 = Report\n" +
+                "2 = Copy Link"
+            );
+
+        if(action === "1"){
+
+            alert("Reported");
+
+        }
+
+        else if(action === "2"){
+
+            navigator.clipboard
+                ?.writeText(
+                    location.href
+                );
+
+            alert("Link Copied");
+
+        }
+
+    }
 
 }
 
-else if(action=="2"){
 
-deletePost(postId);
+// ======================
+// HELPERS
+// ======================
 
-}
+function escapeHTML(value){
 
-else if(action=="3"){
-
-navigator.clipboard.writeText(location.href);
-
-alert("Link Copied");
-
-}
-
-}else{
-
-const action=prompt(
-
-"1 = Report\n2 = Copy Link"
-
-);
-
-if(action=="1"){
-
-alert("Reported");
+    return String(value || "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
 
 }
 
-else if(action=="2"){
 
-navigator.clipboard.writeText(location.href);
+// ======================
+// GLOBAL FUNCTIONS
+// ======================
 
-alert("Link Copied");
+window.loadPosts =
+    loadPosts;
 
-}
+window.createPost =
+    createPost;
 
-}
+window.renderFeed =
+    renderFeed;
 
-}
+window.likePost =
+    likePost;
 
-window.openPostMenu=openPostMenu;
+window.startReaction =
+    startReaction;
+
+window.endReaction =
+    endReaction;
+
+window.handleLikeClick =
+    handleLikeClick;
+
+window.sendReaction =
+    sendReaction;
+
+window.commentPost =
+    commentPost;
+
+window.reactComment =
+    reactComment;
+
+window.replyComment =
+    replyComment;
+
+window.reactReply =
+    reactReply;
+
+window.editPost =
+    editPost;
+
+window.deletePost =
+    deletePost;
+
+window.openPostMenu =
+    openPostMenu;
