@@ -314,6 +314,7 @@ $("logoutBtn")?.addEventListener("click", async () => {
     }
 
 });
+
 // ======================================
 // Part 4
 // Navigation System
@@ -321,151 +322,222 @@ $("logoutBtn")?.addEventListener("click", async () => {
 
 const pages = [
 
-"homePage",
-"profilePage",
-"friendsPage",
-"createPage",
-"reelsPage",
-"messengerPage",
-"notificationPage",
-"aiPage",
-"settingsPage",
-"marketplacePage",
-"savedPage",
-"groupsPage",
-"pagesPage",
-"adminPage"
+    "homeContent",
+    "profilePage",
+    "friendsPage",
+    "aiPage",
+    "reelsPage",
+    "messengerPage",
+    "notificationPage",
+    "settingsPage",
+    "marketplacePage",
+    "savedPage",
+    "groupsPage",
+    "pagesPage",
+    "adminPage"
 
 ];
 
 function openPage(page){
 
-pages.forEach(id=>{
+    // সব page hide
+    pages.forEach(id => {
 
-hide(id);
+        hide(id);
 
-});
+    });
 
-show(page);
+    // যেটা চাই সেটা show
+    show(page);
 
-hide("sideMenu");
-hide("overlay");
+    // Menu বন্ধ
+    hide("sideMenu");
+    hide("overlay");
 
 }
 
-// Bottom Navigation
-
-$("navHome")?.addEventListener("click",()=>{
-
-openPage("homePage");
-
-});
-
-$("navFriends")?.addEventListener("click",()=>{
-
-openPage("friendsPage");
-
-});
-
-$("navCreate")?.addEventListener("click",()=>{
-
-openPage("createPage");
-
-});
-
-$("navReels")?.addEventListener("click",()=>{
-
-openPage("reelsPage");
-
-});
-
-$("navMessenger")?.addEventListener("click",()=>{
-
-openPage("messengerPage");
-
-});
-
-$("navNotification")?.addEventListener("click",()=>{
-
-openPage("notificationPage");
-
-});
-
-$("navProfile")?.addEventListener("click",()=>{
-
-openPage("profilePage");
-
-});
-
-$("navAI")?.addEventListener("click",()=>{
-
-openPage("aiPage");
-
-});
 
 // ======================
-// Side Menu
+// HOME
 // ======================
 
-$("navMenu")?.addEventListener("click",()=>{
+$("navHome")?.addEventListener("click", () => {
 
-show("sideMenu");
-show("overlay");
-
-});
-
-$("overlay")?.addEventListener("click",()=>{
-
-hide("sideMenu");
-hide("overlay");
+    openPage("homeContent");
 
 });
+
 
 // ======================
-// Menu Buttons
+// FRIENDS
 // ======================
 
-$("menuProfileBtn")?.addEventListener("click",()=>{
+$("navFriends")?.addEventListener("click", () => {
 
-openPage("profilePage");
-
-});
-
-$("menuSavedBtn")?.addEventListener("click",()=>{
-
-openPage("savedPage");
+    openPage("friendsPage");
 
 });
 
-$("menuMarketplaceBtn")?.addEventListener("click",()=>{
 
-openPage("marketplacePage");
+// ======================
+// AI
+// ======================
 
-});
+$("navAI")?.addEventListener("click", () => {
 
-$("menuPagesBtn")?.addEventListener("click",()=>{
-
-openPage("pagesPage");
-
-});
-
-$("menuGroupsBtn")?.addEventListener("click",()=>{
-
-openPage("groupsPage");
+    openPage("aiPage");
 
 });
 
-$("menuSettingsBtn")?.addEventListener("click",()=>{
 
-openPage("settingsPage");
+// ======================
+// REELS
+// ======================
+
+$("navReels")?.addEventListener("click", () => {
+
+    openPage("reelsPage");
 
 });
 
-// Admin
+
+// ======================
+// MESSENGER
+// ======================
+
+$("messengerBtn")?.addEventListener("click", () => {
+
+    openPage("messengerPage");
+
+});
+
+$("menuMessengerBtn")?.addEventListener("click", () => {
+
+    openPage("messengerPage");
+
+});
+
+
+// ======================
+// NOTIFICATIONS
+// ======================
+
+$("notificationBtn")?.addEventListener("click", () => {
+
+    openPage("notificationPage");
+
+});
+
+$("menuNotificationBtn")?.addEventListener("click", () => {
+
+    openPage("notificationPage");
+
+});
+
+
+// ======================
+// PROFILE
+// ======================
+
+$("headerProfile")?.addEventListener("click", () => {
+
+    openPage("profilePage");
+
+});
+
+$("menuProfileBtn")?.addEventListener("click", () => {
+
+    openPage("profilePage");
+
+});
+
+
+// ======================
+// MENU
+// ======================
+
+$("navMenu")?.addEventListener("click", () => {
+
+    show("sideMenu");
+    show("overlay");
+
+});
+
+
+// ======================
+// OVERLAY
+// ======================
+
+$("overlay")?.addEventListener("click", () => {
+
+    hide("sideMenu");
+    hide("overlay");
+
+});
+
+
+// ======================
+// SAVED
+// ======================
+
+$("menuSavedBtn")?.addEventListener("click", () => {
+
+    openPage("savedPage");
+
+});
+
+
+// ======================
+// MARKETPLACE
+// ======================
+
+$("menuMarketplaceBtn")?.addEventListener("click", () => {
+
+    openPage("marketplacePage");
+
+});
+
+
+// ======================
+// PAGES
+// ======================
+
+$("menuPagesBtn")?.addEventListener("click", () => {
+
+    openPage("pagesPage");
+
+});
+
+
+// ======================
+// GROUPS
+// ======================
+
+$("menuGroupsBtn")?.addEventListener("click", () => {
+
+    openPage("groupsPage");
+
+});
+
+
+// ======================
+// SETTINGS
+// ======================
+
+$("menuSettingsBtn")?.addEventListener("click", () => {
+
+    openPage("settingsPage");
+
+});
+
+
+// ======================
+// ADMIN
+// ======================
 
 if(App.admin){
 
-show("adminPage");
+    show("adminPage");
 
 }
 // ======================================
