@@ -213,14 +213,22 @@ onAuthStateChanged(auth, async (user) => {
 
         App.user = user;
 
-        App.admin = isAdmin(user.email);
+App.admin = isAdmin(user.email);
 
-        hide("authContainer");
+hide("authContainer");
 
-        loadPosts();
-        show("homePage");
+// Admin button
+if ($("menuAdminBtn")) {
 
-        try {
+    if (App.admin) {
+        show("menuAdminBtn");
+    } else {
+        hide("menuAdminBtn");
+    }
+
+}
+
+try {
 
             const snap = await getDoc(
                 doc(db, "users", user.uid)
@@ -276,7 +284,31 @@ if ($("headerUserName"))
     $("headerUserName").textContent =
         App.profile.name || user.displayName || "User";
             }
+if (!App.profile) {
 
+    App.profile = {
+
+        uid: user.uid,
+
+        name: user.displayName || "User",
+
+        username: user.uid.substring(0, 8),
+
+        bio: "",
+
+        photo: "default-profile.png",
+
+        cover: "default-cover.jpg",
+
+        followers: 0,
+
+        following: 0,
+
+        posts: 0
+
+    };
+
+    }
         } catch (e) {
 
             console.error(e);
@@ -284,7 +316,10 @@ if ($("headerUserName"))
         }
 
     } else {
-
+        
+loadPosts();
+show("homePage");
+        
         App.user = null;
         App.profile = null;
 
