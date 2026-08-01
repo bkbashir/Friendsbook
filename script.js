@@ -309,6 +309,10 @@ if (!App.profile) {
     };
 
     }
+
+    loadPosts();
+show("homePage");
+    
         } catch (e) {
 
             console.error(e);
@@ -316,10 +320,7 @@ if (!App.profile) {
         }
 
     } else {
-        
-loadPosts();
-show("homePage");
-        
+            
         App.user = null;
         App.profile = null;
 
