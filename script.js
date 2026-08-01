@@ -795,6 +795,9 @@ function renderFeed(){
             ` : ""}
 
 ${post.uid===App.user.uid?`
+<div class="postActions">
+
+${post.uid===App.user.uid?`
 
 <button onclick="editPost('${post.id}')">
 ✏️ Edit
@@ -805,21 +808,20 @@ ${post.uid===App.user.uid?`
 </button>
 
 `:""}
-            <div class="postActions">
 
-                <button onclick="likePost('${post.id}')">
-                    👍 ${post.likes || 0}
-                </button>
+<button onclick="likePost('${post.id}')">
+👍 ${post.likes || 0}
+</button>
 
-                <button onclick="commentPost('${post.id}')">
-                    💬 ${(post.comments || []).length}
-                </button>
+<button onclick="commentPost('${post.id}')">
+💬 ${(post.comments || []).length}
+</button>
 
-                <button onclick="sharePost('${post.id}')">
-                    ↗ Share
-                </button>
+<button onclick="sharePost('${post.id}')">
+↗ Share
+</button>
 
-            </div>
+</div>
 
         </div>
 
