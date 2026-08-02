@@ -27,6 +27,7 @@ import {
 addDoc,
 getDocs,
 query,
+    where,
 orderBy,
 serverTimestamp,
 updateDoc,
@@ -1029,6 +1030,555 @@ $("coverInput")?.addEventListener(
 
     }
 );
+// ======================================
+// PART 8B
+// PROFILE POSTS + PROFILE STATS
+// ======================================
+
+
+// ======================
+// LOAD MY PROFILE POSTS
+// ======================
+
+async function loadProfilePosts(){
+
+    if(!App.user) return;
+
+    try{
+
+        const q = query(
+            collection(db, "posts"),
+            where(
+                "uid",
+                "==",
+                App.user.uid
+            ),
+            orderBy(
+                "time",
+                "desc"
+            )
+        );
+
+        const snap =
+            await getDocs(q);
+
+        const myPosts = [];
+
+        snap.forEach(item => {
+
+            myPosts.push({
+
+                id: item.id,
+
+                ...item.data()
+
+            });
+
+        });
+
+
+        // Posts count
+        $("postsCount").textContent =
+            myPosts.length;
+
+
+        // Firebase profile count sync
+        await setDoc(
+            doc(
+                db,
+                "users",
+                App.user.uid
+            ),
+            {
+                posts:
+                    myPosts.length
+            },
+            {
+                merge: true
+            }
+        );
+
+
+        App.profile = {
+
+            ...App.profile,
+
+            posts:
+                myPosts.length
+
+        };
+
+
+        renderProfilePosts(
+            myPosts
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "Profile posts error:",
+            error
+        );
+
+    }
+
+}
+
+
+// ======================
+// RENDER PROFILE POSTS
+// ======================
+
+function renderProfilePosts(
+    myPosts
+){
+
+    const box =
+        $("profilePosts");
+
+    if(!box) return;
+
+
+    if(!myPosts.length){
+
+        box.innerHTML = `
+
+            <div class="card"
+                 style="
+                 padding:25px;
+                 text-align:center;
+                 margin-top:15px;
+                 ">
+
+                <div style="
+                    font-size:40px;
+                    margin-bottom:10px;
+                ">
+                    📝
+                </div>
+
+                <strong>
+                    No posts yet
+                </strong>
+
+                <p>
+                    Your posts will appear here.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    box.innerHTML = `
+
+        <h3 style="
+            margin:20px 0 10px;
+        ">
+            My Posts
+        </h3>
+
+    `;
+
+
+    myPosts.forEach(post => {
+
+        box.innerHTML += `
+
+            <div
+                class="postCard"
+                style="margin-bottom:15px;"
+            >
+
+                <div class="post-header">
+
+                    <img
+                        class="post-profile"
+                        src="${
+                            post.photo ||
+                            "default-profile.png"
+                        }"
+                    >
+
+                    <div class="post-user">
+
+                        <h4>
+                            ${
+                                post.name ||
+                                App.profile?.name ||
+                                "User"
+                            }
+                        </h4>
+
+                        <small>
+                            Just now
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                ${
+                    post.text
+                    ?
+                    `
+                    <p class="postText">
+                        ${escapeHTML(
+                            post.text
+                        )}
+                    </p>
+                    `
+                    :
+                    ""
+                }
+
+
+                ${
+                    post.image
+                    ?
+                    `
+                    <img
+                        src="${post.image}"
+                        class="postImage"
+                        onclick="openImage(
+                            '${post.image}'
+                        )"
+                    >
+                    `
+                    :
+                    ""
+                }
+
+
+                <div
+                    class="postActions"
+                >
+
+                    <button
+                        onclick="
+                        openPage('homeContent')
+                        "
+                    >
+                        👍 ${
+                            post.likes || 0
+                        }
+                    </button>
+
+                    <button>
+                        💬 ${
+                            (
+                                post.comments ||
+                                []
+                            ).length
+                        }
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+// ======================
+// PROFILE PAGE OPEN
+// ======================
+
+async function openMyProfile(){
+
+    openPage(
+        "profilePage"
+    );
+
+
+    updateProfileUI();
+
+
+    await loadProfilePosts();
+
+}
+
+
+// ======================
+// PROFILE BUTTONS
+// ======================
+
+$("menuProfileBtn")?.removeEventListener(
+    "click",
+    () => {}
+);
+
+$("menuProfileBtn")?.addEventListener(
+    "click",
+    async () => {
+
+        await openMyProfile();
+
+    }
+);
+
+
+$("headerProfile")?.addEventListener(
+    "click",
+    async () => {
+
+        await openMyProfile();
+
+    }
+);
+
+
+// ======================
+// PROFILE TAB BUTTONS
+// ======================
+
+const profileTabs =
+    document.querySelectorAll(
+        ".profileTabs button"
+    );
+
+
+profileTabs.forEach(
+    (button, index) => {
+
+        button.addEventListener(
+            "click",
+            async () => {
+
+                profileTabs.forEach(
+                    btn =>
+                    btn.classList.remove(
+                        "active"
+                    )
+                );
+
+                button.classList.add(
+                    "active"
+                );
+
+
+                if(index === 0){
+
+                    // All
+                    await loadProfilePosts();
+
+                }
+
+                else if(index === 1){
+
+                    // Posts
+                    await loadProfilePosts();
+
+                }
+
+                else if(index === 2){
+
+                    // Photos
+                    renderProfilePhotos();
+
+                }
+
+                else if(index === 3){
+
+                    // Reels
+                    renderProfileReels();
+
+                }
+
+                else if(index === 4){
+
+                    // More
+                    renderProfileMore();
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+// ======================
+// PHOTOS TAB
+// ======================
+
+function renderProfilePhotos(){
+
+    const box =
+        $("profilePosts");
+
+    if(!box) return;
+
+
+    const photos =
+        posts.filter(
+            post =>
+                post.uid ===
+                App.user.uid &&
+                post.image &&
+                !post.video
+        );
+
+
+    if(!photos.length){
+
+        box.innerHTML = `
+
+            <div class="card"
+                 style="
+                 padding:25px;
+                 text-align:center;
+                 ">
+
+                📷 No photos yet
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    box.innerHTML = `
+
+        <h3
+            style="
+            margin:20px 0 10px;
+            "
+        >
+            Photos
+        </h3>
+
+        <div
+            style="
+            display:grid;
+            grid-template-columns:
+            repeat(2,1fr);
+            gap:10px;
+            "
+        >
+
+            ${
+                photos.map(
+                    post => `
+
+                    <img
+                        src="${post.image}"
+                        style="
+                        width:100%;
+                        aspect-ratio:1;
+                        object-fit:cover;
+                        border-radius:12px;
+                        "
+                        onclick="
+                        openImage(
+                            '${post.image}'
+                        )
+                        "
+                    >
+
+                    `
+                ).join("")
+            }
+
+        </div>
+
+    `;
+
+}
+
+
+// ======================
+// REELS TAB
+// ======================
+
+function renderProfileReels(){
+
+    const box =
+        $("profilePosts");
+
+    if(!box) return;
+
+
+    box.innerHTML = `
+
+        <div class="card"
+             style="
+             padding:25px;
+             text-align:center;
+             ">
+
+            🎬
+
+            <h3>
+                My Reels
+            </h3>
+
+            <p>
+                Reels system will connect here.
+            </p>
+
+        </div>
+
+    `;
+
+}
+
+
+// ======================
+// MORE TAB
+// ======================
+
+function renderProfileMore(){
+
+    const box =
+        $("profilePosts");
+
+    if(!box) return;
+
+
+    box.innerHTML = `
+
+        <div class="card"
+             style="
+             padding:25px;
+             margin-top:15px;
+             ">
+
+            <h3>
+                More
+            </h3>
+
+            <p>
+                👥 Friends
+            </p>
+
+            <p>
+                ❤️ Reactions
+            </p>
+
+            <p>
+                🔖 Saved Posts
+            </p>
+
+        </div>
+
+    `;
+
+}
 // ======================================
 // Part 5
 // UI System
