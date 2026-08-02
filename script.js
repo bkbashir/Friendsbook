@@ -7,6 +7,10 @@
 import {
     auth,
     db,
+    storage,
+    ref,
+    uploadBytes,
+    getDownloadURL,
     onAuthStateChanged,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
@@ -619,119 +623,412 @@ else{
     hide("menuAdminBtn");
 
 }
-// ======================================
-// PROFILE EDIT SYSTEM
+
+ // ======================================
+// PART 8A - PROFILE SYSTEM
 // ======================================
 
-$("editProfileBtn")?.addEventListener("click", () => {
 
-    if (!App.profile) {
-        alert("Profile loading...");
-        return;
+// ======================
+// PROFILE UI
+// ======================
+
+function updateProfileUI(){
+
+    if(!App.profile) return;
+
+    $("profileName").textContent =
+        App.profile.name || "User";
+
+    $("profileUsername").textContent =
+        "@" + (
+            App.profile.username ||
+            "username"
+        );
+
+    $("profileBio").textContent =
+        App.profile.bio ||
+        "Add your bio...";
+
+    $("profilePhoto").src =
+        App.profile.photo ||
+        "default-profile.png";
+
+    $("coverPhoto").src =
+        App.profile.cover ||
+        "default-cover.jpg";
+
+    $("followersCount").textContent =
+        App.profile.followers || 0;
+
+    $("followingCount").textContent =
+        App.profile.following || 0;
+
+    $("postsCount").textContent =
+        App.profile.posts || 0;
+
+    $("menuUserName").textContent =
+        App.profile.name || "User";
+
+    $("menuProfileImage").src =
+        App.profile.photo ||
+        "default-profile.png";
+
+    $("headerProfile").src =
+        App.profile.photo ||
+        "default-profile.png";
+}
+
+
+// ======================
+// EDIT PROFILE OPEN
+// ======================
+
+$("editProfileBtn")?.addEventListener(
+    "click",
+    () => {
+
+        if(!App.user){
+
+            alert("Please login first.");
+
+            return;
+
+        }
+
+        if(!App.profile){
+
+            alert("Profile not loaded yet.");
+
+            return;
+
+        }
+
+        $("editName").value =
+            App.profile.name || "";
+
+        $("editUsername").value =
+            App.profile.username || "";
+
+        $("editBio").value =
+            App.profile.bio || "";
+
+        show("editProfileModal");
+
     }
-
-    $("editName").value =
-        App.profile.name || "";
-
-    $("editUsername").value =
-        App.profile.username || "";
-
-    $("editBio").value =
-        App.profile.bio || "";
-
-    show("editProfileModal");
-});
+);
 
 
-// ======================================
+// ======================
 // CANCEL EDIT
-// ======================================
+// ======================
 
-$("cancelEdit")?.addEventListener("click", () => {
-
-    hide("editProfileModal");
-
-});
-
-
-// ======================================
-// SAVE PROFILE
-// ======================================
-
-$("saveEdit")?.addEventListener("click", async () => {
-
-    if (!App.user) {
-        alert("Please login first.");
-        return;
-    }
-
-    const name =
-        $("editName").value.trim();
-
-    const username =
-        $("editUsername").value.trim();
-
-    const bio =
-        $("editBio").value.trim();
-
-    if (!name) {
-        alert("Name cannot be empty.");
-        return;
-    }
-
-    try {
-
-        await updateDoc(
-            doc(db, "users", App.user.uid),
-            {
-                name: name,
-                username: username,
-                bio: bio
-            }
-        );
-
-        await updateProfile(
-            App.user,
-            {
-                displayName: name
-            }
-        );
-
-        App.profile = {
-            ...App.profile,
-            name: name,
-            username: username,
-            bio: bio
-        };
-
-        $("profileName").textContent =
-            name;
-
-        $("profileUsername").textContent =
-            "@" + (username || "username");
-
-        $("profileBio").textContent =
-            bio || "Add your bio...";
-
-        $("menuUserName").textContent =
-            name;
+$("cancelEdit")?.addEventListener(
+    "click",
+    () => {
 
         hide("editProfileModal");
 
-        alert("Profile updated successfully!");
+    }
+);
 
-    } catch (error) {
+
+// ======================
+// SAVE PROFILE
+// ======================
+
+$("saveEdit")?.addEventListener(
+    "click",
+    async () => {
+
+        if(!App.user){
+
+            alert("Please login first.");
+
+            return;
+
+        }
+
+        const name =
+            $("editName").value.trim();
+
+        const username =
+            $("editUsername").value
+                .trim()
+                .replace(/^@/, "");
+
+        const bio =
+            $("editBio").value.trim();
+
+
+        if(!name){
+
+            alert("Name cannot be empty.");
+
+            return;
+
+        }
+
+
+        try{
+
+            const old =
+                App.profile || {};
+
+
+            const newProfile = {
+
+                uid:
+                    App.user.uid,
+
+                name:
+                    name,
+
+                username:
+                    username ||
+                    App.user.uid.substring(0,8),
+
+                bio:
+                    bio,
+
+                photo:
+                    old.photo ||
+                    "default-profile.png",
+
+                cover:
+                    old.cover ||
+                    "default-cover.jpg",
+
+                followers:
+                    old.followers || 0,
+
+                following:
+                    old.following || 0,
+
+                posts:
+                    old.posts || 0,
+
+                email:
+                    App.user.email || ""
+
+            };
+
+
+            // Create OR update document
+            await setDoc(
+                doc(
+                    db,
+                    "users",
+                    App.user.uid
+                ),
+                newProfile,
+                {
+                    merge:true
+                }
+            );
+
+
+            // Firebase Auth display name
+            await updateProfile(
+                App.user,
+                {
+                    displayName:name
+                }
+            );
+
+
+            App.profile = {
+
+                ...old,
+                ...newProfile
+
+            };
+
+
+            updateProfileUI();
+
+            hide("editProfileModal");
+
+            alert(
+                "Profile updated successfully!"
+            );
+
+
+        }catch(error){
+
+            console.error(error);
+
+            alert(
+                "Profile update failed: " +
+                error.message
+            );
+
+        }
+
+    }
+);
+
+
+// ======================
+// UPLOAD PROFILE IMAGE
+// ======================
+
+async function uploadProfileImage(
+    file,
+    type
+){
+
+    if(!App.user || !file){
+
+        return;
+
+    }
+
+
+    try{
+
+        showLoading();
+
+
+        const extension =
+            file.name
+                .split(".")
+                .pop();
+
+
+        const path =
+            "users/" +
+            App.user.uid +
+            "/" +
+            type +
+            "." +
+            extension;
+
+
+        const storageRef =
+            ref(
+                storage,
+                path
+            );
+
+
+        await uploadBytes(
+            storageRef,
+            file
+        );
+
+
+        const url =
+            await getDownloadURL(
+                storageRef
+            );
+
+
+        const field =
+            type === "profile"
+                ? "photo"
+                : "cover";
+
+
+        await setDoc(
+            doc(
+                db,
+                "users",
+                App.user.uid
+            ),
+            {
+                [field]: url
+            },
+            {
+                merge:true
+            }
+        );
+
+
+        App.profile = {
+
+            ...App.profile,
+
+            [field]: url
+
+        };
+
+
+        updateProfileUI();
+
+
+        alert(
+            type === "profile"
+                ? "Profile photo updated!"
+                : "Cover photo updated!"
+        );
+
+
+    }catch(error){
 
         console.error(error);
 
         alert(
-            "Profile update failed: " +
+            "Image upload failed: " +
             error.message
         );
 
+
+    }finally{
+
+        hideLoading();
+
     }
 
-});
+}
+
+
+// ======================
+// PROFILE PHOTO BUTTON
+// ======================
+
+$("profileInput")?.addEventListener(
+    "change",
+    async (event) => {
+
+        const file =
+            event.target.files?.[0];
+
+        if(!file) return;
+
+        await uploadProfileImage(
+            file,
+            "profile"
+        );
+
+        event.target.value = "";
+
+    }
+);
+
+
+// ======================
+// COVER PHOTO BUTTON
+// ======================
+
+$("coverInput")?.addEventListener(
+    "change",
+    async (event) => {
+
+        const file =
+            event.target.files?.[0];
+
+        if(!file) return;
+
+        await uploadProfileImage(
+            file,
+            "cover"
+        );
+
+        event.target.value = "";
+
+    }
+);
 // ======================================
 // Part 5
 // UI System
