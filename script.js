@@ -35,6 +35,54 @@ increment,
    arrayUnion,
     deleteDoc
 } from "./firebase.js";
+// ======================================
+// CLOUDINARY UPLOAD SYSTEM
+// ======================================
+
+const CLOUDINARY_CLOUD_NAME = "d22vigls";
+const CLOUDINARY_UPLOAD_PRESET = "friendsbook_upload";
+
+async function uploadToCloudinary(file) {
+
+    if (!file) {
+        throw new Error("No file selected");
+    }
+
+    const formData = new FormData();
+
+    formData.append("file", file);
+    formData.append(
+        "upload_preset",
+        CLOUDINARY_UPLOAD_PRESET
+    );
+
+    const resourceType =
+        file.type.startsWith("video/")
+            ? "video"
+            : "image";
+
+    const uploadURL =
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`;
+
+    const response =
+        await fetch(uploadURL, {
+            method: "POST",
+            body: formData
+        });
+
+    const data =
+        await response.json();
+
+    if (!response.ok) {
+        console.error("Cloudinary error:", data);
+        throw new Error(
+            data.error?.message ||
+            "Cloudinary upload failed"
+        );
+    }
+
+    return data.secure_url;
+}
 
 // ======================
 // DOM Helper
