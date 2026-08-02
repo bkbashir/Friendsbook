@@ -928,56 +928,20 @@ async function uploadProfileImage(
 ){
 
     if(!App.user || !file){
-
         return;
-
     }
-
 
     try{
 
         showLoading();
 
-
-        const extension =
-            file.name
-                .split(".")
-                .pop();
-
-
-        const path =
-            "users/" +
-            App.user.uid +
-            "/" +
-            type +
-            "." +
-            extension;
-
-
-        const storageRef =
-            ref(
-                storage,
-                path
-            );
-
-
-        await uploadBytes(
-            storageRef,
-            file
-        );
-
-
         const url =
-            await getDownloadURL(
-                storageRef
-            );
-
+            await uploadToCloudinary(file);
 
         const field =
             type === "profile"
                 ? "photo"
                 : "cover";
-
 
         await setDoc(
             doc(
@@ -989,10 +953,9 @@ async function uploadProfileImage(
                 [field]: url
             },
             {
-                merge:true
+                merge: true
             }
         );
-
 
         App.profile = {
 
@@ -1002,9 +965,7 @@ async function uploadProfileImage(
 
         };
 
-
         updateProfileUI();
-
 
         alert(
             type === "profile"
@@ -1012,16 +973,17 @@ async function uploadProfileImage(
                 : "Cover photo updated!"
         );
 
-
     }catch(error){
 
-        console.error(error);
+        console.error(
+            "Cloudinary upload error:",
+            error
+        );
 
         alert(
             "Image upload failed: " +
             error.message
         );
-
 
     }finally{
 
@@ -1030,8 +992,6 @@ async function uploadProfileImage(
     }
 
 }
-
-
 // ======================
 // PROFILE PHOTO BUTTON
 // ======================
