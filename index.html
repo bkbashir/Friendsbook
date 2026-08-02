@@ -62,10 +62,11 @@
   <main id="mainContent">
     <section id="homeContent" class="pageView">
       <div class="storyRow">
-        <div class="storyCard ownStory">
+        <div class="storyCard ownStory" id="ownStoryCard">
           <img id="storyProfile" src="default-profile.png" alt="Story">
           <div class="storyPlus">+</div>
           <strong>Your story</strong>
+          <input id="storyInput" type="file" accept="image/*,video/*" hidden>
         </div>
         <div class="storyCard"><div class="storyPlaceholder">😊</div><strong>Friends</strong></div>
         <div class="storyCard"><div class="storyPlaceholder">📷</div><strong>Photos</strong></div>
@@ -80,6 +81,7 @@
         </div>
         <div class="composerBottom">
           <label class="composerItem">📷 Photo<input id="postImage" type="file" accept="image/*" hidden></label>
+          <span id="postUploadStatus" class="uploadStatus"></span>
           <button id="feelingBtn" class="composerItem">😊 Feeling</button>
         </div>
       </section>
@@ -118,7 +120,7 @@
 
     <section id="friendsPage" class="pageView hidden"><div class="sectionCard"><h2>Friends</h2><p>Find people, follow friends and manage friend requests.</p><button class="primaryBtn" id="findFriendsBtn">Find Friends</button></div></section>
     <section id="aiPage" class="pageView hidden"><div class="sectionCard"><h2>Friendsbook AI</h2><p>Your Gemini chat will live here.</p><div class="aiChatBox" id="aiMessages"><div class="aiBubble">Hello! How can I help?</div></div><div class="aiComposer"><input id="aiInput" placeholder="Ask Gemini..."><button id="aiSend" class="primarySmall">Send</button></div></div></section>
-    <section id="reelsPage" class="pageView hidden"><div class="sectionCard"><h2>Reels</h2><p>Short videos will appear here.</p></div></section>
+    <section id="reelsPage" class="pageView hidden"><div class="sectionCard"><h2>Reels</h2><label class="primaryBtn uploadButton">🎬 Upload Reel<input id="reelInput" type="file" accept="video/*" hidden></label><div id="reelsFeed" class="reelsFeed"></div></div></section>
     <section id="messengerPage" class="pageView hidden"><div class="sectionCard"><h2>Messenger</h2><p>Your conversations will appear here.</p></div></section>
     <section id="notificationPage" class="pageView hidden"><div class="sectionCard"><h2>Notifications</h2><p>Your activity notifications will appear here.</p></div></section>
     <section id="settingsPage" class="pageView hidden"><div class="sectionCard"><h2>Settings</h2><label class="settingRow">🌙 Dark Mode <input id="darkToggle" type="checkbox"></label><button class="secondaryBtn" id="logoutFromSettings">Logout</button></div></section>
@@ -159,4 +161,4 @@
 <script type="module" src="firebase.js"></script>
 <script type="module" src="script.js"></script>
 </body>
-    </html>
+  </html>
