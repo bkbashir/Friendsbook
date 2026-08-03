@@ -1151,21 +1151,15 @@ async function loadProfilePosts(){
 // ======================
 // RENDER PROFILE POSTS
 // ======================
+function renderProfilePosts(myPosts){
 
-function renderProfilePosts(
-    myPosts
-){
-
-    const box =
-        $("profilePosts");
+    const box = $("profilePosts");
 
     if(!box) return;
-
 
     if(!myPosts.length){
 
         box.innerHTML = `
-
             <div class="card"
                  style="
                  padding:25px;
@@ -1180,20 +1174,16 @@ function renderProfilePosts(
                     📝
                 </div>
 
-                <strong>
-                    No posts yet
-                </strong>
+                <strong>No posts yet</strong>
 
                 <p>
                     Your posts will appear here.
                 </p>
 
             </div>
-
         `;
 
         return;
-
     }
 
 
@@ -1210,12 +1200,22 @@ function renderProfilePosts(
 
     myPosts.forEach(post => {
 
+        const comments =
+            post.comments || [];
+
+        const reactions =
+            post.reactions || {};
+
+
         box.innerHTML += `
 
             <div
                 class="postCard"
+                id="profile-post-${post.id}"
                 style="margin-bottom:15px;"
             >
+
+                <!-- POST HEADER -->
 
                 <div class="post-header">
 
@@ -1231,9 +1231,11 @@ function renderProfilePosts(
 
                         <h4>
                             ${
-                                post.name ||
-                                App.profile?.name ||
-                                "User"
+                                escapeHTML(
+                                    post.name ||
+                                    App.profile?.name ||
+                                    "User"
+                                )
                             }
                         </h4>
 
@@ -1243,23 +1245,39 @@ function renderProfilePosts(
 
                     </div>
 
+
+                    <!-- THREE DOT -->
+
+                    <button
+                        class="postMenuBtn"
+                        onclick="
+                            openPostMenu(
+                                '${post.id}'
+                            )
+                        "
+                    >
+                        ⋮
+                    </button>
+
                 </div>
 
+
+                <!-- POST TEXT -->
 
                 ${
                     post.text
                     ?
                     `
                     <p class="postText">
-                        ${escapeHTML(
-                            post.text
-                        )}
+                        ${escapeHTML(post.text)}
                     </p>
                     `
                     :
                     ""
                 }
 
+
+                <!-- POST IMAGE -->
 
                 ${
                     post.image
@@ -1268,9 +1286,11 @@ function renderProfilePosts(
                     <img
                         src="${post.image}"
                         class="postImage"
-                        onclick="openImage(
-                            '${post.image}'
-                        )"
+                        onclick="
+                            openImage(
+                                '${post.image}'
+                            )
+                        "
                     >
                     `
                     :
@@ -1278,28 +1298,130 @@ function renderProfilePosts(
                 }
 
 
-                <div
-                    class="postActions"
-                >
+                <!-- POST ACTIONS -->
+
+                <div class="postActions">
+
+                    <button
+                        class="likeBtn"
+                        onclick="
+                            handleLikeClick(
+                                '${post.id}'
+                            )
+                        "
+                        onpointerdown="
+                            startReaction(
+                                event,
+                                '${post.id}'
+                            )
+                        "
+                        onpointerup="
+                            endReaction()
+                        "
+                        onpointerleave="
+                            endReaction()
+                        "
+                        onpointercancel="
+                            endReaction()
+                        "
+                    >
+                        👍 ${post.likes || 0}
+                    </button>
+
 
                     <button
                         onclick="
-                        openPage('homeContent')
+                            commentPost(
+                                '${post.id}'
+                            )
                         "
                     >
-                        👍 ${
-                            post.likes || 0
-                        }
+                        💬 ${comments.length}
                     </button>
 
-                    <button>
-                        💬 ${
-                            (
-                                post.comments ||
-                                []
-                            ).length
-                        }
+
+                    <button
+                        onclick="
+                            sharePost(
+                                '${post.id}'
+                            )
+                        "
+                    >
+                        ↗ Share
                     </button>
+
+                </div>
+
+
+                <!-- REACTION COUNTS -->
+
+                <div class="reactionCounts">
+
+                    ${
+                        reactions.like
+                        ?
+                        `👍 ${reactions.like}`
+                        :
+                        ""
+                    }
+
+                    ${
+                        reactions.love
+                        ?
+                        ` ❤️ ${reactions.love}`
+                        :
+                        ""
+                    }
+
+                    ${
+                        reactions.haha
+                        ?
+                        ` 😂 ${reactions.haha}`
+                        :
+                        ""
+                    }
+
+                    ${
+                        reactions.wow
+                        ?
+                        ` 😮 ${reactions.wow}`
+                        :
+                        ""
+                    }
+
+                    ${
+                        reactions.sad
+                        ?
+                        ` 😢 ${reactions.sad}`
+                        :
+                        ""
+                    }
+
+                    ${
+                        reactions.angry
+                        ?
+                        ` 😡 ${reactions.angry}`
+                        :
+                        ""
+                    }
+
+                </div>
+
+
+                <!-- COMMENTS + REPLIES -->
+
+                <div class="commentList">
+
+                    ${
+                        comments.map(
+                            (comment,index) =>
+                                renderComment(
+                                    post.id,
+                                    comment,
+                                    index
+                                )
+                        ).join("")
+                    }
 
                 </div>
 
@@ -1310,7 +1432,6 @@ function renderProfilePosts(
     });
 
 }
-
 
 // ======================
 // PROFILE PAGE OPEN
