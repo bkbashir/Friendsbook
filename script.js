@@ -1920,7 +1920,7 @@ async function createPost(text,image=""){
 
 
 // ======================
-// POST BUTTON
+// POST BUTTON + CLOUDINARY IMAGE UPLOAD
 // ======================
 
 $("postBtn")?.addEventListener(
@@ -1928,25 +1928,95 @@ $("postBtn")?.addEventListener(
     async () => {
 
         const input = $("postText");
+        const imageInput = $("postImage");
 
         const text =
             input.value.trim();
 
-        if(!text){
+        const file =
+            imageInput?.files?.[0] || null;
 
-            alert("Write something");
+
+        // Text অথবা Image যেকোনো একটি থাকলেই Post হবে
+        if(!text && !file){
+
+            alert("Write something or select a photo.");
 
             return;
 
         }
 
-        await createPost(text);
 
-        input.value = "";
+        try{
+
+            showLoading();
+
+
+            let imageURL = "";
+
+
+            // ==========================
+            // CLOUDINARY IMAGE UPLOAD
+            // ==========================
+
+            if(file){
+
+                if(!file.type.startsWith("image/")){
+
+                    alert("Please select an image.");
+
+                    return;
+
+                }
+
+
+                imageURL =
+                    await uploadToCloudinary(file);
+
+            }
+
+
+            // ==========================
+            // SAVE POST TO FIRESTORE
+            // ==========================
+
+            await createPost(
+                text,
+                imageURL
+            );
+
+
+            // Clear composer
+            input.value = "";
+
+            if(imageInput){
+
+                imageInput.value = "";
+
+            }
+
+
+        }catch(error){
+
+            console.error(
+                "Post upload error:",
+                error
+            );
+
+            alert(
+                "Post failed: " +
+                error.message
+            );
+
+
+        }finally{
+
+            hideLoading();
+
+        }
 
     }
 );
-
 
 // ======================
 // RENDER FEED
