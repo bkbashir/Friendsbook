@@ -1078,37 +1078,38 @@ async function loadProfilePosts(){
                 "uid",
                 "==",
                 App.user.uid
-            ),
-            orderBy(
-                "time",
-                "desc"
             )
         );
 
-        const snap =
-            await getDocs(q);
+        const snap = await getDocs(q);
 
         const myPosts = [];
 
         snap.forEach(item => {
 
             myPosts.push({
-
                 id: item.id,
-
                 ...item.data()
-
             });
 
         });
 
+        // Newest first
+        myPosts.sort((a, b) => {
 
-        // Posts count
+            const aTime =
+                a.time?.toMillis?.() || 0;
+
+            const bTime =
+                b.time?.toMillis?.() || 0;
+
+            return bTime - aTime;
+
+        });
+
         $("postsCount").textContent =
             myPosts.length;
 
-
-        // Firebase profile count sync
         await setDoc(
             doc(
                 db,
@@ -1116,29 +1117,19 @@ async function loadProfilePosts(){
                 App.user.uid
             ),
             {
-                posts:
-                    myPosts.length
+                posts: myPosts.length
             },
             {
                 merge: true
             }
         );
 
-
         App.profile = {
-
             ...App.profile,
-
-            posts:
-                myPosts.length
-
+            posts: myPosts.length
         };
 
-
-        renderProfilePosts(
-            myPosts
-        );
-
+        renderProfilePosts(myPosts);
 
     }catch(error){
 
@@ -1147,9 +1138,14 @@ async function loadProfilePosts(){
             error
         );
 
+        alert(
+            "Profile posts failed: " +
+            error.message
+        );
+
     }
 
-}
+            }
 
 
 // ======================
