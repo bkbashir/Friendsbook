@@ -922,21 +922,43 @@ $("saveEdit")?.addEventListener(
 // UPLOAD PROFILE IMAGE
 // ======================
 
-async function uploadProfileImage(
-    file,
-    type
-){
+async function uploadProfileImage(file, type) {
 
-    if(!App.user || !file){
+    if (!App.user || !file) {
         return;
     }
 
-    try{
+    try {
 
         showLoading();
 
-        const url =
-            await uploadToCloudinary(file);
+        const formData = new FormData();
+
+        formData.append("file", file);
+
+        formData.append(
+            "upload_preset",
+            "friendsbook_upload"
+        );
+
+        const response = await fetch(
+            "https://api.cloudinary.com/v1_1/d22vigls/image/upload",
+            {
+                method: "POST",
+                body: formData
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "Cloudinary upload failed: " +
+                response.status
+            );
+        }
+
+        const data = await response.json();
+
+        const url = data.secure_url;
 
         const field =
             type === "profile"
@@ -958,11 +980,8 @@ async function uploadProfileImage(
         );
 
         App.profile = {
-
             ...App.profile,
-
             [field]: url
-
         };
 
         updateProfileUI();
@@ -973,10 +992,10 @@ async function uploadProfileImage(
                 : "Cover photo updated!"
         );
 
-    }catch(error){
+    } catch (error) {
 
         console.error(
-            "Cloudinary upload error:",
+            "Cloudinary Error:",
             error
         );
 
@@ -985,12 +1004,11 @@ async function uploadProfileImage(
             error.message
         );
 
-    }finally{
+    } finally {
 
         hideLoading();
 
     }
-
 }
 // ======================
 // PROFILE PHOTO BUTTON
