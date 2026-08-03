@@ -39,7 +39,7 @@ increment,
 // CLOUDINARY UPLOAD SYSTEM
 // ======================================
 
-const CLOUDINARY_CLOUD_NAME = "d22vigls";
+const CLOUDINARY_CLOUD_NAME = "d22vlgls";
 const CLOUDINARY_UPLOAD_PRESET = "friendsbook_upload";
 
 async function uploadToCloudinary(file) {
