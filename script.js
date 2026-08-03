@@ -942,12 +942,12 @@ async function uploadProfileImage(file, type) {
         );
 
         const response = await fetch(
-            "https://api.cloudinary.com/v1_1/d22vigls/image/upload",
-            {
-                method: "POST",
-                body: formData
-            }
-        );
+    "https://api.cloudinary.com/v1_1/d22vlgls/image/upload",
+    {
+        method: "POST",
+        body: formData
+    }
+);
 
         if (!response.ok) {
             throw new Error(
