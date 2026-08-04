@@ -934,3 +934,8 @@ textarea {
   margin-top: 10px;
   background: #000;
 }
+/* Active Like */
+.likeBtn.activeLike {
+    color: #1877f2;
+    font-weight: 700;
+  }
