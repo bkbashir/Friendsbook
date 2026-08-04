@@ -2224,12 +2224,20 @@ function renderFeed(){
             reactionInfo[myReaction];
 
 
-        const buttonText =
-            selected
-            ?
-            `${selected.emoji} ${selected.name}`
-            :
-            `👍 Like`;
+        const reactionCount =
+    Object.values(reactions)
+        .reduce(
+            (total, count) =>
+                total + (Number(count) || 0),
+            0
+        );
+
+const buttonText =
+    selected
+    ?
+    `${selected.emoji} ${selected.name} ${reactionCount}`
+    :
+    `👍 Like ${reactionCount}`;
 
 
         const likeClass =
