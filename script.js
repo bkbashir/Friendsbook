@@ -2171,13 +2171,81 @@ function renderFeed(){
         const comments =
             post.comments || [];
 
-        const reactions =
-            post.reactions || {};
+        const reactions = {
+            like: 0,
+            love: 0,
+            haha: 0,
+            wow: 0,
+            sad: 0,
+            angry: 0,
+            ...(post.reactions || {})
+        };
+
+        const myReaction =
+            post.userReactions?.[App.user?.uid] || null;
+
+
+        const reactionInfo = {
+
+            like: {
+                emoji: "👍",
+                name: "Like"
+            },
+
+            love: {
+                emoji: "❤️",
+                name: "Love"
+            },
+
+            haha: {
+                emoji: "😂",
+                name: "Haha"
+            },
+
+            wow: {
+                emoji: "😮",
+                name: "Wow"
+            },
+
+            sad: {
+                emoji: "😢",
+                name: "Sad"
+            },
+
+            angry: {
+                emoji: "😡",
+                name: "Angry"
+            }
+
+        };
+
+
+        const selected =
+            reactionInfo[myReaction];
+
+
+        const buttonText =
+            selected
+            ?
+            `${selected.emoji} ${selected.name}`
+            :
+            `👍 Like`;
+
+
+        const likeClass =
+            myReaction === "like"
+            ?
+            "likeBtn activeLike"
+            :
+            "likeBtn";
+
 
         feed.innerHTML += `
 
-        <div class="postCard"
-             id="post-${post.id}">
+        <div
+            class="postCard"
+            id="post-${post.id}"
+        >
 
             <!-- POST HEADER -->
 
@@ -2185,13 +2253,32 @@ function renderFeed(){
 
                 <img
                     class="post-profile"
-                    src="${post.photo || "default-profile.png"}"
+                    src="${
+                        post.photo ||
+                        "default-profile.png"
+                    }"
+                    onclick="
+                        openUserProfile(
+                            '${post.uid}'
+                        )
+                    "
+                    style="cursor:pointer;"
                 >
 
-                <div class="post-user">
+                <div
+                    class="post-user"
+                    onclick="
+                        openUserProfile(
+                            '${post.uid}'
+                        )
+                    "
+                    style="cursor:pointer;"
+                >
 
                     <h4>
-                        ${post.name || "User"}
+                        ${escapeHTML(
+                            post.name || "User"
+                        )}
                     </h4>
 
                     <small>
@@ -2202,7 +2289,11 @@ function renderFeed(){
 
                 <button
                     class="postMenuBtn"
-                    onclick="openPostMenu('${post.id}')"
+                    onclick="
+                        openPostMenu(
+                            '${post.id}'
+                        )
+                    "
                 >
                     ⋮
                 </button>
@@ -2215,9 +2306,11 @@ function renderFeed(){
             ${
                 post.text
                 ?
-                `<p class="postText">
+                `
+                <p class="postText">
                     ${escapeHTML(post.text)}
-                </p>`
+                </p>
+                `
                 :
                 ""
             }
@@ -2232,7 +2325,11 @@ function renderFeed(){
                 <img
                     src="${post.image}"
                     class="postImage"
-                    onclick="openImage('${post.image}')"
+                    onclick="
+                        openImage(
+                            '${post.image}'
+                        )
+                    "
                 >
                 `
                 :
@@ -2245,84 +2342,52 @@ function renderFeed(){
             <div class="postActions">
 
                 <button
-                    class="likeBtn"
-                    onclick="handleLikeClick('${post.id}')"
-                    onpointerdown="startReaction(event,'${post.id}')"
-                    onpointerup="endReaction()"
-                    onpointerleave="endReaction()"
-                    onpointercancel="endReaction()"
+                    class="${likeClass}"
+                    onclick="
+                        handleLikeClick(
+                            '${post.id}'
+                        )
+                    "
+                    onpointerdown="
+                        startReaction(
+                            event,
+                            '${post.id}'
+                        )
+                    "
+                    onpointerup="
+                        endReaction()
+                    "
+                    onpointerleave="
+                        endReaction()
+                    "
+                    onpointercancel="
+                        endReaction()
+                    "
                 >
-                    👍 ${post.likes || 0}
+                    ${buttonText}
                 </button>
 
 
                 <button
-                    onclick="commentPost('${post.id}')"
+                    onclick="
+                        commentPost(
+                            '${post.id}'
+                        )
+                    "
                 >
                     💬 ${comments.length}
                 </button>
 
 
                 <button
-                    onclick="sharePost('${post.id}')"
+                    onclick="
+                        sharePost(
+                            '${post.id}'
+                        )
+                    "
                 >
                     ↗ Share
                 </button>
-
-            </div>
-
-
-            <!-- REACTION COUNTS -->
-
-            <div class="reactionCounts">
-
-                ${
-                    reactions.like
-                    ?
-                    `👍 ${reactions.like}`
-                    :
-                    ""
-                }
-
-                ${
-                    reactions.love
-                    ?
-                    ` ❤️ ${reactions.love}`
-                    :
-                    ""
-                }
-
-                ${
-                    reactions.haha
-                    ?
-                    ` 😂 ${reactions.haha}`
-                    :
-                    ""
-                }
-
-                ${
-                    reactions.wow
-                    ?
-                    ` 😮 ${reactions.wow}`
-                    :
-                    ""
-                }
-
-                ${
-                    reactions.sad
-                    ?
-                    ` 😢 ${reactions.sad}`
-                    :
-                    ""
-                }
-
-                ${
-                    reactions.angry
-                    ?
-                    ` 😡 ${reactions.angry}`
-                    :
-                    ""
-                }
 
             </div>
 
