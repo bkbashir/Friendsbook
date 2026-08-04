@@ -3355,8 +3355,6 @@ async function reactReply(
     type
 ){
 
-    if(!App.user) return;
-
     try{
 
         const post =
@@ -3375,75 +3373,25 @@ async function reactReply(
             };
 
         const replies =
-            [...(comment.replies || [])];
-
-        if(!replies[replyIndex]) return;
+            [
+                ...(comment.replies || [])
+            ];
 
         const reply =
             {
                 ...replies[replyIndex]
             };
 
-        const reactions = {
+        const reactions =
+            {
+                ...(reply.reactions || {})
+            };
 
-            like: 0,
-            love: 0,
-            haha: 0,
-            wow: 0,
-            sad: 0,
-            angry: 0,
-
-            ...(reply.reactions || {})
-
-        };
-
-        const userReactions = {
-
-            ...(reply.userReactions || {})
-
-        };
-
-        const uid =
-            App.user.uid;
-
-        const oldReaction =
-            userReactions[uid] || null;
-
-
-        // Same reaction দিলে আবার count বাড়বে না
-        if(oldReaction === type){
-
-            return;
-
-        }
-
-
-        // আগের reaction থাকলে সেটা কমবে
-        if(oldReaction){
-
-            reactions[oldReaction] =
-                Math.max(
-                    0,
-                    (reactions[oldReaction] || 0) - 1
-                );
-
-        }
-
-
-        // নতুন reaction
         reactions[type] =
             (reactions[type] || 0) + 1;
 
-        userReactions[uid] =
-            type;
-
-
         reply.reactions =
             reactions;
-
-        reply.userReactions =
-            userReactions;
-
 
         replies[replyIndex] =
             reply;
@@ -3454,14 +3402,12 @@ async function reactReply(
         comments[commentIndex] =
             comment;
 
-
         await updateDoc(
-            doc(db, "posts", postId),
+            doc(db,"posts",postId),
             {
                 comments: comments
             }
         );
-
 
         await loadPosts();
 
