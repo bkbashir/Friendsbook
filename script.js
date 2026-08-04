@@ -2034,7 +2034,7 @@ async function createPost(text,image=""){
                     sad: 0,
                     angry: 0
                 },
-
+          userReactions: {},
                 comments: [],
 
                 time: serverTimestamp()
@@ -2637,30 +2637,96 @@ function renderReply(
 
 async function likePost(postId){
 
+    if(!App.user) return;
+
     try{
 
-        await updateDoc(
-            doc(db,"posts",postId),
-            {
-                likes: increment(1),
+        const postRef =
+            doc(db, "posts", postId);
 
-                "reactions.like":
-                    increment(1)
+        const snap =
+            await getDoc(postRef);
+
+        if(!snap.exists()) return;
+
+        const post =
+            snap.data();
+
+        const reactions = {
+            like: 0,
+            love: 0,
+            haha: 0,
+            wow: 0,
+            sad: 0,
+            angry: 0,
+            ...(post.reactions || {})
+        };
+
+        const userReactions =
+            {
+                ...(post.userReactions || {})
+            };
+
+        const uid =
+            App.user.uid;
+
+        const oldReaction =
+            userReactions[uid] || null;
+
+
+        // Already Like করলে কিছু হবে না
+        if(oldReaction === "like"){
+
+            return;
+
+        }
+
+
+        // পুরোনো reaction থাকলে সেটা কমাও
+        if(oldReaction){
+
+            reactions[oldReaction] =
+                Math.max(
+                    0,
+                    (reactions[oldReaction] || 0) - 1
+                );
+
+        }
+
+
+        // নতুন Like
+        reactions.like =
+            (reactions.like || 0) + 1;
+
+        userReactions[uid] =
+            "like";
+
+
+        await updateDoc(
+            postRef,
+            {
+                reactions: reactions,
+
+                userReactions:
+                    userReactions,
+
+                likes:
+                    reactions.like
             }
         );
+
 
         await loadPosts();
 
     }catch(e){
 
         console.error(e);
+
         alert(e.message);
 
     }
 
 }
-
-
 // ======================
 // LONG PRESS REACTION
 // ======================
@@ -2832,27 +2898,97 @@ async function sendReaction(
 
     closeReactionMenu();
 
+    if(!App.user) return;
+
     try{
 
-        await updateDoc(
-            doc(db,"posts",postId),
+        const postRef =
+            doc(db, "posts", postId);
+
+        const snap =
+            await getDoc(postRef);
+
+        if(!snap.exists()) return;
+
+        const post =
+            snap.data();
+
+        const reactions = {
+            like: 0,
+            love: 0,
+            haha: 0,
+            wow: 0,
+            sad: 0,
+            angry: 0,
+            ...(post.reactions || {})
+        };
+
+        const userReactions =
             {
-                [`reactions.${type}`]:
-                    increment(1)
+                ...(post.userReactions || {})
+            };
+
+        const uid =
+            App.user.uid;
+
+        const oldReaction =
+            userReactions[uid] || null;
+
+
+        // একই reaction আবার দিলে কিছু করবে না
+        if(oldReaction === type){
+
+            return;
+
+        }
+
+
+        // আগের reaction কমাও
+        if(oldReaction){
+
+            reactions[oldReaction] =
+                Math.max(
+                    0,
+                    (reactions[oldReaction] || 0) - 1
+                );
+
+        }
+
+
+        // নতুন reaction বাড়াও
+        reactions[type] =
+            (reactions[type] || 0) + 1;
+
+        userReactions[uid] =
+            type;
+
+
+        await updateDoc(
+            postRef,
+            {
+                reactions:
+                    reactions,
+
+                userReactions:
+                    userReactions,
+
+                likes:
+                    reactions.like
             }
         );
+
 
         await loadPosts();
 
     }catch(e){
 
         console.error(e);
+
         alert(e.message);
 
     }
 
 }
-
 
 // ======================
 // COMMENT
