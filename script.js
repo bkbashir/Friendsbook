@@ -2484,111 +2484,162 @@ function renderComment(
     commentIndex
 ){
 
-    const reactions =
-        comment.reactions || {};
+    const reactions = {
+
+        like: 0,
+        love: 0,
+        haha: 0,
+        wow: 0,
+        sad: 0,
+        angry: 0,
+
+        ...(comment.reactions || {})
+
+    };
+
 
     const replies =
         comment.replies || [];
+
+
+    const myReaction =
+        comment.userReactions?.[
+            App.user?.uid
+        ] || null;
+
+
+    const reactionInfo = {
+
+        like: {
+            emoji: "👍",
+            name: "Like"
+        },
+
+        love: {
+            emoji: "❤️",
+            name: "Love"
+        },
+
+        haha: {
+            emoji: "😂",
+            name: "Haha"
+        },
+
+        wow: {
+            emoji: "😮",
+            name: "Wow"
+        },
+
+        sad: {
+            emoji: "😢",
+            name: "Sad"
+        },
+
+        angry: {
+            emoji: "😡",
+            name: "Angry"
+        }
+
+    };
+
+
+    const selected =
+        reactionInfo[myReaction];
+
+
+    const buttonText =
+        selected
+        ?
+        `${selected.emoji} ${selected.name}`
+        :
+        `👍 Like`;
+
+
+    const likeClass =
+        myReaction === "like"
+        ?
+        "likeBtn activeLike"
+        :
+        "likeBtn";
+
 
     return `
 
     <div class="commentBox">
 
         <img
-            src="${comment.photo || "default-profile.png"}"
+            src="${
+                comment.photo ||
+                "default-profile.png"
+            }"
             class="commentPhoto"
         >
+
 
         <div class="commentContent">
 
             <b>
-                ${escapeHTML(comment.name || "User")}
+                ${escapeHTML(
+                    comment.name ||
+                    "User"
+                )}
             </b>
 
+
             <div>
-                ${escapeHTML(comment.text || "")}
+                ${escapeHTML(
+                    comment.text ||
+                    ""
+                )}
             </div>
 
+
             <small>
-                ${comment.time || "Just now"}
+                ${
+                    comment.time ||
+                    "Just now"
+                }
             </small>
 
-
-            <!-- COMMENT REACTIONS -->
 
             <div class="commentActions">
 
                 <button
-                    onclick="reactComment(
-                        '${postId}',
-                        ${commentIndex},
-                        'like'
-                    )"
+                    class="${likeClass}"
+                    onclick="
+                        handleCommentLikeClick(
+                            '${postId}',
+                            ${commentIndex}
+                        )
+                    "
+                    onpointerdown="
+                        startCommentReaction(
+                            event,
+                            '${postId}',
+                            ${commentIndex}
+                        )
+                    "
+                    onpointerup="
+                        endCommentReaction()
+                    "
+                    onpointerleave="
+                        endCommentReaction()
+                    "
+                    onpointercancel="
+                        endCommentReaction()
+                    "
                 >
-                    👍 ${reactions.like || 0}
+                    ${buttonText}
                 </button>
 
 
                 <button
-                    onclick="reactComment(
-                        '${postId}',
-                        ${commentIndex},
-                        'love'
-                    )"
-                >
-                    ❤️ ${reactions.love || 0}
-                </button>
-
-
-                <button
-                    onclick="reactComment(
-                        '${postId}',
-                        ${commentIndex},
-                        'haha'
-                    )"
-                >
-                    😂 ${reactions.haha || 0}
-                </button>
-
-
-                <button
-                    onclick="reactComment(
-                        '${postId}',
-                        ${commentIndex},
-                        'wow'
-                    )"
-                >
-                    😮 ${reactions.wow || 0}
-                </button>
-
-
-                <button
-                    onclick="reactComment(
-                        '${postId}',
-                        ${commentIndex},
-                        'sad'
-                    )"
-                >
-                    😢 ${reactions.sad || 0}
-                </button>
-
-
-                <button
-                    onclick="reactComment(
-                        '${postId}',
-                        ${commentIndex},
-                        'angry'
-                    )"
-                >
-                    😡 ${reactions.angry || 0}
-                </button>
-
-
-                <button
-                    onclick="replyComment(
-                        '${postId}',
-                        ${commentIndex}
-                    )"
+                    onclick="
+                        replyComment(
+                            '${postId}',
+                            ${commentIndex}
+                        )
+                    "
                 >
                     ↩ Reply
                 </button>
@@ -2596,12 +2647,9 @@ function renderComment(
             </div>
 
 
-            <!-- REPLIES -->
-
             ${
                 replies.length
                 ?
-
                 replies.map(
                     (reply,replyIndex) =>
 
@@ -2613,9 +2661,7 @@ function renderComment(
                     )
 
                 ).join("")
-
                 :
-
                 ""
             }
 
@@ -2626,7 +2672,6 @@ function renderComment(
     `;
 
 }
-
 
 // ======================
 // REPLY HTML
@@ -3337,6 +3382,227 @@ async function reactComment(
     }
 
 }
+let commentReactionTimer = null;
+
+let commentReactionOpened = false;
+
+
+function startCommentReaction(
+    event,
+    postId,
+    commentIndex
+){
+
+    commentReactionOpened = false;
+
+    const button =
+        event.currentTarget;
+
+    const rect =
+        button.getBoundingClientRect();
+
+
+    commentReactionTimer =
+        setTimeout(() => {
+
+            commentReactionOpened =
+                true;
+
+
+            showCommentReactionMenu(
+                rect,
+                postId,
+                commentIndex
+            );
+
+        }, 550);
+
+}
+
+
+function endCommentReaction(){
+
+    if(commentReactionTimer){
+
+        clearTimeout(
+            commentReactionTimer
+        );
+
+        commentReactionTimer =
+            null;
+
+    }
+
+}
+
+
+function handleCommentLikeClick(
+    postId,
+    commentIndex
+){
+
+    if(commentReactionOpened){
+
+        commentReactionOpened =
+            false;
+
+        return;
+
+    }
+
+
+    reactComment(
+        postId,
+        commentIndex,
+        "like"
+    );
+
+}
+function showCommentReactionMenu(
+    rect,
+    postId,
+    commentIndex
+){
+
+    closeReactionMenu();
+
+
+    const menu =
+        document.createElement(
+            "div"
+        );
+
+
+    menu.id =
+        "commentReactionMenu";
+
+
+    menu.innerHTML = `
+
+        <button
+            onclick="
+                reactComment(
+                    '${postId}',
+                    ${commentIndex},
+                    'like'
+                );
+                closeCommentReactionMenu();
+            "
+        >
+            👍
+        </button>
+
+
+        <button
+            onclick="
+                reactComment(
+                    '${postId}',
+                    ${commentIndex},
+                    'love'
+                );
+                closeCommentReactionMenu();
+            "
+        >
+            ❤️
+        </button>
+
+
+        <button
+            onclick="
+                reactComment(
+                    '${postId}',
+                    ${commentIndex},
+                    'haha'
+                );
+                closeCommentReactionMenu();
+            "
+        >
+            😂
+        </button>
+
+
+        <button
+            onclick="
+                reactComment(
+                    '${postId}',
+                    ${commentIndex},
+                    'wow'
+                );
+                closeCommentReactionMenu();
+            "
+        >
+            😮
+        </button>
+
+
+        <button
+            onclick="
+                reactComment(
+                    '${postId}',
+                    ${commentIndex},
+                    'sad'
+                );
+                closeCommentReactionMenu();
+            "
+        >
+            😢
+        </button>
+
+
+        <button
+            onclick="
+                reactComment(
+                    '${postId}',
+                    ${commentIndex},
+                    'angry'
+                );
+                closeCommentReactionMenu();
+            "
+        >
+            😡
+        </button>
+
+    `;
+
+
+    document.body.appendChild(menu);
+
+
+    menu.style.position =
+        "fixed";
+
+
+    menu.style.left =
+        Math.max(
+            10,
+            rect.left - 20
+        ) + "px";
+
+
+    menu.style.top =
+        Math.max(
+            10,
+            rect.top - 65
+        ) + "px";
+
+}
+
+
+function closeCommentReactionMenu(){
+
+    const menu =
+        document.getElementById(
+            "commentReactionMenu"
+        );
+
+
+    if(menu){
+
+        menu.remove();
+
+    }
+
+        }
 // ======================
 // REPLY COMMENT
 // ======================
