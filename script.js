@@ -2079,6 +2079,13 @@ async function loadPosts(){
 
         renderFeed();
 
+        if (
+    $("profilePage") &&
+    !$("profilePage").classList.contains("hidden")
+) {
+    await loadProfilePosts();
+        }
+        
     }catch(e){
 
         console.error(e);
