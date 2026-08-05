@@ -2639,104 +2639,146 @@ function renderReply(
     replyIndex
 ){
 
-    const reactions =
-        reply.reactions || {};
+    const reactions = {
+
+        like: 0,
+        love: 0,
+        haha: 0,
+        wow: 0,
+        sad: 0,
+        angry: 0,
+
+        ...(reply.reactions || {})
+
+    };
+
+
+    const myReaction =
+        reply.userReactions?.[
+            App.user?.uid
+        ] || null;
+
+
+    const reactionInfo = {
+
+        like: {
+            emoji: "👍",
+            name: "Like"
+        },
+
+        love: {
+            emoji: "❤️",
+            name: "Love"
+        },
+
+        haha: {
+            emoji: "😂",
+            name: "Haha"
+        },
+
+        wow: {
+            emoji: "😮",
+            name: "Wow"
+        },
+
+        sad: {
+            emoji: "😢",
+            name: "Sad"
+        },
+
+        angry: {
+            emoji: "😡",
+            name: "Angry"
+        }
+
+    };
+
+
+    const selected =
+        reactionInfo[myReaction];
+
+
+    const buttonText =
+        selected
+        ?
+        `${selected.emoji} ${selected.name}`
+        :
+        `👍 Like`;
+
+
+    const likeClass =
+        myReaction === "like"
+        ?
+        "likeBtn activeLike"
+        :
+        "likeBtn";
+
 
     return `
 
     <div class="replyBox">
 
         <img
-            src="${reply.photo || "default-profile.png"}"
+            src="${
+                reply.photo ||
+                "default-profile.png"
+            }"
             class="commentPhoto"
         >
 
         <div>
 
             <b>
-                ${escapeHTML(reply.name || "User")}
+                ${escapeHTML(
+                    reply.name ||
+                    "User"
+                )}
             </b>
 
             <div>
-                ${escapeHTML(reply.text || "")}
+                ${escapeHTML(
+                    reply.text || ""
+                )}
             </div>
 
             <small>
-                ${reply.time || "Just now"}
+                ${
+                    reply.time ||
+                    "Just now"
+                }
             </small>
 
 
             <div class="commentActions">
 
                 <button
-                    onclick="reactReply(
-                        '${postId}',
-                        ${commentIndex},
-                        ${replyIndex},
-                        'like'
-                    )"
+                    class="${likeClass}"
+                    onclick="
+                        handleReplyLikeClick(
+                            '${postId}',
+                            ${commentIndex},
+                            ${replyIndex}
+                        )
+                    "
+                    onpointerdown="
+                        startReplyReaction(
+                            event,
+                            '${postId}',
+                            ${commentIndex},
+                            ${replyIndex}
+                        )
+                    "
+                    onpointerup="
+                        endReplyReaction()
+                    "
+                    onpointerleave="
+                        endReplyReaction()
+                    "
+                    onpointercancel="
+                        endReplyReaction()
+                    "
                 >
-                    👍 ${reactions.like || 0}
-                </button>
-
-
-                <button
-                    onclick="reactReply(
-                        '${postId}',
-                        ${commentIndex},
-                        ${replyIndex},
-                        'love'
-                    )"
-                >
-                    ❤️ ${reactions.love || 0}
-                </button>
-
-
-                <button
-                    onclick="reactReply(
-                        '${postId}',
-                        ${commentIndex},
-                        ${replyIndex},
-                        'haha'
-                    )"
-                >
-                    😂 ${reactions.haha || 0}
-                </button>
-
-
-                <button
-                    onclick="reactReply(
-                        '${postId}',
-                        ${commentIndex},
-                        ${replyIndex},
-                        'wow'
-                    )"
-                >
-                    😮 ${reactions.wow || 0}
-                </button>
-
-
-                <button
-                    onclick="reactReply(
-                        '${postId}',
-                        ${commentIndex},
-                        ${replyIndex},
-                        'sad'
-                    )"
-                >
-                    😢 ${reactions.sad || 0}
-                </button>
-
-
-                <button
-                    onclick="reactReply(
-                        '${postId}',
-                        ${commentIndex},
-                        ${replyIndex},
-                        'angry'
-                    )"
-                >
-                    😡 ${reactions.angry || 0}
+                    ${buttonText}
                 </button>
 
             </div>
@@ -3401,6 +3443,8 @@ async function reactReply(
     type
 ){
 
+    if(!App.user) return;
+
     try{
 
         const post =
@@ -3410,52 +3454,119 @@ async function reactReply(
 
         if(!post) return;
 
+
         const comments =
             [...(post.comments || [])];
+
 
         const comment =
             {
                 ...comments[commentIndex]
             };
 
+
         const replies =
             [
                 ...(comment.replies || [])
             ];
+
+
+        if(!replies[replyIndex])
+            return;
+
 
         const reply =
             {
                 ...replies[replyIndex]
             };
 
-        const reactions =
-            {
-                ...(reply.reactions || {})
-            };
+
+        const reactions = {
+
+            like: 0,
+            love: 0,
+            haha: 0,
+            wow: 0,
+            sad: 0,
+            angry: 0,
+
+            ...(reply.reactions || {})
+
+        };
+
+
+        const userReactions = {
+
+            ...(reply.userReactions || {})
+
+        };
+
+
+        const uid =
+            App.user.uid;
+
+
+        const oldReaction =
+            userReactions[uid] || null;
+
+
+        if(oldReaction === type){
+
+            return;
+
+        }
+
+
+        if(oldReaction){
+
+            reactions[oldReaction] =
+                Math.max(
+                    0,
+                    (reactions[oldReaction] || 0) - 1
+                );
+
+        }
+
 
         reactions[type] =
             (reactions[type] || 0) + 1;
 
+
+        userReactions[uid] =
+            type;
+
+
         reply.reactions =
             reactions;
+
+
+        reply.userReactions =
+            userReactions;
+
 
         replies[replyIndex] =
             reply;
 
+
         comment.replies =
             replies;
+
 
         comments[commentIndex] =
             comment;
 
+
         await updateDoc(
-            doc(db,"posts",postId),
+            doc(db, "posts", postId),
             {
-                comments: comments
+                comments:
+                    comments
             }
         );
 
+
         await loadPosts();
+
 
     }catch(e){
 
@@ -3466,8 +3577,241 @@ async function reactReply(
     }
 
 }
+let replyReactionTimer = null;
+
+let replyReactionOpened = false;
 
 
+function startReplyReaction(
+    event,
+    postId,
+    commentIndex,
+    replyIndex
+){
+
+    replyReactionOpened = false;
+
+
+    const button =
+        event.currentTarget;
+
+
+    const rect =
+        button.getBoundingClientRect();
+
+
+    replyReactionTimer =
+        setTimeout(() => {
+
+            replyReactionOpened =
+                true;
+
+
+            showReplyReactionMenu(
+                rect,
+                postId,
+                commentIndex,
+                replyIndex
+            );
+
+
+        }, 550);
+
+}
+
+
+function endReplyReaction(){
+
+    if(replyReactionTimer){
+
+        clearTimeout(
+            replyReactionTimer
+        );
+
+        replyReactionTimer =
+            null;
+
+    }
+
+}
+
+
+function handleReplyLikeClick(
+    postId,
+    commentIndex,
+    replyIndex
+){
+
+    if(replyReactionOpened){
+
+        replyReactionOpened =
+            false;
+
+        return;
+
+    }
+
+
+    reactReply(
+        postId,
+        commentIndex,
+        replyIndex,
+        "like"
+    );
+
+}
+function showReplyReactionMenu(
+    rect,
+    postId,
+    commentIndex,
+    replyIndex
+){
+
+    closeReactionMenu();
+
+
+    const menu =
+        document.createElement(
+            "div"
+        );
+
+
+    menu.id =
+        "replyReactionMenu";
+
+
+    menu.innerHTML = `
+
+        <button
+            onclick="
+                reactReply(
+                    '${postId}',
+                    ${commentIndex},
+                    ${replyIndex},
+                    'like'
+                );
+                closeReplyReactionMenu();
+            "
+        >
+            👍
+        </button>
+
+
+        <button
+            onclick="
+                reactReply(
+                    '${postId}',
+                    ${commentIndex},
+                    ${replyIndex},
+                    'love'
+                );
+                closeReplyReactionMenu();
+            "
+        >
+            ❤️
+        </button>
+
+
+        <button
+            onclick="
+                reactReply(
+                    '${postId}',
+                    ${commentIndex},
+                    ${replyIndex},
+                    'haha'
+                );
+                closeReplyReactionMenu();
+            "
+        >
+            😂
+        </button>
+
+
+        <button
+            onclick="
+                reactReply(
+                    '${postId}',
+                    ${commentIndex},
+                    ${replyIndex},
+                    'wow'
+                );
+                closeReplyReactionMenu();
+            "
+        >
+            😮
+        </button>
+
+
+        <button
+            onclick="
+                reactReply(
+                    '${postId}',
+                    ${commentIndex},
+                    ${replyIndex},
+                    'sad'
+                );
+                closeReplyReactionMenu();
+            "
+        >
+            😢
+        </button>
+
+
+        <button
+            onclick="
+                reactReply(
+                    '${postId}',
+                    ${commentIndex},
+                    ${replyIndex},
+                    'angry'
+                );
+                closeReplyReactionMenu();
+            "
+        >
+            😡
+        </button>
+
+    `;
+
+
+    document.body.appendChild(
+        menu
+    );
+
+
+    menu.style.position =
+        "fixed";
+
+
+    menu.style.left =
+        Math.max(
+            10,
+            rect.left - 20
+        ) + "px";
+
+
+    menu.style.top =
+        Math.max(
+            10,
+            rect.top - 65
+        ) + "px";
+
+}
+
+
+function closeReplyReactionMenu(){
+
+    const menu =
+        $("replyReactionMenu");
+
+
+    if(menu){
+
+        menu.remove();
+
+    }
+
+}
 // ======================
 // EDIT POST
 // ======================
