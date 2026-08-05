@@ -4313,6 +4313,15 @@ window.replyComment =
 window.reactReply =
     reactReply;
 
+window.startReplyReaction =
+    startReplyReaction;
+
+window.endReplyReaction =
+    endReplyReaction;
+
+window.handleReplyLikeClick =
+    handleReplyLikeClick;
+
 window.editPost =
     editPost;
 
