@@ -1442,60 +1442,7 @@ function renderProfilePosts(myPosts){
             </div>
 
 
-            <!-- REACTION COUNTS -->
-
-            <div class="reactionCounts">
-
-                ${
-                    reactions.like
-                    ?
-                    `👍 ${reactions.like}`
-                    :
-                    ""
-                }
-
-                ${
-                    reactions.love
-                    ?
-                    ` ❤️ ${reactions.love}`
-                    :
-                    ""
-                }
-
-                ${
-                    reactions.haha
-                    ?
-                    ` 😂 ${reactions.haha}`
-                    :
-                    ""
-                }
-
-                ${
-                    reactions.wow
-                    ?
-                    ` 😮 ${reactions.wow}`
-                    :
-                    ""
-                }
-
-                ${
-                    reactions.sad
-                    ?
-                    ` 😢 ${reactions.sad}`
-                    :
-                    ""
-                }
-
-                ${
-                    reactions.angry
-                    ?
-                    ` 😡 ${reactions.angry}`
-                    :
-                    ""
-                }
-
-            </div>
-
+            
 
             <!-- COMMENTS -->
 
