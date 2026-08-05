@@ -413,6 +413,7 @@ $("logoutBtn")?.addEventListener("click", async () => {
 const pageViews = [
     "homeContent",
     "profilePage",
+    "commentsPage",
     "friendsPage",
     "aiPage",
     "reelsPage",
@@ -2424,10 +2425,10 @@ const buttonText =
 
                 <button
                     onclick="
-                        commentPost(
-                            '${post.id}'
-                        )
-                    "
+    openPostComments(
+        '${post.id}'
+    )
+"
                 >
                     💬 ${comments.length}
                 </button>
@@ -2445,27 +2446,7 @@ const buttonText =
 
             </div>
 
-
-            <!-- COMMENTS -->
-
-            <div class="commentList">
-
-                ${
-                    comments.map(
-                        (comment,index) =>
-
-                        renderComment(
-                            post.id,
-                            comment,
-                            index
-                        )
-
-                    ).join("")
-                }
-
-            </div>
-
-        </div>
+       </div>
 
         `;
 
@@ -4354,3 +4335,337 @@ window.handleReplyLikeClick =
 
 window.closeReplyReactionMenu =
     closeReplyReactionMenu;
+
+// ======================================
+// COMMENTS PAGE
+// ======================================
+
+let currentCommentsPostId = null;
+
+
+function openCommentsPage(postId){
+
+    const post =
+        posts.find(
+            p => p.id === postId
+        );
+
+    if(!post) return;
+
+
+    currentCommentsPostId =
+        postId;
+
+
+    openPage(
+        "commentsPage"
+    );
+
+
+    renderCommentsPage(
+        post
+    );
+
+}
+
+
+function renderCommentsPage(post){
+
+    const preview =
+        $("commentsPostPreview");
+
+    const list =
+        $("commentsPageList");
+
+
+    if(!preview || !list)
+        return;
+
+
+    const comments =
+        post.comments || [];
+
+
+    preview.innerHTML = `
+
+        <div class="commentsPostPreview">
+
+            <div class="post-header">
+
+                <img
+                    class="post-profile"
+                    src="${
+                        post.photo ||
+                        "default-profile.png"
+                    }"
+                >
+
+                <div class="post-user">
+
+                    <h4>
+                        ${
+                            escapeHTML(
+                                post.name ||
+                                "User"
+                            )
+                        }
+                    </h4>
+
+                    <small>
+                        Just now
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            ${
+                post.text
+                ?
+                `
+                <p class="postText">
+                    ${
+                        escapeHTML(
+                            post.text
+                        )
+                    }
+                </p>
+                `
+                :
+                ""
+            }
+
+
+            ${
+                post.image
+                ?
+                `
+                <img
+                    src="${post.image}"
+                    class="postImage"
+                    onclick="
+                        openImage(
+                            '${post.image}'
+                        )
+                    "
+                >
+                `
+                :
+                ""
+            }
+
+        </div>
+
+    `;
+
+
+    list.innerHTML = `
+
+        <h3>
+            ${
+                comments.length
+            }
+            ${
+                comments.length === 1
+                ? "Comment"
+                : "Comments"
+            }
+        </h3>
+
+        ${
+            comments.length
+            ?
+            comments.map(
+                (
+                    comment,
+                    index
+                ) =>
+
+                renderComment(
+                    post.id,
+                    comment,
+                    index
+                )
+
+            ).join("")
+            :
+            `
+            <div class="noComments">
+                No comments yet.
+            </div>
+            `
+        }
+
+    `;
+
+}
+
+
+// ======================
+// OPEN COMMENTS BUTTON
+// ======================
+
+function openPostComments(
+    postId
+){
+
+    openCommentsPage(
+        postId
+    );
+
+}
+
+
+// ======================
+// SEND NEW COMMENT
+// ======================
+
+$("commentsSendBtn")?.addEventListener(
+    "click",
+    async () => {
+
+        const input =
+            $("commentsInput");
+
+        const text =
+            input?.value.trim();
+
+
+        if(!text)
+            return;
+
+
+        if(!currentCommentsPostId)
+            return;
+
+
+        try{
+
+            await updateDoc(
+
+                doc(
+                    db,
+                    "posts",
+                    currentCommentsPostId
+                ),
+
+                {
+
+                    comments:
+
+                        arrayUnion({
+
+                            uid:
+                                App.user.uid,
+
+                            name:
+                                App.profile?.name ||
+                                App.user.displayName ||
+                                "User",
+
+                            photo:
+                                App.profile?.photo ||
+                                "default-profile.png",
+
+                            text:
+                                text,
+
+                            time:
+                                new Date()
+                                .toLocaleString(),
+
+                            reactions: {
+
+                                like: 0,
+                                love: 0,
+                                haha: 0,
+                                wow: 0,
+                                sad: 0,
+                                angry: 0
+
+                            },
+
+                            replies: []
+
+                        })
+
+                }
+
+            );
+
+
+            input.value = "";
+
+
+            await loadPosts();
+
+
+            const updatedPost =
+                posts.find(
+                    p =>
+                    p.id ===
+                    currentCommentsPostId
+                );
+
+
+            if(updatedPost){
+
+                renderCommentsPage(
+                    updatedPost
+                );
+
+            }
+
+
+        }catch(e){
+
+            console.error(e);
+
+            alert(
+                "Comment failed: " +
+                e.message
+            );
+
+        }
+
+    }
+);
+
+
+// ======================
+// ENTER = SEND COMMENT
+// ======================
+
+$("commentsInput")?.addEventListener(
+    "keydown",
+    e => {
+
+        if(e.key === "Enter"){
+
+            $("commentsSendBtn")
+                ?.click();
+
+        }
+
+    }
+);
+
+
+// ======================
+// BACK
+// ======================
+
+$("backFromComments")?.addEventListener(
+    "click",
+    () => {
+
+        currentCommentsPostId =
+            null;
+
+        openPage(
+            "homePage"
+        );
+
+    }
+);
