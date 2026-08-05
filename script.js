@@ -4330,3 +4330,27 @@ window.deletePost =
 
 window.openPostMenu =
     openPostMenu;
+
+window.startCommentReaction =
+    startCommentReaction;
+
+window.endCommentReaction =
+    endCommentReaction;
+
+window.handleCommentLikeClick =
+    handleCommentLikeClick;
+
+window.closeCommentReactionMenu =
+    closeCommentReactionMenu;
+
+window.startReplyReaction =
+    startReplyReaction;
+
+window.endReplyReaction =
+    endReplyReaction;
+
+window.handleReplyLikeClick =
+    handleReplyLikeClick;
+
+window.closeReplyReactionMenu =
+    closeReplyReactionMenu;
