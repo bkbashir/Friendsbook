@@ -3464,7 +3464,7 @@ function showCommentReactionMenu(
     commentIndex
 ){
 
-    closeReactionMenu();
+    closeCommentReactionMenu();
 
 
     const menu =
