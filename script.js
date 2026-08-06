@@ -3354,6 +3354,16 @@ async function reactComment(
 
 
         await loadPosts();
+        const updatedPost = posts.find(
+    p => p.id === postId
+);
+
+if (
+    updatedPost &&
+    currentCommentsPostId === postId
+) {
+    renderCommentsPage(updatedPost);
+            }
 
     }catch(e){
 
