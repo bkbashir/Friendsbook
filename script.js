@@ -4663,9 +4663,14 @@ $("backFromComments")?.addEventListener(
         currentCommentsPostId =
             null;
 
-        openPage(
-            "homePage"
+        openPage("homeContent");
         );
 
     }
 );
+// ======================================
+// GLOBAL COMMENT BUTTON
+// ======================================
+
+window.openPostComments =
+    openPostComments;
