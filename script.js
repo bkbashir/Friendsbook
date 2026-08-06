@@ -4664,7 +4664,6 @@ $("backFromComments")?.addEventListener(
             null;
 
         openPage("homeContent");
-        );
 
     }
 );
