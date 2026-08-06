@@ -1,3 +1,4 @@
+
 // ======================================
 // Friendsbook 2026
 // script.js
@@ -4664,9 +4665,10 @@ $("backFromComments")?.addEventListener(
             null;
 
         openPage("homeContent");
+        );
 
     }
-);
+
 // ======================================
 // GLOBAL COMMENT BUTTON
 // ======================================
