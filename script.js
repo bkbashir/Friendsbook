@@ -4665,10 +4665,9 @@ $("backFromComments")?.addEventListener(
             null;
 
         openPage("homeContent");
-        );
 
     }
-
+);
 // ======================================
 // GLOBAL COMMENT BUTTON
 // ======================================
