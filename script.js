@@ -1422,10 +1422,10 @@ function renderProfilePosts(myPosts){
 
                 <button
                     onclick="
-                        commentPost(
-                            '${post.id}'
-                        )
-                    "
+    window.openPostComments(
+        '${post.id}'
+    )
+"
                 >
                     💬 ${comments.length}
                 </button>
@@ -1440,28 +1440,6 @@ function renderProfilePosts(myPosts){
                 >
                     ↗ Share
                 </button>
-
-            </div>
-
-
-            
-
-            <!-- COMMENTS -->
-
-            <div class="commentList">
-
-                ${
-                    comments.map(
-                        (comment,index) =>
-
-                        renderComment(
-                            post.id,
-                            comment,
-                            index
-                        )
-
-                    ).join("")
-                }
 
             </div>
 
