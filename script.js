@@ -3297,7 +3297,18 @@ function renderComment(
         :
         "likeBtn";
 
+const isOwnComment =
+    comment.uid === App.user?.uid;
 
+const isFollowingCommentUser =
+    (App.profile?.followingIds || [])
+        .includes(comment.uid);
+
+const showCommentFollow =
+    comment.uid &&
+    !isOwnComment &&
+    !isFollowingCommentUser;
+    
     return `
 
     <div class="commentBox">
@@ -3321,12 +3332,62 @@ function renderComment(
             </b>
 
 
-            <div>
-                ${escapeHTML(
-                    comment.text ||
-                    ""
-                )}
-            </div>
+            <div
+    style="
+        display:flex;
+        align-items:center;
+        gap:8px;
+        flex-wrap:wrap;
+    "
+>
+    <b
+        onclick="
+            openUserProfile(
+                '${comment.uid}'
+            )
+        "
+        style="
+            cursor:pointer;
+        "
+    >
+        ${escapeHTML(
+            comment.name ||
+            "User"
+        )}
+    </b>
+
+    ${
+        showCommentFollow
+        ?
+        `
+        <button
+            type="button"
+            onclick="
+                event.stopPropagation();
+
+                toggleFollowFromList(
+                    '${comment.uid}',
+                    this
+                )
+            "
+            style="
+                border:none;
+                background:#6c63ff;
+                color:white;
+                border-radius:7px;
+                padding:4px 9px;
+                font-size:12px;
+                font-weight:600;
+                cursor:pointer;
+            "
+        >
+            Follow
+        </button>
+        `
+        :
+        ""
+    }
+</div>
 
 
             <small>
