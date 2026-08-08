@@ -429,6 +429,10 @@ const pageViews = [
 ];
 
 function openPage(pageId){
+    localStorage.setItem(
+    "fb_current_page",
+    pageId
+);
 
     // সব page hide
     pageViews.forEach(id => {
@@ -4662,3 +4666,33 @@ $("backFromComments")?.addEventListener(
 
 window.openPostComments =
     openPostComments;
+// ======================================
+// RESTORE LAST PAGE AFTER REFRESH
+// ======================================
+
+function restoreLastPage(){
+
+    const lastPage =
+        localStorage.getItem(
+            "fb_current_page"
+        );
+
+    if(
+        lastPage &&
+        pageViews.includes(lastPage)
+    ){
+
+        openPage(lastPage);
+
+    }else{
+
+        openPage("homeContent");
+
+    }
+
+}
+
+setTimeout(
+    restoreLastPage,
+    500
+);
