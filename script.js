@@ -1839,7 +1839,23 @@ $("messageText").textContent=text;
 show("messageModal");
 
 }
+$("profilePhoto")?.addEventListener(
+    "click",
+    () => {
+        openImage(
+            $("profilePhoto").src
+        );
+    }
+);
 
+$("coverPhoto")?.addEventListener(
+    "click",
+    () => {
+        openImage(
+            $("coverPhoto").src
+        );
+    }
+);
 $("messageOkBtn")?.addEventListener("click",()=>{
 
 hide("messageModal");
