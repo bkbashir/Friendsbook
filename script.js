@@ -733,6 +733,492 @@ function updateProfileUI(){
         App.profile.photo ||
         "default-profile.png";
 }
+// ======================================
+// VIEW OTHER USER PROFILE + FOLLOW
+// ======================================
+
+let viewedProfileUid = null;
+
+
+async function openUserProfile(uid){
+
+    if(!uid || !App.user) return;
+
+    try{
+
+        const userSnap = await getDoc(
+            doc(db, "users", uid)
+        );
+
+        if(!userSnap.exists()){
+
+            alert("User profile not found.");
+            return;
+
+        }
+
+        const profile = {
+            uid: uid,
+            ...userSnap.data()
+        };
+
+        viewedProfileUid = uid;
+
+        // Open profile page
+        openPage("profilePage");
+
+
+        // ==========================
+        // PROFILE INFORMATION
+        // ==========================
+
+        $("profileName").textContent =
+            profile.name ||
+            "User";
+
+        $("profileUsername").textContent =
+            "@" +
+            (
+                profile.username ||
+                uid.substring(0,8)
+            );
+
+        $("profileBio").textContent =
+            profile.bio ||
+            "Add your bio...";
+
+        $("profilePhoto").src =
+            profile.photo ||
+            "default-profile.png";
+
+        $("coverPhoto").src =
+            profile.cover ||
+            "default-cover.jpg";
+
+
+        // ==========================
+        // PROFILE STATS
+        // ==========================
+
+        $("followersCount").textContent =
+            profile.followers || 0;
+
+        $("followingCount").textContent =
+            profile.following || 0;
+
+
+        // ==========================
+        // LOAD USER POSTS
+        // ==========================
+
+        const q = query(
+            collection(db, "posts"),
+            where(
+                "uid",
+                "==",
+                uid
+            )
+        );
+
+        const snap =
+            await getDocs(q);
+
+        const userPosts = [];
+
+        snap.forEach(item => {
+
+            userPosts.push({
+
+                id: item.id,
+
+                ...item.data()
+
+            });
+
+        });
+
+
+        userPosts.sort((a,b) => {
+
+            const aTime =
+                a.time?.toMillis?.() || 0;
+
+            const bTime =
+                b.time?.toMillis?.() || 0;
+
+            return bTime - aTime;
+
+        });
+
+
+        $("postsCount").textContent =
+            userPosts.length;
+
+
+        renderProfilePosts(
+            userPosts
+        );
+
+
+        // ==========================
+        // OWN PROFILE / OTHER PROFILE
+        // ==========================
+
+        const isOwnProfile =
+            uid === App.user.uid;
+
+
+        const editBtn =
+            $("editProfileBtn");
+
+        const storyBtn =
+            $("createStoryBtn");
+
+        const followBtn =
+            $("followBtn");
+
+
+        if(isOwnProfile){
+
+            // নিজের profile
+
+            editBtn?.classList.remove(
+                "hidden"
+            );
+
+            storyBtn?.classList.remove(
+                "hidden"
+            );
+
+            followBtn?.classList.add(
+                "hidden"
+            );
+
+
+            document
+                .querySelector(
+                    ".coverCamera"
+                )
+                ?.classList.remove(
+                    "hidden"
+                );
+
+            document
+                .querySelector(
+                    ".avatarCamera"
+                )
+                ?.classList.remove(
+                    "hidden"
+                );
+
+
+        }else{
+
+            // অন্যের profile
+
+            editBtn?.classList.add(
+                "hidden"
+            );
+
+            storyBtn?.classList.add(
+                "hidden"
+            );
+
+            followBtn?.classList.remove(
+                "hidden"
+            );
+
+
+            document
+                .querySelector(
+                    ".coverCamera"
+                )
+                ?.classList.add(
+                    "hidden"
+                );
+
+            document
+                .querySelector(
+                    ".avatarCamera"
+                )
+                ?.classList.add(
+                    "hidden"
+                );
+
+
+            // ==========================
+            // FOLLOWING CHECK
+            // ==========================
+
+            const mySnap =
+                await getDoc(
+                    doc(
+                        db,
+                        "users",
+                        App.user.uid
+                    )
+                );
+
+            const myData =
+                mySnap.exists()
+                ? mySnap.data()
+                : {};
+
+            const followingIds =
+                myData.followingIds || [];
+
+            const isFollowing =
+                followingIds.includes(uid);
+
+
+            followBtn.textContent =
+                isFollowing
+                ? "Following"
+                : "Follow";
+
+
+            followBtn.classList.toggle(
+                "followingBtn",
+                isFollowing
+            );
+
+        }
+
+    }catch(error){
+
+        console.error(
+            "Open user profile error:",
+            error
+        );
+
+        alert(
+            "Profile failed: " +
+            error.message
+        );
+
+    }
+
+                }
+// ======================================
+// FOLLOW / UNFOLLOW
+// ======================================
+
+$("followBtn")?.addEventListener(
+    "click",
+    async () => {
+
+        if(
+            !App.user ||
+            !viewedProfileUid ||
+            viewedProfileUid === App.user.uid
+        ){
+
+            return;
+
+        }
+
+
+        const followBtn =
+            $("followBtn");
+
+
+        try{
+
+            followBtn.disabled = true;
+
+
+            const myRef =
+                doc(
+                    db,
+                    "users",
+                    App.user.uid
+                );
+
+            const targetRef =
+                doc(
+                    db,
+                    "users",
+                    viewedProfileUid
+                );
+
+
+            const mySnap =
+                await getDoc(myRef);
+
+            const targetSnap =
+                await getDoc(targetRef);
+
+
+            if(
+                !mySnap.exists() ||
+                !targetSnap.exists()
+            ){
+
+                return;
+
+            }
+
+
+            const myData =
+                mySnap.data();
+
+            const targetData =
+                targetSnap.data();
+
+
+            let followingIds =
+                myData.followingIds || [];
+
+            let followerIds =
+                targetData.followerIds || [];
+
+
+            const alreadyFollowing =
+                followingIds.includes(
+                    viewedProfileUid
+                );
+
+
+            if(alreadyFollowing){
+
+                // ======================
+                // UNFOLLOW
+                // ======================
+
+                followingIds =
+                    followingIds.filter(
+                        id =>
+                        id !==
+                        viewedProfileUid
+                    );
+
+                followerIds =
+                    followerIds.filter(
+                        id =>
+                        id !==
+                        App.user.uid
+                    );
+
+
+            }else{
+
+                // ======================
+                // FOLLOW
+                // ======================
+
+                if(
+                    !followingIds.includes(
+                        viewedProfileUid
+                    )
+                ){
+
+                    followingIds.push(
+                        viewedProfileUid
+                    );
+
+                }
+
+
+                if(
+                    !followerIds.includes(
+                        App.user.uid
+                    )
+                ){
+
+                    followerIds.push(
+                        App.user.uid
+                    );
+
+                }
+
+            }
+
+
+            await setDoc(
+                myRef,
+                {
+
+                    followingIds:
+                        followingIds,
+
+                    following:
+                        followingIds.length
+
+                },
+                {
+                    merge: true
+                }
+            );
+
+
+            await setDoc(
+                targetRef,
+                {
+
+                    followerIds:
+                        followerIds,
+
+                    followers:
+                        followerIds.length
+
+                },
+                {
+                    merge: true
+                }
+            );
+
+
+            // ======================
+            // UPDATE UI
+            // ======================
+
+            $("followingCount").textContent =
+                followingIds.length;
+
+
+            $("followersCount").textContent =
+                followerIds.length;
+
+
+            const isNowFollowing =
+                followingIds.includes(
+                    viewedProfileUid
+                );
+
+
+            followBtn.textContent =
+                isNowFollowing
+                ? "Following"
+                : "Follow";
+
+
+            followBtn.classList.toggle(
+                "followingBtn",
+                isNowFollowing
+            );
+
+
+        }catch(error){
+
+            console.error(
+                "Follow error:",
+                error
+            );
+
+            alert(
+                "Follow failed: " +
+                error.message
+            );
+
+        }finally{
+
+            followBtn.disabled =
+                false;
+
+        }
+
+    }
+);
 
 
 // ======================
@@ -4314,6 +4800,9 @@ window.handleReplyLikeClick =
 
 window.editPost =
     editPost;
+
+window.openUserProfile =
+    openUserProfile;
 
 window.deletePost =
     deletePost;
