@@ -5128,6 +5128,9 @@ window.editPost =
 window.openUserProfile =
     openUserProfile;
 
+window.toggleFollowFromList =
+    toggleFollowFromList;
+
 window.deletePost =
     deletePost;
 
