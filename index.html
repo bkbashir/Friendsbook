@@ -117,12 +117,24 @@
     <section id="profilePage" class="pageView hidden">
       <div class="profileCard">
         <div class="profileCoverWrap">
-          <img id="coverPhoto" class="profileCover" src="default-cover.jpg" alt="Cover">
+          <img
+    id="coverPhoto"
+    class="profileCover"
+    src="default-cover.jpg"
+    alt="Cover"
+    onclick="openImage(this.src)"
+>
           <label class="coverCamera">📷<input id="coverInput" type="file" accept="image/*" hidden></label>
         </div>
         <div class="profileMain">
           <div class="profileAvatarWrap">
-            <img id="profilePhoto" class="profileAvatar" src="default-profile.png" alt="Profile">
+            <img
+    id="profilePhoto"
+    class="profileAvatar"
+    src="default-profile.png"
+    alt="Profile"
+    onclick="openImage(this.src)"
+>
             <label class="avatarCamera">📷<input id="profileInput" type="file" accept="image/*" hidden></label>
           </div>
           <div class="profileNameBlock">
@@ -183,6 +195,21 @@
 <div id="editProfileModal" class="modal hidden"><div class="modalCard"><h3>Edit Profile</h3><input id="editName" placeholder="Name"><input id="editUsername" placeholder="Username"><textarea id="editBio" placeholder="Bio"></textarea><div class="modalActions"><button id="cancelEdit" class="secondaryBtn">Cancel</button><button id="saveEdit" class="primarySmall">Save</button></div></div></div>
 <div id="toast" class="toast hidden"></div>
 
+  <!-- FULL IMAGE VIEWER -->
+
+<div id="imageViewer" class="imageViewer hidden">
+
+    <button id="closeImageViewer" class="closeImageViewer">
+        ✕
+    </button>
+
+    <img
+        id="previewImage"
+        src=""
+        alt="Full Image"
+    >
+
+</div>
 <script type="module" src="firebase.js"></script>
 <script type="module" src="script.js"></script>
 </body>
