@@ -3324,13 +3324,7 @@ const showCommentFollow =
 
         <div class="commentContent">
 
-            <b>
-                ${escapeHTML(
-                    comment.name ||
-                    "User"
-                )}
-            </b>
-
+            
 
             <div
     style="
