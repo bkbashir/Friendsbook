@@ -2779,7 +2779,17 @@ const buttonText =
             :
             "likeBtn";
 
+const isOwnPost =
+    post.uid === App.user?.uid;
 
+const isFollowing =
+    (App.profile?.followingIds || [])
+        .includes(post.uid);
+
+const showFollowButton =
+    !isOwnPost &&
+    !isFollowing;
+        
         feed.innerHTML += `
 
         <div
@@ -2806,26 +2816,60 @@ const buttonText =
                 >
 
                 <div
-                    class="post-user"
-                    onclick="
-                        openUserProfile(
-                            '${post.uid}'
-                        )
-                    "
-                    style="cursor:pointer;"
-                >
+                <div
+    class="post-user"
+    onclick="
+        openUserProfile(
+            '${post.uid}'
+        )
+    "
+    style="
+        cursor:pointer;
+        flex:1;
+    "
+>
+    <h4>
+        ${escapeHTML(
+            post.name || "User"
+        )}
+    </h4>
 
-                    <h4>
-                        ${escapeHTML(
-                            post.name || "User"
-                        )}
-                    </h4>
+    <small>
+        Just now
+    </small>
+</div>
 
-                    <small>
-                        Just now
-                    </small>
-
-                </div>
+${
+    showFollowButton
+    ?
+    `
+    <button
+        type="button"
+        class="feedFollowBtn"
+        onclick="
+            event.stopPropagation();
+            toggleFollowFromList(
+                '${post.uid}',
+                this
+            )
+        "
+        style="
+            border:none;
+            background:#6c63ff;
+            color:white;
+            border-radius:8px;
+            padding:6px 10px;
+            font-weight:600;
+            cursor:pointer;
+            margin-right:8px;
+        "
+    >
+        Follow
+    </button>
+    `
+    :
+    ""
+}
 
                 <button
                     class="postMenuBtn"
@@ -2939,7 +2983,232 @@ const buttonText =
 
 }
 
+// ======================================
+// FOLLOW FROM HOME / COMMENTS
+// ======================================
 
+async function toggleFollowFromList(
+    targetUid,
+    button
+){
+
+    if(!App.user || !targetUid)
+        return;
+
+    // নিজের profile-কে follow করা যাবে না
+    if(targetUid === App.user.uid)
+        return;
+
+    try{
+
+        if(button){
+
+            button.disabled = true;
+
+        }
+
+
+        const myRef =
+            doc(
+                db,
+                "users",
+                App.user.uid
+            );
+
+
+        const targetRef =
+            doc(
+                db,
+                "users",
+                targetUid
+            );
+
+
+        const mySnap =
+            await getDoc(myRef);
+
+        const targetSnap =
+            await getDoc(targetRef);
+
+
+        if(
+            !mySnap.exists() ||
+            !targetSnap.exists()
+        ){
+
+            return;
+
+        }
+
+
+        const myData =
+            mySnap.data();
+
+        const targetData =
+            targetSnap.data();
+
+
+        let followingIds =
+            [
+                ...(myData.followingIds || [])
+            ];
+
+
+        let followerIds =
+            [
+                ...(targetData.followerIds || [])
+            ];
+
+
+        const alreadyFollowing =
+            followingIds.includes(
+                targetUid
+            );
+
+
+        if(alreadyFollowing){
+
+            // ==========================
+            // UNFOLLOW
+            // ==========================
+
+            followingIds =
+                followingIds.filter(
+                    id =>
+                    id !== targetUid
+                );
+
+
+            followerIds =
+                followerIds.filter(
+                    id =>
+                    id !== App.user.uid
+                );
+
+
+        }else{
+
+            // ==========================
+            // FOLLOW
+            // ==========================
+
+            if(
+                !followingIds.includes(
+                    targetUid
+                )
+            ){
+
+                followingIds.push(
+                    targetUid
+                );
+
+            }
+
+
+            if(
+                !followerIds.includes(
+                    App.user.uid
+                )
+            ){
+
+                followerIds.push(
+                    App.user.uid
+                );
+
+            }
+
+        }
+
+
+        // ==========================
+        // SAVE MY FOLLOWING
+        // ==========================
+
+        await setDoc(
+            myRef,
+            {
+
+                followingIds:
+                    followingIds,
+
+                following:
+                    followingIds.length
+
+            },
+            {
+                merge: true
+            }
+        );
+
+
+        // ==========================
+        // SAVE TARGET FOLLOWERS
+        // ==========================
+
+        await setDoc(
+            targetRef,
+            {
+
+                followerIds:
+                    followerIds,
+
+                followers:
+                    followerIds.length
+
+            },
+            {
+                merge: true
+            }
+        );
+
+
+        // ==========================
+        // UPDATE CURRENT APP PROFILE
+        // ==========================
+
+        App.profile = {
+
+            ...App.profile,
+
+            followingIds:
+                followingIds,
+
+            following:
+                followingIds.length
+
+        };
+
+
+        // ==========================
+        // REFRESH HOME FEED
+        // ==========================
+
+        await loadPosts();
+
+
+    }catch(error){
+
+        console.error(
+            "Follow error:",
+            error
+        );
+
+        alert(
+            "Follow failed: " +
+            error.message
+        );
+
+    }finally{
+
+        if(button){
+
+            button.disabled = false;
+
+        }
+
+    }
+
+            }
 // ======================
 // COMMENT HTML
 // ======================
