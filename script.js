@@ -297,24 +297,12 @@ onAuthStateChanged(auth, async (user) => {
 
           following: 0,
 
-          followingIds: [],
-
-          followerIds: [],
-
           posts: 0,
         };
       }
 
-      await loadPosts();
-
-      // Restore another user's profile after refresh
-      const savedProfileUid = localStorage.getItem("fb_viewed_profile_uid");
-
-      if (savedProfileUid && savedProfileUid !== user.uid) {
-        await openUserProfile(savedProfileUid);
-      } else {
-        show("homePage");
-      }
+      loadPosts();
+      show("homePage");
     } catch (e) {
       console.error(e);
     }
@@ -365,6 +353,10 @@ const pageViews = [
 
 function openPage(pageId) {
   localStorage.setItem("fb_current_page", pageId);
+
+  // App shell must remain visible while switching inner pages
+  show("homePage");
+  hide("authContainer");
 
   // সব page hide
   pageViews.forEach((id) => {
@@ -437,18 +429,10 @@ $("navReels")?.addEventListener("click", () => {
 // ======================================
 
 $("headerProfile")?.addEventListener("click", () => {
-  localStorage.removeItem("fb_viewed_profile_uid");
-
-  viewedProfileUid = App.user?.uid || null;
-
   openPage("profilePage");
 });
 
 $("menuProfileBtn")?.addEventListener("click", () => {
-  localStorage.removeItem("fb_viewed_profile_uid");
-
-  viewedProfileUid = App.user?.uid || null;
-
   openPage("profilePage");
 });
 
@@ -614,13 +598,6 @@ async function openUserProfile(uid) {
     };
 
     viewedProfileUid = uid;
-
-    // Remember which profile is currently being viewed
-    if (uid === App.user.uid) {
-      localStorage.removeItem("fb_viewed_profile_uid");
-    } else {
-      localStorage.setItem("fb_viewed_profile_uid", uid);
-    }
 
     // Open profile page
     openPage("profilePage");
@@ -1785,27 +1762,22 @@ async function toggleFollowFromList(targetUid, button) {
       following: followingIds.length,
     };
 
-    // Update visible Follow buttons immediately
-    if (button) {
-      if (alreadyFollowing) {
-        button.textContent = "Follow";
-        button.style.display = "";
-      } else {
-        button.style.display = "none";
-      }
-    }
+    // ==========================
+    // REFRESH HOME FEED
+    // ==========================
 
-    // Re-render the current comments page too
-    if (currentCommentsPostId) {
-      const currentPost = posts.find((p) => p.id === currentCommentsPostId);
-
-      if (currentPost) {
-        renderCommentsPage(currentPost);
-      }
-    }
-
-    // Refresh Home Feed
     await loadPosts();
+
+    // Refresh the Comments page immediately if it is open
+    if (currentCommentsPostId) {
+      const updatedCommentPost = posts.find(
+        (p) => p.id === currentCommentsPostId
+      );
+
+      if (updatedCommentPost) {
+        renderCommentsPage(updatedCommentPost);
+      }
+    }
   } catch (error) {
     console.error("Follow error:", error);
 
