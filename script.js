@@ -354,10 +354,6 @@ const pageViews = [
 function openPage(pageId) {
   localStorage.setItem("fb_current_page", pageId);
 
-  // App shell must remain visible while switching inner pages
-  show("homePage");
-  hide("authContainer");
-
   // সব page hide
   pageViews.forEach((id) => {
     hide(id);
@@ -599,6 +595,7 @@ async function openUserProfile(uid) {
 
     viewedProfileUid = uid;
 
+    localStorage.setItem("fb_viewed_profile_uid", uid);
     // Open profile page
     openPage("profilePage");
 
@@ -1164,6 +1161,8 @@ function renderProfilePosts(myPosts) {
 // ======================
 
 async function openMyProfile() {
+  viewedProfileUid = App.user?.uid || null;
+  localStorage.removeItem("fb_viewed_profile_uid");
   openPage("profilePage");
 
   updateProfileUI();
@@ -1655,7 +1654,7 @@ function renderFeed() {
 
     const showFollowButton = !isOwnPost && !isFollowing;
 
-    feed.innerHTML += ` <div class="postCard" id="post-${post.id}" > <!-- POST HEADER --> <div class="post-header"> <img class="post-profile" src="${post.photo || "default-profile.png"}" onclick=" openUserProfile( '${post.uid}' ) " style="cursor:pointer;" > <div class="post-user" onclick=" openUserProfile( '${post.uid}' ) " style=" cursor:pointer; flex:1; " > <h4> ${escapeHTML(post.name || "User")} </h4> <small> Just now </small> </div> ${ showFollowButton ? ` <button type="button" class="feedFollowBtn" onclick=" event.stopPropagation(); toggleFollowFromList( '${post.uid}', this ) " style=" border:none; background:#6c63ff; color:white; border-radius:8px; padding:6px 10px; font-weight:600; cursor:pointer; margin-right:8px; " > Follow </button> ` : "" } <button class="postMenuBtn" onclick=" openPostMenu( '${post.id}' ) " > ⋮ </button> </div> <!-- POST TEXT --> ${ post.text ? ` <p class="postText"> ${escapeHTML(post.text)} </p> ` : "" } <!-- POST IMAGE --> ${ post.image ? ` <img src="${post.image}" class="postImage" onclick=" openImage( '${post.image}' ) " > ` : "" } <!-- POST ACTIONS --> <div class="postActions"> <button class="${likeClass}" onclick=" handleLikeClick( '${post.id}' ) " onpointerdown=" startReaction( event, '${post.id}' ) " onpointerup=" endReaction() " onpointerleave=" endReaction() " onpointercancel=" endReaction() " > ${buttonText} </button> <button onclick=" openPostComments( '${post.id}' ) " > 💬 ${comments.length} </button> <button onclick=" sharePost( '${post.id}' ) " > ↗ Share </button> </div> </div> `;
+    feed.innerHTML += ` <div class="postCard" id="post-${post.id}" > <!-- POST HEADER --> <div class="post-header"> <img class="post-profile" src="${post.photo || "default-profile.png"}" onclick=" openUserProfile( '${post.uid}' ) " style="cursor:pointer;" > <div <div class="post-user" onclick=" openUserProfile( '${post.uid}' ) " style=" cursor:pointer; flex:1; " > <h4> ${escapeHTML(post.name || "User")} </h4> <small> Just now </small> </div> ${ showFollowButton ? ` <button type="button" class="feedFollowBtn" onclick=" event.stopPropagation(); toggleFollowFromList( '${post.uid}', this ) " style=" border:none; background:#6c63ff; color:white; border-radius:8px; padding:6px 10px; font-weight:600; cursor:pointer; margin-right:8px; " > Follow </button> ` : "" } <button class="postMenuBtn" onclick=" openPostMenu( '${post.id}' ) " > ⋮ </button> </div> <!-- POST TEXT --> ${ post.text ? ` <p class="postText"> ${escapeHTML(post.text)} </p> ` : "" } <!-- POST IMAGE --> ${ post.image ? ` <img src="${post.image}" class="postImage" onclick=" openImage( '${post.image}' ) " > ` : "" } <!-- POST ACTIONS --> <div class="postActions"> <button class="${likeClass}" onclick=" handleLikeClick( '${post.id}' ) " onpointerdown=" startReaction( event, '${post.id}' ) " onpointerup=" endReaction() " onpointerleave=" endReaction() " onpointercancel=" endReaction() " > ${buttonText} </button> <button onclick=" openPostComments( '${post.id}' ) " > 💬 ${comments.length} </button> <button onclick=" sharePost( '${post.id}' ) " > ↗ Share </button> </div> </div> `;
   });
 }
 
@@ -1767,17 +1766,6 @@ async function toggleFollowFromList(targetUid, button) {
     // ==========================
 
     await loadPosts();
-
-    // Refresh the Comments page immediately if it is open
-    if (currentCommentsPostId) {
-      const updatedCommentPost = posts.find(
-        (p) => p.id === currentCommentsPostId
-      );
-
-      if (updatedCommentPost) {
-        renderCommentsPage(updatedCommentPost);
-      }
-    }
   } catch (error) {
     console.error("Follow error:", error);
 
@@ -2780,8 +2768,20 @@ window.openPostComments = openPostComments;
 // RESTORE LAST PAGE AFTER REFRESH
 // ======================================
 
-function restoreLastPage() {
+async function restoreLastPage() {
   const lastPage = localStorage.getItem("fb_current_page");
+
+  if (lastPage === "profilePage") {
+    const savedUid = localStorage.getItem("fb_viewed_profile_uid");
+
+    if (savedUid && App.user && savedUid !== App.user.uid) {
+      await openUserProfile(savedUid);
+      return;
+    }
+
+    await openMyProfile();
+    return;
+  }
 
   if (lastPage && pageViews.includes(lastPage)) {
     openPage(lastPage);
@@ -2790,4 +2790,6 @@ function restoreLastPage() {
   }
 }
 
-setTimeout(restoreLastPage, 500);
+setTimeout(() => {
+  restoreLastPage().catch(console.error);
+}, 500);
