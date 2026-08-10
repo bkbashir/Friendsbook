@@ -579,7 +579,7 @@ function updateProfileUI() {
 // VIEW OTHER USER PROFILE + FOLLOW
 // ======================================
 
-let viewedProfileUid = null;
+let viewedProfileUid = localStorage.getItem("fb_viewed_profile_uid") || null;
 
 async function openUserProfile(uid) {
   if (!uid || !App.user) return;
@@ -1032,7 +1032,12 @@ async function loadProfilePosts() {
   if (!App.user) return;
 
   try {
-    const q = query(collection(db, "posts"), where("uid", "==", App.user.uid));
+    const targetUid =
+      viewedProfileUid && viewedProfileUid !== App.user.uid
+        ? viewedProfileUid
+        : App.user.uid;
+
+    const q = query(collection(db, "posts"), where("uid", "==", targetUid));
 
     const snap = await getDocs(q);
 
@@ -1056,20 +1061,24 @@ async function loadProfilePosts() {
 
     $("postsCount").textContent = myPosts.length;
 
-    await setDoc(
-      doc(db, "users", App.user.uid),
-      {
-        posts: myPosts.length,
-      },
-      {
-        merge: true,
-      }
-    );
+    // Only update the logged-in user's profile document when
+    // we are actually viewing our own profile.
+    if (targetUid === App.user.uid) {
+      await setDoc(
+        doc(db, "users", App.user.uid),
+        {
+          posts: myPosts.length,
+        },
+        {
+          merge: true,
+        }
+      );
 
-    App.profile = {
-      ...App.profile,
-      posts: myPosts.length,
-    };
+      App.profile = {
+        ...App.profile,
+        posts: myPosts.length,
+      };
+    }
 
     renderProfilePosts(myPosts);
   } catch (error) {
@@ -2785,25 +2794,27 @@ window.openPostComments = openPostComments;
 // ======================================
 
 async function restoreLastPage() {
-  // Wait until Firebase Auth has restored the current user.
-  if (!App.user) {
-    setTimeout(restoreLastPage, 300);
+  if (!App.user) return;
+
+  const lastPage = localStorage.getItem("fb_current_page");
+  const savedProfileUid = localStorage.getItem("fb_viewed_profile_uid");
+
+  // Restore the exact other profile after refresh.
+  if (
+    lastPage === "profilePage" &&
+    savedProfileUid &&
+    savedProfileUid !== App.user.uid
+  ) {
+    viewedProfileUid = savedProfileUid;
+    await openUserProfile(savedProfileUid);
     return;
   }
 
-  const lastPage = localStorage.getItem("fb_current_page");
-
-  // If the last page was another user's profile,
-  // restore that exact profile instead of showing my own profile.
+  // If profilePage was saved without a valid other-user UID,
+  // show the logged-in user's profile.
   if (lastPage === "profilePage") {
-    const savedProfileUid = localStorage.getItem("fb_viewed_profile_uid");
-
-    if (savedProfileUid && savedProfileUid !== App.user.uid) {
-      await openUserProfile(savedProfileUid);
-      return;
-    }
-
-    // No other profile was saved, so this is my profile.
+    viewedProfileUid = null;
+    localStorage.removeItem("fb_viewed_profile_uid");
     await openMyProfile();
     return;
   }
@@ -2815,4 +2826,6 @@ async function restoreLastPage() {
   }
 }
 
-setTimeout(restoreLastPage, 500);
+setTimeout(() => {
+  restoreLastPage();
+}, 700);
