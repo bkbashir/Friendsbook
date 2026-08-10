@@ -571,9 +571,23 @@ function updateProfileUI() {
 
   $("menuUserName").textContent = App.profile.name || "User";
 
-  $("menuProfileImage").src = App.profile.photo || "default-profile.png";
+ $("menuProfileImage").src = App.profile.photo || "default-profile.png";
 
-  $("headerProfile").src = App.profile.photo || "default-profile.png";
+$("headerProfile").src = App.profile.photo || "default-profile.png";
+
+const composerPhoto = $("createProfileImage");
+
+if (composerPhoto) {
+    composerPhoto.src =
+        App.profile.photo ||
+        "default-profile.png";
+
+    composerPhoto.style.cursor = "pointer";
+
+    composerPhoto.onclick = () => {
+        openPage("profilePage");
+    };
+}
 }
 // ======================================
 // VIEW OTHER USER PROFILE + FOLLOW
