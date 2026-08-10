@@ -598,6 +598,7 @@ async function openUserProfile(uid) {
     };
 
     viewedProfileUid = uid;
+    localStorage.setItem("fb_viewed_profile_uid", uid);
 
     // Open profile page
     openPage("profilePage");
@@ -1155,7 +1156,7 @@ function renderProfilePosts(myPosts) {
 
     const likeClass = myReaction === "like" ? "likeBtn activeLike" : "likeBtn";
 
-    box.innerHTML += ` <div class="postCard" id="profile-post-${post.id}" style="margin-bottom:15px;" > <!-- POST HEADER --> <div class="post-header"> <img class="post-profile" src="${post.photo || "default-profile.png"}" onclick=" openUserProfile( '${post.uid}' ) " style="cursor:pointer;" > <div class="post-user" onclick=" openUserProfile( '${post.uid}' ) " style="cursor:pointer;" > <h4> ${escapeHTML(post.name || App.profile?.name || "User")} </h4> <small> Just now </small> </div> <button class="postMenuBtn" onclick=" openPostMenu( '${post.id}' ) " > ⋮ </button> </div> <!-- POST TEXT --> ${ post.text ? ` <p class="postText"> ${escapeHTML(post.text)} </p> ` : "" } <!-- POST IMAGE --> ${ post.image ? ` <img src="${post.image}" class="postImage" onclick=" openImage( '${post.image}' ) " > ` : "" } <!-- POST ACTIONS --> <div class="postActions"> <button class="${likeClass}" onclick=" handleLikeClick( '${post.id}' ) " onpointerdown=" startReaction( event, '${post.id}' ) " onpointerup=" endReaction() " onpointerleave=" endReaction() " onpointercancel=" endReaction() " > ${buttonText} </button> <button onclick=" window.openPostComments( '${post.id}' ) " > 💬 ${comments.length} </button> <button onclick=" sharePost( '${post.id}' ) " > ↗ Share </button> </div> </div> `;
+    box.innerHTML += ` <div class="postCard" id="profile-post-${ post.id }" style="margin-bottom:15px;" > <!-- POST HEADER --> <div class="post-header"> <img class="post-profile" src="${ post.photo || "default-profile.png" }" onclick=" openUserProfile( '${ post.uid }' ) " style="cursor:pointer;" > <div class="post-user" onclick=" openUserProfile( '${ post.uid }' ) " style="cursor:pointer;" > <h4> ${escapeHTML( post.name || App.profile?.name || "User" )} </h4> <small> Just now </small> </div> <button class="postMenuBtn" onclick=" openPostMenu( '${ post.id }' ) " > ⋮ </button> </div> <!-- POST TEXT --> ${ post.text ? ` <p class="postText"> ${escapeHTML(post.text)} </p> ` : "" } <!-- POST IMAGE --> ${ post.image ? ` <img src="${post.image}" class="postImage" onclick=" openImage( '${post.image}' ) " > ` : "" } <!-- POST ACTIONS --> <div class="postActions"> <button class="${likeClass}" onclick=" handleLikeClick( '${ post.id }' ) " onpointerdown=" startReaction( event, '${ post.id }' ) " onpointerup=" endReaction() " onpointerleave=" endReaction() " onpointercancel=" endReaction() " > ${buttonText} </button> <button onclick=" window.openPostComments( '${ post.id }' ) " > 💬 ${comments.length} </button> <button onclick=" sharePost( '${ post.id }' ) " > ↗ Share </button> </div> </div> `;
   });
 }
 
@@ -1164,6 +1165,9 @@ function renderProfilePosts(myPosts) {
 // ======================
 
 async function openMyProfile() {
+  viewedProfileUid = null;
+  localStorage.removeItem("fb_viewed_profile_uid");
+
   openPage("profilePage");
 
   updateProfileUI();
@@ -1655,7 +1659,7 @@ function renderFeed() {
 
     const showFollowButton = !isOwnPost && !isFollowing;
 
-    feed.innerHTML += ` <div class="postCard" id="post-${post.id}" > <!-- POST HEADER --> <div class="post-header"> <img class="post-profile" src="${post.photo || "default-profile.png"}" onclick=" openUserProfile( '${post.uid}' ) " style="cursor:pointer;" > <div class="post-user" onclick=" openUserProfile( '${post.uid}' ) " style=" cursor:pointer; flex:1; " > <h4> ${escapeHTML(post.name || "User")} </h4> <small> Just now </small> </div> ${ showFollowButton ? ` <button type="button" class="feedFollowBtn" onclick=" event.stopPropagation(); toggleFollowFromList( '${post.uid}', this ) " style=" border:none; background:#6c63ff; color:white; border-radius:8px; padding:6px 10px; font-weight:600; cursor:pointer; margin-right:8px; " > Follow </button> ` : "" } <button class="postMenuBtn" onclick=" openPostMenu( '${post.id}' ) " > ⋮ </button> </div> <!-- POST TEXT --> ${ post.text ? ` <p class="postText"> ${escapeHTML(post.text)} </p> ` : "" } <!-- POST IMAGE --> ${ post.image ? ` <img src="${post.image}" class="postImage" onclick=" openImage( '${post.image}' ) " > ` : "" } <!-- POST ACTIONS --> <div class="postActions"> <button class="${likeClass}" onclick=" handleLikeClick( '${post.id}' ) " onpointerdown=" startReaction( event, '${post.id}' ) " onpointerup=" endReaction() " onpointerleave=" endReaction() " onpointercancel=" endReaction() " > ${buttonText} </button> <button onclick=" openPostComments( '${post.id}' ) " > 💬 ${comments.length} </button> <button onclick=" sharePost( '${post.id}' ) " > ↗ Share </button> </div> </div> `;
+    feed.innerHTML += ` <div class="postCard" id="post-${ post.id }" > <!-- POST HEADER --> <div class="post-header"> <img class="post-profile" src="${ post.photo || "default-profile.png" }" onclick=" openUserProfile( '${ post.uid }' ) " style="cursor:pointer;" > <div class="post-user" onclick=" openUserProfile( '${ post.uid }' ) " style=" cursor:pointer; flex:1; " > <h4> ${escapeHTML( post.name || "User" )} </h4> <small> Just now </small> </div> ${ showFollowButton ? ` <button type="button" class="feedFollowBtn" onclick=" event.stopPropagation(); toggleFollowFromList( '${post.uid}', this ) " style=" border:none; background:#6c63ff; color:white; border-radius:8px; padding:6px 10px; font-weight:600; cursor:pointer; margin-right:8px; " > Follow </button> ` : "" } <button class="postMenuBtn" onclick=" openPostMenu( '${ post.id }' ) " > ⋮ </button> </div> <!-- POST TEXT --> ${ post.text ? ` <p class="postText"> ${escapeHTML(post.text)} </p> ` : "" } <!-- POST IMAGE --> ${ post.image ? ` <img src="${post.image}" class="postImage" onclick=" openImage( '${post.image}' ) " > ` : "" } <!-- POST ACTIONS --> <div class="postActions"> <button class="${likeClass}" onclick=" handleLikeClick( '${ post.id }' ) " onpointerdown=" startReaction( event, '${ post.id }' ) " onpointerup=" endReaction() " onpointerleave=" endReaction() " onpointercancel=" endReaction() " > ${buttonText} </button> <button onclick=" openPostComments( '${ post.id }' ) " > 💬 ${comments.length} </button> <button onclick=" sharePost( '${ post.id }' ) " > ↗ Share </button> </div> </div> `;
   });
 }
 
@@ -1857,7 +1861,7 @@ function renderComment(postId, comment, commentIndex) {
   const showCommentFollow =
     comment.uid && !isOwnComment && !isFollowingCommentUser;
 
-  return ` <div class="commentBox"> <img src="${comment.photo || "default-profile.png"}" class="commentPhoto" > <div class="commentContent"> <div style=" display:flex; align-items:center; gap:8px; flex-wrap:wrap; " > <b onclick=" openUserProfile( '${comment.uid}' ) " style=" cursor:pointer; " > ${escapeHTML(comment.name || "User")} </b> ${ showCommentFollow ? ` <button type="button" onclick=" event.stopPropagation(); toggleFollowFromList( '${comment.uid}', this ) " style=" border:none; background:#6c63ff; color:white; border-radius:7px; padding:4px 9px; font-size:12px; font-weight:600; cursor:pointer; " > Follow </button> ` : "" } </div> <small> ${comment.time || "Just now"} </small> <div class="commentActions"> <button class="${likeClass}" onclick=" handleCommentLikeClick( '${postId}', ${commentIndex} ) " onpointerdown=" startCommentReaction( event, '${postId}', ${commentIndex} ) " onpointerup=" endCommentReaction() " onpointerleave=" endCommentReaction() " onpointercancel=" endCommentReaction() " > ${buttonText} </button> <button onclick=" replyComment( '${postId}', ${commentIndex} ) " > ↩ Reply </button> </div> ${ replies.length ? replies .map((reply, replyIndex) => renderReply(postId, commentIndex, reply, replyIndex) ) .join("") : "" } </div> </div> `;
+  return ` <div class="commentBox"> <img src="${ comment.photo || "default-profile.png" }" class="commentPhoto" > <div class="commentContent"> <div style=" display:flex; align-items:center; gap:8px; flex-wrap:wrap; " > <b onclick=" openUserProfile( '${ comment.uid }' ) " style=" cursor:pointer; " > ${escapeHTML( comment.name || "User" )} </b> ${ showCommentFollow ? ` <button type="button" onclick=" event.stopPropagation(); toggleFollowFromList( '${comment.uid}', this ) " style=" border:none; background:#6c63ff; color:white; border-radius:7px; padding:4px 9px; font-size:12px; font-weight:600; cursor:pointer; " > Follow </button> ` : "" } </div> <small> ${ comment.time || "Just now" } </small> <div class="commentActions"> <button class="${likeClass}" onclick=" handleCommentLikeClick( '${postId}', ${commentIndex} ) " onpointerdown=" startCommentReaction( event, '${postId}', ${commentIndex} ) " onpointerup=" endCommentReaction() " onpointerleave=" endCommentReaction() " onpointercancel=" endCommentReaction() " > ${buttonText} </button> <button onclick=" replyComment( '${postId}', ${commentIndex} ) " > ↩ Reply </button> </div> ${ replies.length ? replies .map((reply, replyIndex) => renderReply(postId, commentIndex, reply, replyIndex) ) .join("") : "" } </div> </div> `;
 }
 
 // ======================
@@ -1918,7 +1922,7 @@ function renderReply(postId, commentIndex, reply, replyIndex) {
 
   const likeClass = myReaction === "like" ? "likeBtn activeLike" : "likeBtn";
 
-  return ` <div class="replyBox"> <img src="${reply.photo || "default-profile.png"}" class="commentPhoto" > <div> <b> ${escapeHTML(reply.name || "User")} </b> <div> ${escapeHTML(reply.text || "")} </div> <small> ${reply.time || "Just now"} </small> <div class="commentActions"> <button class="${likeClass}" onclick=" handleReplyLikeClick( '${postId}', ${commentIndex}, ${replyIndex} ) " onpointerdown=" startReplyReaction( event, '${postId}', ${commentIndex}, ${replyIndex} ) " onpointerup=" endReplyReaction() " onpointerleave=" endReplyReaction() " onpointercancel=" endReplyReaction() " > ${buttonText} </button> </div> </div> </div> `;
+  return ` <div class="replyBox"> <img src="${ reply.photo || "default-profile.png" }" class="commentPhoto" > <div> <b> ${escapeHTML( reply.name || "User" )} </b> <div> ${escapeHTML(reply.text || "")} </div> <small> ${ reply.time || "Just now" } </small> <div class="commentActions"> <button class="${likeClass}" onclick=" handleReplyLikeClick( '${postId}', ${commentIndex}, ${replyIndex} ) " onpointerdown=" startReplyReaction( event, '${postId}', ${commentIndex}, ${replyIndex} ) " onpointerup=" endReplyReaction() " onpointerleave=" endReplyReaction() " onpointercancel=" endReplyReaction() " > ${buttonText} </button> </div> </div> </div> `;
 }
 
 // ======================
@@ -2680,9 +2684,9 @@ function renderCommentsPage(post) {
 
   const comments = post.comments || [];
 
-  preview.innerHTML = ` <div class="commentsPostPreview"> <div class="post-header"> <img class="post-profile" src="${post.photo || "default-profile.png"}" > <div class="post-user"> <h4> ${escapeHTML(post.name || "User")} </h4> <small> Just now </small> </div> </div> ${ post.text ? ` <p class="postText"> ${escapeHTML(post.text)} </p> ` : "" } ${ post.image ? ` <img src="${post.image}" class="postImage" onclick=" openImage( '${post.image}' ) " > ` : "" } </div> `;
+  preview.innerHTML = ` <div class="commentsPostPreview"> <div class="post-header"> <img class="post-profile" src="${ post.photo || "default-profile.png" }" > <div class="post-user"> <h4> ${escapeHTML( post.name || "User" )} </h4> <small> Just now </small> </div> </div> ${ post.text ? ` <p class="postText"> ${escapeHTML(post.text)} </p> ` : "" } ${ post.image ? ` <img src="${post.image}" class="postImage" onclick=" openImage( '${post.image}' ) " > ` : "" } </div> `;
 
-  list.innerHTML = ` <h3> ${comments.length} ${comments.length === 1 ? "Comment" : "Comments"} </h3> ${ comments.length ? comments .map((comment, index) => renderComment(post.id, comment, index)) .join("") : ` <div class="noComments"> No comments yet. </div> ` } `;
+  list.innerHTML = ` <h3> ${comments.length} ${ comments.length === 1 ? "Comment" : "Comments" } </h3> ${ comments.length ? comments .map((comment, index) => renderComment(post.id, comment, index)) .join("") : ` <div class="noComments"> No comments yet. </div> ` } `;
 }
 
 // ======================
@@ -2780,8 +2784,29 @@ window.openPostComments = openPostComments;
 // RESTORE LAST PAGE AFTER REFRESH
 // ======================================
 
-function restoreLastPage() {
+async function restoreLastPage() {
+  // Wait until Firebase Auth has restored the current user.
+  if (!App.user) {
+    setTimeout(restoreLastPage, 300);
+    return;
+  }
+
   const lastPage = localStorage.getItem("fb_current_page");
+
+  // If the last page was another user's profile,
+  // restore that exact profile instead of showing my own profile.
+  if (lastPage === "profilePage") {
+    const savedProfileUid = localStorage.getItem("fb_viewed_profile_uid");
+
+    if (savedProfileUid && savedProfileUid !== App.user.uid) {
+      await openUserProfile(savedProfileUid);
+      return;
+    }
+
+    // No other profile was saved, so this is my profile.
+    await openMyProfile();
+    return;
+  }
 
   if (lastPage && pageViews.includes(lastPage)) {
     openPage(lastPage);
