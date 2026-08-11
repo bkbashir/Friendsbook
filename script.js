@@ -1885,7 +1885,14 @@ function renderComment(postId, comment, commentIndex) {
   const showCommentFollow =
     comment.uid && !isOwnComment && !isFollowingCommentUser;
 
-  return ` <div class="commentBox"> <img src="${ comment.photo || "default-profile.png" }" class="commentPhoto" > <div class="commentContent"> <div style=" display:flex; align-items:center; gap:8px; flex-wrap:wrap; " > <b onclick=" openUserProfile( '${ comment.uid }' ) " style=" cursor:pointer; " > ${escapeHTML( comment.name || "User" )} </b> ${ showCommentFollow ? ` <button type="button" onclick=" event.stopPropagation(); toggleFollowFromList( '${comment.uid}', this ) " style=" border:none; background:#6c63ff; color:white; border-radius:7px; padding:4px 9px; font-size:12px; font-weight:600; cursor:pointer; " > Follow </button> ` : "" } </div> <small> ${ comment.time || "Just now" } </small> <div class="commentActions"> <button class="${likeClass}" onclick=" handleCommentLikeClick( '${postId}', ${commentIndex} ) " onpointerdown=" startCommentReaction( event, '${postId}', ${commentIndex} ) " onpointerup=" endCommentReaction() " onpointerleave=" endCommentReaction() " onpointercancel=" endCommentReaction() " > ${buttonText} </button> <button onclick=" replyComment( '${postId}', ${commentIndex} ) " > ↩ Reply </button> </div> ${ replies.length ? replies .map((reply, replyIndex) => renderReply(postId, commentIndex, reply, replyIndex) ) .join("") : "" } </div> </div> `;
+  return ` <div class="commentBox"> <img
+    src="${
+        comment.uid === App.user?.uid
+            ? (App.profile?.photo || "default-profile.png")
+            : (comment.photo || "default-profile.png")
+    }"
+    class="commentPhoto"
+> <div class="commentContent"> <div style=" display:flex; align-items:center; gap:8px; flex-wrap:wrap; " > <b onclick=" openUserProfile( '${ comment.uid }' ) " style=" cursor:pointer; " > ${escapeHTML( comment.name || "User" )} </b> ${ showCommentFollow ? ` <button type="button" onclick=" event.stopPropagation(); toggleFollowFromList( '${comment.uid}', this ) " style=" border:none; background:#6c63ff; color:white; border-radius:7px; padding:4px 9px; font-size:12px; font-weight:600; cursor:pointer; " > Follow </button> ` : "" } </div> <small> ${ comment.time || "Just now" } </small> <div class="commentActions"> <button class="${likeClass}" onclick=" handleCommentLikeClick( '${postId}', ${commentIndex} ) " onpointerdown=" startCommentReaction( event, '${postId}', ${commentIndex} ) " onpointerup=" endCommentReaction() " onpointerleave=" endCommentReaction() " onpointercancel=" endCommentReaction() " > ${buttonText} </button> <button onclick=" replyComment( '${postId}', ${commentIndex} ) " > ↩ Reply </button> </div> ${ replies.length ? replies .map((reply, replyIndex) => renderReply(postId, commentIndex, reply, replyIndex) ) .join("") : "" } </div> </div> `;
 }
 
 // ======================
