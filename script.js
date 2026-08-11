@@ -301,6 +301,7 @@ onAuthStateChanged(auth, async (user) => {
         };
       }
 
+      updateProfileUI();
       loadPosts();
       show("homePage");
     } catch (e) {
