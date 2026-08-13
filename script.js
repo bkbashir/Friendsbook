@@ -1132,9 +1132,18 @@ async function uploadProfileImage(file, type) {
     // UPDATE UI
     // =====================================
 
-    updateProfileUI();
+    const savedProfileUid =
+    localStorage.getItem("fb_viewed_profile_uid");
 
+if (
+    savedProfileUid &&
+    savedProfileUid !== App.user.uid
+) {
+    await openUserProfile(savedProfileUid);
+} else {
+    updateProfileUI();
     await loadPosts();
+}
 
 
     alert(
