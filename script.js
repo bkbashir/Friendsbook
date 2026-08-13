@@ -2871,6 +2871,11 @@ function openCommentsPage(postId) {
 
   currentCommentsPostId = postId;
 
+  localStorage.setItem(
+    "fb_comments_post_id",
+    postId
+  );
+
   openPage("commentsPage");
 
   renderCommentsPage(post);
@@ -2974,6 +2979,10 @@ $("commentsInput")?.addEventListener("keydown", (e) => {
 $("backFromComments")?.addEventListener("click", () => {
   currentCommentsPostId = null;
 
+  localStorage.removeItem(
+    "fb_comments_post_id"
+  );
+
   openPage("homeContent");
 });
 // ======================================
@@ -2990,7 +2999,8 @@ async function restoreLastPage() {
 
   const lastPage = localStorage.getItem("fb_current_page");
   const savedProfileUid = localStorage.getItem("fb_viewed_profile_uid");
-
+const savedCommentsPostId =
+  localStorage.getItem("fb_comments_post_id");
   // Restore the exact other profile after refresh.
   if (
     lastPage === "profilePage" &&
@@ -3004,6 +3014,32 @@ async function restoreLastPage() {
 
   // If profilePage was saved without a valid other-user UID,
   // show the logged-in user's profile.
+ if (
+  lastPage === "commentsPage" &&
+  savedCommentsPostId
+) {
+  currentCommentsPostId =
+    savedCommentsPostId;
+
+  await loadPosts();
+
+  const commentPost =
+    posts.find(
+      (p) =>
+        p.id ===
+        savedCommentsPostId
+    );
+
+  if (commentPost) {
+    openPage("commentsPage");
+    renderCommentsPage(commentPost);
+    return;
+  }
+
+  localStorage.removeItem(
+    "fb_comments_post_id"
+  );
+ }
   if (lastPage === "profilePage") {
     viewedProfileUid = null;
     localStorage.removeItem("fb_viewed_profile_uid");
