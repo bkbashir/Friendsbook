@@ -946,7 +946,6 @@ $("saveEdit")?.addEventListener("click", async () => {
 // ======================
 // UPLOAD PROFILE IMAGE
 // ======================
-
 async function uploadProfileImage(file, type) {
   if (!App.user || !file) {
     return;
@@ -958,7 +957,6 @@ async function uploadProfileImage(file, type) {
     const formData = new FormData();
 
     formData.append("file", file);
-
     formData.append("upload_preset", "friendsbook_upload");
 
     const response = await fetch(
@@ -970,14 +968,24 @@ async function uploadProfileImage(file, type) {
     );
 
     if (!response.ok) {
-      throw new Error("Cloudinary upload failed: " + response.status);
+      throw new Error(
+        "Cloudinary upload failed: " + response.status
+      );
     }
 
     const data = await response.json();
 
     const url = data.secure_url;
 
-    const field = type === "profile" ? "photo" : "cover";
+    const field =
+      type === "profile"
+        ? "photo"
+        : "cover";
+
+
+    // =====================================
+    // UPDATE USER PROFILE
+    // =====================================
 
     await setDoc(
       doc(db, "users", App.user.uid),
@@ -989,22 +997,169 @@ async function uploadProfileImage(file, type) {
       }
     );
 
+
     App.profile = {
       ...App.profile,
       [field]: url,
     };
 
+
+    // =====================================
+    // PROFILE PHOTO CHANGE
+    // UPDATE OLD POSTS / COMMENTS / REPLIES
+    // =====================================
+
+    if (type === "profile") {
+
+      const postsSnapshot =
+        await getDocs(
+          collection(db, "posts")
+        );
+
+
+      const updatePromises = [];
+
+
+      postsSnapshot.forEach((postDoc) => {
+
+        const postData = postDoc.data();
+
+        // শুধু নিজের পোস্টগুলো
+        if (postData.uid !== App.user.uid) {
+          return;
+        }
+
+
+        const updateData = {
+          photo: url
+        };
+
+
+        // -------------------------------
+        // Comments
+        // -------------------------------
+
+        if (
+          Array.isArray(postData.comments)
+        ) {
+
+          const updatedComments =
+            postData.comments.map(
+              (comment) => {
+
+                const updatedComment = {
+                  ...comment
+                };
+
+
+                // নিজের comment
+                if (
+                  comment.uid ===
+                  App.user.uid
+                ) {
+                  updatedComment.photo = url;
+                }
+
+
+                // -------------------------
+                // Replies
+                // -------------------------
+
+                if (
+                  Array.isArray(
+                    comment.replies
+                  )
+                ) {
+
+                  updatedComment.replies =
+                    comment.replies.map(
+                      (reply) => {
+
+                        if (
+                          reply.uid ===
+                          App.user.uid
+                        ) {
+
+                          return {
+                            ...reply,
+                            photo: url
+                          };
+
+                        }
+
+                        return reply;
+
+                      }
+                    );
+
+                }
+
+
+                return updatedComment;
+
+              }
+            );
+
+
+          updateData.comments =
+            updatedComments;
+
+        }
+
+
+        updatePromises.push(
+          updateDoc(
+            doc(
+              db,
+              "posts",
+              postDoc.id
+            ),
+            updateData
+          )
+        );
+
+      });
+
+
+      await Promise.all(
+        updatePromises
+      );
+
+    }
+
+
+    // =====================================
+    // UPDATE UI
+    // =====================================
+
     updateProfileUI();
 
-    alert(
-      type === "profile" ? "Profile photo updated!" : "Cover photo updated!"
-    );
-  } catch (error) {
-    console.error("Cloudinary Error:", error);
+    await loadPosts();
 
-    alert("Image upload failed: " + error.message);
+
+    alert(
+      type === "profile"
+        ? "Profile photo updated!"
+        : "Cover photo updated!"
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Profile image update error:",
+      error
+    );
+
+    alert(
+      "Image upload failed: " +
+      error.message
+    );
+
   } finally {
+
     hideLoading();
+
   }
 }
 // ======================
