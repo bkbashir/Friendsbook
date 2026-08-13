@@ -430,11 +430,11 @@ $("navReels")?.addEventListener("click", () => {
 // ======================================
 
 $("headerProfile")?.addEventListener("click", () => {
-  openPage("profilePage");
+  openMyProfile();
 });
 
 $("menuProfileBtn")?.addEventListener("click", () => {
-  openPage("profilePage");
+  openMyProfile();
 });
 
 // ======================================
@@ -586,8 +586,8 @@ if (composerPhoto) {
     composerPhoto.style.cursor = "pointer";
 
     composerPhoto.onclick = () => {
-        openPage("profilePage");
-    };
+    openMyProfile();
+};
 }
 }
 // ======================================
